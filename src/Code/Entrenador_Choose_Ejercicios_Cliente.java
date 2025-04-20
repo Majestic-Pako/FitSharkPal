@@ -1,65 +1,40 @@
 package Code;
-//El nombre es largo, puedo cambiarlo si se lo requiere, es solo para que se comprenda mejor el codigo.
 public class Entrenador_Choose_Ejercicios_Cliente {
-	//se crean los valores con los nombres: 
-       private String ejercicio_basico;
-       private String ejercicio_personalizado;
-       
-       
-    //Constructor
-	public Entrenador_Choose_Ejercicios_Cliente(String ejercicio_basico, String ejercicio_personalizado) {
+	private double peso;
+	private double altura;
+	private String plan;
+	public Entrenador_Choose_Ejercicios_Cliente(double peso, double altura, String plan) {
 		super();
-		this.ejercicio_basico = ejercicio_basico;
-		this.ejercicio_personalizado = ejercicio_personalizado;
+		this.peso = peso;
+		this.altura = altura;
+		this.plan = plan;
 	}
-
-	//Get y set
-	public String getEjercicio_basico() {
-		return ejercicio_basico;
+	public double getPeso() {
+		return peso;
 	}
-
-	public void setEjercicio_basico(String ejercicio_basico) {
-		this.ejercicio_basico = ejercicio_basico;
+	public void setPeso(double peso) {
+		this.peso = peso;
 	}
-
-	public String getEjercicio_personalizado() {
-		return ejercicio_personalizado;
+	public double getAltura() {
+		return altura;
 	}
-
-	public void setEjercicio_personalizado(String ejercicio_personalizado) {
-		this.ejercicio_personalizado = ejercicio_personalizado;
+	public void setAltura(double altura) {
+		this.altura = altura;
 	}
-  
-	//Metodo sin retorno de Entrenamiento basico y personalizado
-	//Agregado para que se entienda.
-	public void EntrenamientoBasico(String texto) {
-		//Imaginemos que aca en texto, ingresa el nombre predeterminado
-		//Al agregarlo se fija si lo contiene, si es asi
-		//es true
-		//sino tira
-		//false
+	public String getPlan() {
+		return plan;
 	}
-	public void Entrenamiento_Personalizado() {
-		//Lo mismo pasa aca
+	public void setPlan(String plan) {
+		this.plan = plan;
 	}
-	
 	@Override
-	//ToString(lo que devuelve)
 	public String toString() {
-		return "Entrenador_Choose_Ejercicios_Cliente [ejercicio_basico=" + ejercicio_basico
-				+ ", ejercicio_personalizado=" + ejercicio_personalizado + ", getEjercicio_basico()="
-				+ getEjercicio_basico() + ", getEjercicio_personalizado()=" + getEjercicio_personalizado()
+		return "Entrenador_Choose_Ejercicios_Cliente [peso=" + peso + ", altura=" + altura + ", plan=" + plan
+				+ ", getPeso()=" + getPeso() + ", getAltura()=" + getAltura() + ", getPlan()=" + getPlan()
 				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
 				+ "]";
 	}
-       
+	
 }
-
-//Fue pensado que ingrese el texto sea el entrenamiento que sea para que despues se aplique 
-//lo que debe hacer 
-//tanto si es entrenamiento basico o entrenamiento personalizado.
-//Despues se hace una conversion si elige ejercicio1 del ejerciciobasico
-//o ejercicio1 del ejerciciopersonalizado, etc.
-//Ese es mi planteo, quedo ante tu entendimiento.
 
 
