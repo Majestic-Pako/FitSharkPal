@@ -1,9 +1,9 @@
 package Code;
-public class Entrenador_Choose_Ejercicios_Cliente {
+public class Entrenamientos {
 	private double peso;
 	private double altura;
 	private String plan;
-	public Entrenador_Choose_Ejercicios_Cliente(double peso, double altura, String plan) {
+	public Entrenamientos(double peso, double altura, String plan) {
 		super();
 		this.peso = peso;
 		this.altura = altura;
@@ -29,12 +29,10 @@ public class Entrenador_Choose_Ejercicios_Cliente {
 	}
 	@Override
 	public String toString() {
-		return "Entrenador_Choose_Ejercicios_Cliente [peso=" + peso + ", altura=" + altura + ", plan=" + plan
-				+ ", getPeso()=" + getPeso() + ", getAltura()=" + getAltura() + ", getPlan()=" + getPlan()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
-				+ "]";
+		return "Entrenamientos [peso=" + peso + ", altura=" + altura + ", plan=" + plan + ", getPeso()=" + getPeso()
+				+ ", getAltura()=" + getAltura() + ", getPlan()=" + getPlan() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	
+	
 }
-
-
