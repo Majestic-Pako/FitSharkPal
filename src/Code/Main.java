@@ -8,7 +8,7 @@ public class Main {
 
 		JOptionPane.showMessageDialog(null, "Bienvenido a FitSharkPal");
 		JOptionPane.showMessageDialog(null,
-				"En esta ventana pediria ingresar usuario o si es nuevo led aria la posibilidad de crear uno");
+				"En esta ventana pediria ingresar usuario o si es nuevo le daria la posibilidad de crear uno");
 		int opcion;
 		do {
 			String convertir[] = { "Datos", "Entrenamientos", "Historial", "Calificacion", "Salir" };
