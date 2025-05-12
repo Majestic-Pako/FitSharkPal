@@ -1,7 +1,7 @@
 package Code;
 
 public class Cuenta {
-	
+	private int id;
 	private String nombre;
 	private String usuario;
 	private String contrasenia;
@@ -11,6 +11,7 @@ public class Cuenta {
 	
 	public Cuenta(String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.usuario = usuario;
 		this.contrasenia = contrasenia;
@@ -65,6 +66,14 @@ public class Cuenta {
 
 	public void setEntrenador(Boolean entrenador) {
 		Entrenador = entrenador;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

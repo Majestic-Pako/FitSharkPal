@@ -1,5 +1,6 @@
 package Code;
 
+import java.sql.Connection;
 import java.util.LinkedList;
 
 public class Cliente extends Cuenta {
@@ -7,7 +8,7 @@ public class Cliente extends Cuenta {
 	private Cuenta cuenta;
 	private LinkedList<String> Nivel;
 	
-	public Cliente(String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
+	public Cliente(int id,String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
 		super(nombre, usuario, contrasenia, edad, genero, entrenador);
 		Nivel = new LinkedList<>();
         Nivel.add("Principiante");
@@ -23,5 +24,5 @@ public class Cliente extends Cuenta {
 		Nivel = nivel;
 	}
 	
-	
+	private static Connection con = Conexion.getInstance().getConnection();
 }
