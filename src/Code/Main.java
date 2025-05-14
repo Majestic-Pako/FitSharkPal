@@ -7,8 +7,18 @@ public class Main {
 	public static void main(String[] args) {
 
 		JOptionPane.showMessageDialog(null, "Bienvenido a FitSharkPal");
-		JOptionPane.showMessageDialog(null,
-				"En esta ventana pediria ingresar usuario o si es nuevo le daria la posibilidad de crear uno");
+		Cuenta c = Cuenta.login("agus123", "asd");
+
+        if (c != null) {
+            System.out.println("Bienvenido " + c.getNombre());
+            if (c instanceof Entrenador) {
+                System.out.println("Modo Entrenador activado");
+            } else {
+                System.out.println("Modo Cliente activado");
+            }
+        } else {
+            System.out.println("Credenciales incorrectas");
+        }
 		int opcion;
 		do {
 			String convertir[] = { "Datos", "Entrenamientos", "Historial", "Calificacion", "Salir" };

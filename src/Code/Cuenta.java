@@ -1,25 +1,32 @@
 package Code;
 
-public class Cuenta {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class Cuenta implements Encriptador {
 	private int id;
 	private String nombre;
 	private String usuario;
-	private String contrasenia;
+	private String contrasena;
 	private int edad;
 	private String genero;
 	private Boolean Entrenador;
 	
-	public Cuenta(String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
+	public Cuenta(int id,String nombre, String usuario, String contrasena, int edad, String genero, Boolean entrenador) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.usuario = usuario;
-		this.contrasenia = contrasenia;
+		this.contrasena = contrasena;
 		this.edad = edad;
 		this.genero = genero;
 		Entrenador = entrenador;
 	}
 
+	public Cuenta() {
+	}	
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -37,11 +44,11 @@ public class Cuenta {
 	}
 
 	public String getContrasenia() {
-		return contrasenia;
+		return contrasena;
 	}
 
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
+	public void setContrasenia(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public int getEdad() {
@@ -76,5 +83,36 @@ public class Cuenta {
 		this.id = id;
 	}
 	
+	private static Connection con = Conexion.getInstance().getConnection();
+	
+	public static Cuenta login(String usuario, String contrasena) {
+	    Cuenta cuenta = null;
+	    try {
+	        PreparedStatement stmt = con.prepareStatement(
+	            "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
+	        );
+	        stmt.setString(1, usuario);
+	        stmt.setString(2, new Cuenta().encriptar(contrasena));
+
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            int id = rs.getInt("id");
+	            String nombre = rs.getString("nombre");
+	            int edad = rs.getInt("edad");
+	            String genero = rs.getString("genero");
+	            Boolean entrenador = rs.getBoolean("entrenador");
+
+	            if (entrenador) {
+	            	cuenta = new Entrenador(id, nombre, usuario, contrasena, edad, genero, true);
+	            } else {
+	                cuenta = new Cliente(id, nombre, usuario, contrasena, edad, genero, false);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return cuenta;
+	}
 	
 }

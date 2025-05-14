@@ -3,18 +3,19 @@ package Code;
 import java.sql.Connection;
 import java.util.LinkedList;
 
-public class Cliente extends Cuenta {
+public class Cliente extends Cuenta implements Encriptador{
 	
 	private Cuenta cuenta;
 	private LinkedList<String> Nivel;
 	
-	public Cliente(int id,String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
-		super(nombre, usuario, contrasenia, edad, genero, entrenador);
+	public Cliente(int id,String nombre, String usuario, String contrasena, int edad, String genero, Boolean entrenador) {
+		super(id, nombre, usuario, contrasena, edad, genero, entrenador);
 		Nivel = new LinkedList<>();
         Nivel.add("Principiante");
         Nivel.add("Intermedio");
         Nivel.add("Avanzado");
 	}
+	
 
 	public LinkedList<String> getNivel() {
 		return Nivel;
@@ -25,4 +26,5 @@ public class Cliente extends Cuenta {
 	}
 	
 	private static Connection con = Conexion.getInstance().getConnection();
+	
 }
