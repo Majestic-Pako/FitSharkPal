@@ -115,5 +115,11 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	    }
 	    return cuenta;
 	}
+
+	@Override
+	public String toString() {
+		return "Cuenta [id=" + id + ", nombre=" + nombre + ", usuario=" + usuario + ", contrasena=" + contrasena
+				+ ", edad=" + edad + ", genero=" + genero + ", Entrenador=" + Entrenador + "]";
+	}
 	
 }
