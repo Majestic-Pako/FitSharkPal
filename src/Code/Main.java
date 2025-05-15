@@ -8,9 +8,10 @@ public class Main {
 
 		JOptionPane.showMessageDialog(null, "Bienvenido a FitSharkPal");
 		Cuenta c = Cuenta.login("agus123", "asd");
+		
 
         if (c != null) {
-            System.out.println("Bienvenido " + c.getNombre());
+            System.out.println("Bienvenido " + c );
             if (c instanceof Entrenador) {
                 System.out.println("Modo Entrenador activado");
             } else {

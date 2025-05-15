@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class Cuenta implements Encriptador {
+public class Cuenta<T extends Cuenta> implements Encriptador {
 	private int id;
 	private String nombre;
 	private String usuario;
@@ -43,11 +43,11 @@ public class Cuenta implements Encriptador {
 		this.usuario = usuario;
 	}
 
-	public String getContrasenia() {
+	public String getContrasena() {
 		return contrasena;
 	}
 
-	public void setContrasenia(String contrasena) {
+	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
 
@@ -85,8 +85,9 @@ public class Cuenta implements Encriptador {
 	
 	private static Connection con = Conexion.getInstance().getConnection();
 	
-	public static Cuenta login(String usuario, String contrasena) {
-	    Cuenta cuenta = null;
+	public static <T>T login(String usuario, String contrasena) {
+		T cuenta = (T)new Cuenta();
+	    
 	    try {
 	        PreparedStatement stmt = con.prepareStatement(
 	            "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
@@ -104,9 +105,9 @@ public class Cuenta implements Encriptador {
 	            Boolean entrenador = rs.getBoolean("entrenador");
 
 	            if (entrenador) {
-	            	cuenta = new Entrenador(id, nombre, usuario, contrasena, edad, genero, true);
+	            	T login = (T) new Entrenador(id, nombre, usuario, contrasena, edad, genero, true);
 	            } else {
-	                cuenta = new Cliente(id, nombre, usuario, contrasena, edad, genero, false);
+	                T login = (T)new Cliente(id, nombre, usuario, contrasena, edad, genero, false);
 	            }
 	        }
 	    } catch (Exception e) {
