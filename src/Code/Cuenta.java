@@ -11,9 +11,10 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	private String contrasena;
 	private int edad;
 	private String genero;
-	private Boolean Entrenador;
-	
-	public Cuenta(int id,String nombre, String usuario, String contrasena, int edad, String genero, Boolean entrenador) {
+	private Rol rol;
+
+	public Cuenta(int id, String nombre, String usuario, String contrasena, int edad, String genero,
+			Rol rol) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -21,12 +22,12 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.contrasena = contrasena;
 		this.edad = edad;
 		this.genero = genero;
-		Entrenador = entrenador;
+		this.rol = rol;
 	}
 
 	public Cuenta() {
-	}	
-	
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -67,14 +68,6 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.genero = genero;
 	}
 
-	public Boolean getEntrenador() {
-		return Entrenador;
-	}
-
-	public void setEntrenador(Boolean entrenador) {
-		Entrenador = entrenador;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -83,43 +76,73 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.id = id;
 	}
 	
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+
+
 	private static Connection con = Conexion.getInstance().getConnection();
 	
-	public static <T>T login(String usuario, String contrasena) {
-		T cuenta = (T)new Cuenta();
-	    
+	public static boolean crearCuenta(String usuario, String contrasena, String rol) {
 	    try {
-	        PreparedStatement stmt = con.prepareStatement(
-	            "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
-	        );
+	        String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
+	        PreparedStatement stmt = con.prepareStatement(sql);
 	        stmt.setString(1, usuario);
-	        stmt.setString(2, new Cuenta().encriptar(contrasena));
-
-	        ResultSet rs = stmt.executeQuery();
-
-	        if (rs.next()) {
-	            int id = rs.getInt("id");
-	            String nombre = rs.getString("nombre");
-	            int edad = rs.getInt("edad");
-	            String genero = rs.getString("genero");
-	            Boolean entrenador = rs.getBoolean("entrenador");
-
-	            if (entrenador) {
-	            	T login = (T) new Entrenador(id, nombre, usuario, contrasena, edad, genero, true);
-	            } else {
-	                T login = (T)new Cliente(id, nombre, usuario, contrasena, edad, genero, false);
-	            }
-	        }
+	        stmt.setString(2, contrasena);
+	        stmt.setString(3, rol);
+	        int filas = stmt.executeUpdate();
+	        return filas > 0;
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        return false;
 	    }
-	    return cuenta;
 	}
 
-	@Override
-	public String toString() {
-		return "Cuenta [id=" + id + ", nombre=" + nombre + ", usuario=" + usuario + ", contrasena=" + contrasena
-				+ ", edad=" + edad + ", genero=" + genero + ", Entrenador=" + Entrenador + "]";
-	}
-	
+	 public static Cuenta<?> login(String usuario, String contrasena) {
+		 Cuenta cuenta = null;
+	        try {
+	            PreparedStatement stmt = con.prepareStatement(
+	                "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
+	            );
+	            stmt.setString(1, usuario);
+	            //stmt.setString(2, new Cuenta<>().encriptar(contrasena));
+	            stmt.setString(2, contrasena);
+	            
+	            System.out.println("Ejecutando consulta login para usuario: " + usuario);
+	            
+	            ResultSet rs = stmt.executeQuery();
+
+	            if (rs.next()) {
+	                int id = rs.getInt("idCuenta");
+	                String user = rs.getString("usuario");
+	                String pass = rs.getString("contrasena");
+	                String rolStr = rs.getString("rol");
+
+	                Rol rol = Rol.valueOf(rolStr.toUpperCase());
+	                
+	                
+	                if (rol == Rol.ENTRENADOR) {
+	                    return new Entrenador(id, null, user, pass, 0, null, rol);
+	                } else {
+	                    return new Cliente(id, null, user, pass, 0, null, rol);
+	                }
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	    }
+
+	 @Override
+	 public String toString() {
+	     return "Contraseña: " + contrasena + ", Usuario: " + usuario + ", Rol: " + rol;
+	 }
+
+
 }

@@ -8,8 +8,8 @@ public class Cliente extends Cuenta implements Encriptador{
 	private Cuenta cuenta;
 	private LinkedList<String> Nivel;
 	
-	public Cliente(int id,String nombre, String usuario, String contrasena, int edad, String genero, Boolean entrenador) {
-		super(id, nombre, usuario, contrasena, edad, genero, entrenador);
+	public Cliente(int id,String nombre, String usuario, String contrasena, int edad, String genero, Rol rol) {
+		super(id, nombre, usuario, contrasena, edad, genero, rol);
 		Nivel = new LinkedList<>();
         Nivel.add("Principiante");
         Nivel.add("Intermedio");

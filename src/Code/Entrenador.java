@@ -8,13 +8,13 @@ public class Entrenador extends Cuenta{
 	private ArrayList<String> acciones;
 
 	public Entrenador(int id, String nombre, String usuario, String contrasena, int edad, String genero,
-			Boolean entrenador, Cuenta cuenta, ArrayList<String> acciones) {
-		super(id, nombre, usuario, contrasena, edad, genero, entrenador);
+			Rol rol, Cuenta cuenta, ArrayList<String> acciones) {
+		super(id, nombre, usuario, contrasena, edad, genero, rol);
 		this.cuenta = cuenta;
 		this.acciones = acciones;
 	}
-	public Entrenador(int id, String nombre, String usuario, String contrasena, int edad, String genero, Boolean entrenador) {
-	    super(id, nombre, usuario, contrasena, edad, genero, entrenador);
+	public Entrenador(int id, String nombre, String usuario, String contrasena, int edad, String genero, Rol rol) {
+	    super(id, nombre, usuario, contrasena, edad, genero, rol);
 	    this.cuenta = this; 
 	    this.acciones = new ArrayList<>(); 
 	}
