@@ -15,7 +15,6 @@ public class Main {
 		        System.out.println("Error al crear cuenta");
 		    }
 
-		    // Luego probar login
 		    Cuenta c = Cuenta.login("agus123", "asd");
 
 		    if (c != null) {
