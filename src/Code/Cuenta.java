@@ -89,12 +89,13 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 
 	private static Connection con = Conexion.getInstance().getConnection();
 	
-	public static boolean crearCuenta(String usuario, String contrasena, String rol) {
-	    try {
+	public static boolean Registro(String usuario, String contrasena, String rol) {
+		try {
 	        String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
 	        PreparedStatement stmt = con.prepareStatement(sql);
+	        Encriptador cifrador = new Cuenta();
 	        stmt.setString(1, usuario);
-	        stmt.setString(2, contrasena);
+	        stmt.setString(2, cifrador.encriptar(contrasena));
 	        stmt.setString(3, rol);
 	        int filas = stmt.executeUpdate();
 	        return filas > 0;
@@ -104,15 +105,14 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	    }
 	}
 
-	 public static Cuenta<?> login(String usuario, String contrasena) {
+	 public static Cuenta<?> Login(String usuario, String contrasena) {
 		 Cuenta cuenta = null;
 	        try {
 	            PreparedStatement stmt = con.prepareStatement(
 	                "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
 	            );
 	            stmt.setString(1, usuario);
-	            //stmt.setString(2, new Cuenta<>().encriptar(contrasena));
-	            stmt.setString(2, contrasena);
+	            stmt.setString(2, new Cuenta<>().encriptar(contrasena));
 	            
 	            System.out.println("Ejecutando consulta login para usuario: " + usuario);
 	            
