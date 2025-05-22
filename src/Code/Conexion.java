@@ -8,10 +8,9 @@ import javax.swing.JOptionPane;
 import com.mysql.jdbc.Connection;
 
 public class Conexion {
-	private static String URL ="jdbc:mysql://localhost:3306/escuela";
+	private static String URL ="jdbc:mysql://localhost:3306/fitshark";
 	private static String USER = "root";
 	private static String PASSWORD ="";
-	
 	private static Connection conect;
 	private static Conexion instance;
 	private Conexion() {

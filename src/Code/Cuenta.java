@@ -1,22 +1,31 @@
 package Code;
 
-public class Cuenta {
-	
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class Cuenta<T extends Cuenta> implements Encriptador {
+	private int id;
 	private String nombre;
 	private String usuario;
-	private String contrasenia;
+	private String contrasena;
 	private int edad;
 	private String genero;
-	private Boolean Entrenador;
-	
-	public Cuenta(String nombre, String usuario, String contrasenia, int edad, String genero, Boolean entrenador) {
+	private Rol rol;
+
+	public Cuenta(int id, String nombre, String usuario, String contrasena, int edad, String genero,
+			Rol rol) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.usuario = usuario;
-		this.contrasenia = contrasenia;
+		this.contrasena = contrasena;
 		this.edad = edad;
 		this.genero = genero;
-		Entrenador = entrenador;
+		this.rol = rol;
+	}
+
+	public Cuenta() {
 	}
 
 	public String getNombre() {
@@ -35,12 +44,12 @@ public class Cuenta {
 		this.usuario = usuario;
 	}
 
-	public String getContrasenia() {
-		return contrasenia;
+	public String getContrasena() {
+		return contrasena;
 	}
 
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public int getEdad() {
@@ -59,13 +68,81 @@ public class Cuenta {
 		this.genero = genero;
 	}
 
-	public Boolean getEntrenador() {
-		return Entrenador;
+	public int getId() {
+		return id;
 	}
 
-	public void setEntrenador(Boolean entrenador) {
-		Entrenador = entrenador;
+	public void setId(int id) {
+		this.id = id;
 	}
 	
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+
+
+	private static Connection con = Conexion.getInstance().getConnection();
 	
+	public static boolean Registro(String usuario, String contrasena, String rol) {
+		try {
+	        String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
+	        PreparedStatement stmt = con.prepareStatement(sql);
+	        Encriptador cifrador = new Cuenta();
+	        stmt.setString(1, usuario);
+	        stmt.setString(2, cifrador.encriptar(contrasena));
+	        stmt.setString(3, rol);
+	        int filas = stmt.executeUpdate();
+	        return filas > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	 public static Cuenta<?> Login(String usuario, String contrasena) {
+		 Cuenta cuenta = null;
+	        try {
+	            PreparedStatement stmt = con.prepareStatement(
+	                "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
+	            );
+	            stmt.setString(1, usuario);
+	            stmt.setString(2, new Cuenta<>().encriptar(contrasena));
+	            
+	            System.out.println("Ejecutando consulta login para usuario: " + usuario);
+	            
+	            ResultSet rs = stmt.executeQuery();
+
+	            if (rs.next()) {
+	                int id = rs.getInt("idCuenta");
+	                String user = rs.getString("usuario");
+	                String pass = rs.getString("contrasena");
+	                String rolStr = rs.getString("rol");
+
+	                Rol rol = Rol.valueOf(rolStr.toUpperCase());
+	                
+	                
+	                if (rol == Rol.ENTRENADOR) {
+	                    return new Entrenador(id, null, user, pass, 0, null, rol);
+	                } else {
+	                    return new Cliente(id, null, user, pass, 0, null, rol);
+	                }
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	    }
+
+	 @Override
+	 public String toString() {
+	     return "Contraseña: " + contrasena + ", Usuario: " + usuario + ", Rol: " + rol;
+	 }
+
+
 }
