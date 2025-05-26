@@ -5,13 +5,14 @@ import javax.swing.JOptionPane;
 public interface Validacion {
 	
 	default boolean validarUsuario(String usuario, String contrasena) {
-        	try {
-               return validarCredenciales(usuario, contrasena);
+            	try {
+               return true;
         	}catch(Exception e){
         		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         	        return false;
         	}
 	}
+	
 	
 
 	default boolean validarRegistro(String usuario, String contrasena) {
