@@ -7,7 +7,7 @@ public class Main implements Validacion {
 	public static void main(String[] args) {
 
 		Main instancia = new Main(); // llama a los métodos default de la interfaz
-
+		int idCuentaSesion = -1;
 		int opcion;
 		do {
 			String[] opciones = { "Registrar", "Login", "Salir" };
@@ -16,15 +16,18 @@ public class Main implements Validacion {
 
 			switch (opcion) {
 			case 0:
+				
 				String usuario = JOptionPane.showInputDialog("Ingrese usuario:");
 				String contrasena = JOptionPane.showInputDialog("Ingrese contraseña:");
 
 				if (instancia.ValidarRegistro(usuario, contrasena)) {
-					boolean exito = Cuenta.Registro(usuario, contrasena,"CLIENTE");
-					if (exito)
-						JOptionPane.showMessageDialog(null, "Registro exitoso.");
-					else
+					int idCuenta = Cuenta.Registro(usuario, contrasena,"CLIENTE");
+					if (idCuenta != -1){
+						JOptionPane.showMessageDialog(null, "Registro exitoso."+ idCuenta);
+						idCuentaSesion = idCuenta;
+					}else {
 						JOptionPane.showMessageDialog(null, "Error en el registro.");
+					}
 				}
 				break;
 
@@ -36,6 +39,7 @@ public class Main implements Validacion {
 					Cuenta<?> cuenta = Cuenta.Login(usuario, contrasena);
 					if (cuenta != null) {
 						JOptionPane.showMessageDialog(null, "Bienvenido " + cuenta.getUsuario());
+						idCuentaSesion = cuenta.getIdCuenta();
 						int o;
 						do {
 							String convertir[] = { "Datos", "Entrenamientos", "Historial", "Calificacion", "Salir" };
@@ -43,8 +47,21 @@ public class Main implements Validacion {
 									convertir[0]);
 							switch (o) {
 							case 0:
-								JOptionPane.showMessageDialog(null,
-										"Seccion Cliente \n Aca el cliente podria modificar sus datos");
+								
+								JOptionPane.showMessageDialog(null, "Se le solicitara ingresar sus datos");
+								String nombre = JOptionPane.showInputDialog("Ingrese su nombre");
+								int edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su Edad"));
+								String genero = (String) JOptionPane.showInputDialog(null, "Seleccione su genero:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
+										 new Object[]{"Hombre", "Mujer", "Otro"}, "Hombre");
+								String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
+										 new Object[]{"Principiante", "Intermedio", "Avanzado"}, "Principiante");
+						
+								boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivel.toUpperCase());
+								if (registrado) {
+					                JOptionPane.showMessageDialog(null, "Registro exitoso.");
+								}else {
+					                JOptionPane.showMessageDialog(null, "Error al registrar datos del cliente.");
+								}
 								JOptionPane.showMessageDialog(null,
 										"Seccion Entrenador \n Aca el entrenador podra visaulizar sus alumnos "
 												+ "y tendra la posibilidad de modificar sus datos, eliminar o agregar nuevos clientes");

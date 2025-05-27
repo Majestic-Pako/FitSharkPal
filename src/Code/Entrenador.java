@@ -7,9 +7,9 @@ public class Entrenador extends Cuenta{
 	private Cuenta cuenta;
 	private ArrayList<String> acciones;
 
-	public Entrenador(int id, String nombre, String usuario, String contrasena, int edad, String genero,
+	public Entrenador(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero,
 			Rol rol, Cuenta cuenta, ArrayList<String> acciones) {
-		super(id, nombre, usuario, contrasena, edad, genero, rol);
+		super(idCuenta, nombre, usuario, contrasena, edad, genero, rol);
 		this.cuenta = cuenta;
 		this.acciones = acciones;
 	}
