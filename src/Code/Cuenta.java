@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.mysql.jdbc.Statement;
+
 public class Cuenta<T extends Cuenta> implements Encriptador {
-	private int id;
+	private int idCuenta;
 	private String nombre;
 	private String usuario;
 	private String contrasena;
@@ -13,10 +15,10 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	private String genero;
 	private Rol rol;
 
-	public Cuenta(int id, String nombre, String usuario, String contrasena, int edad, String genero,
+	public Cuenta(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero,
 			Rol rol) {
 		super();
-		this.id = id;
+		this.idCuenta = idCuenta;
 		this.nombre = nombre;
 		this.usuario = usuario;
 		this.contrasena = contrasena;
@@ -68,12 +70,12 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.genero = genero;
 	}
 
-	public int getId() {
-		return id;
+	public int getIdCuenta() {
+		return idCuenta;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdCuenta(int id) {
+		this.idCuenta = idCuenta;
 	}
 	
 
@@ -89,20 +91,25 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 
 	private static Connection con = Conexion.getInstance().getConnection();
 	
-	public static boolean Registro(String usuario, String contrasena, String rol) {
+	public static int Registro(String usuario, String contrasena, String rol) {
 		try {
 	        String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
-	        PreparedStatement stmt = con.prepareStatement(sql);
-	        Encriptador cifrador = new Cuenta();
+	        PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	        Encriptador cifrador = new Cuenta(); //no me dejaba encriptar si no ponia esto :v
 	        stmt.setString(1, usuario);
 	        stmt.setString(2, cifrador.encriptar(contrasena));
 	        stmt.setString(3, rol);
 	        int filas = stmt.executeUpdate();
-	        return filas > 0;
+	        if (filas > 0) {
+	            ResultSet rs = stmt.getGeneratedKeys();
+	            if (rs.next()) {
+	                return rs.getInt(1); //esta wea es para que me devuelva el idCuenta pa el Cliente
+	            }
+	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        return false;
 	    }
+		return -1;
 	}
 
 	 public static Cuenta<?> Login(String usuario, String contrasena) {
