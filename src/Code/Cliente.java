@@ -48,4 +48,3 @@ public class Cliente extends Cuenta implements Encriptador{
 	}
 	
 }
-
