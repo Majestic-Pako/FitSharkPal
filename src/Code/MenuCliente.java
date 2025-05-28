@@ -1,6 +1,6 @@
 package Code;
 
 public enum MenuCliente {
-Datos, Entrenamiento, Historial,
-Calificacion, Salir
+	Datos,Entrenamientos,Historial
+	,Calificacion,Salir
 }
