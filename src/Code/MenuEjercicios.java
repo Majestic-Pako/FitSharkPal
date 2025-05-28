@@ -1,5 +1,7 @@
 package Code;
 
 public enum MenuEjercicios {
-Fuerza,Volumen,Resistencia
-}
+		Fuerza,Volumen,Resistencia
+	}
+
+
