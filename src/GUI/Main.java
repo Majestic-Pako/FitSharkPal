@@ -1,6 +1,11 @@
-package Code;
+package GUI;
 
 import javax.swing.JOptionPane;
+
+import BLL.Validacion;
+import DLL.Cliente;
+import DLL.Cuenta;
+import DLL.Fuerza;
 
 public class Main implements Validacion {
 

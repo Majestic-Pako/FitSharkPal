@@ -1,4 +1,4 @@
-package Code;
+package DLL;
 
 public enum MenuCliente {
 	Datos,Entrenamientos,Historial

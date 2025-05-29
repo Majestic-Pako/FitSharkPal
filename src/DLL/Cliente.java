@@ -1,10 +1,13 @@
-package Code;
+package DLL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.LinkedList;
 
 import com.mysql.jdbc.Statement;
+
+import BLL.Encriptador;
+import repository.Conexion;
 
 public class Cliente extends Cuenta implements Encriptador{
 	
