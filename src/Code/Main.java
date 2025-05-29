@@ -62,6 +62,9 @@ public class Main implements Validacion {
 								}else {
 					                JOptionPane.showMessageDialog(null, "Error al registrar datos del cliente.");
 								}
+								
+								JOptionPane.showMessageDialog(null, nivel);
+								Fuerza.afk(nivel);
 								JOptionPane.showMessageDialog(null,
 										"Seccion Entrenador \n Aca el entrenador podra visaulizar sus alumnos "
 												+ "y tendra la posibilidad de modificar sus datos, eliminar o agregar nuevos clientes");

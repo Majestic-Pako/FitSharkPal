@@ -9,7 +9,7 @@ import com.mysql.jdbc.Statement;
 public class Cliente extends Cuenta implements Encriptador{
 	
 	private Cuenta cuenta;
-	private LinkedList<String> Nivel;
+	public LinkedList<String> Nivel;
 	
 	public Cliente(int idCuenta,String nombre, String usuario, String contrasena, int edad, String genero, Rol rol) {
 		super(idCuenta, nombre, usuario, contrasena, edad, genero, rol);
