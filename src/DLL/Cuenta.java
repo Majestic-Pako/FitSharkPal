@@ -1,10 +1,13 @@
-package Code;
+package DLL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import com.mysql.jdbc.Statement;
+
+import BLL.Encriptador;
+import repository.Conexion;
 
 public class Cuenta<T extends Cuenta> implements Encriptador {
 	private int idCuenta;

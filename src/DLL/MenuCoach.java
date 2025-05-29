@@ -1,4 +1,4 @@
-package Code;
+package DLL;
 
 public enum MenuCoach {
 	Alumnos, Editar_Perfiles, Ver_Actidades,

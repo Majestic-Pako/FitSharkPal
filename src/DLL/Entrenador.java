@@ -1,4 +1,4 @@
-package Code;
+package DLL;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,8 @@ public class Entrenador extends Cuenta{
 	    this.cuenta = this; 
 	    this.acciones = new ArrayList<>(); 
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "Entrenador [cuenta=" + cuenta + ", acciones=" + acciones + "]";
