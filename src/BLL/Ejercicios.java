@@ -1,4 +1,4 @@
-package Code;
+package BLL;
 
 public class Ejercicios {
 	private int repeticiones;
