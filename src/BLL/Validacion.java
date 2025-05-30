@@ -2,6 +2,9 @@ package BLL;
 
 import javax.swing.JOptionPane;
 
+import DLL.MenuCliente;
+import DLL.MenuCoach;
+
 public interface Validacion {
 	
 	default boolean ValidarUsuario(String usuario, String contrasena) {
@@ -28,5 +31,44 @@ public interface Validacion {
 	    return true;
 	}
 
+	default void NavCliente(int idCuentaSesion) {
+        MenuCliente opcion;
+        do {
+            opcion = (MenuCliente) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione una opción:",
+                    "Menú Cliente",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    MenuCliente.values(),
+                    MenuCliente.Datos
+            );
+
+            if (opcion != null) {
+                opcion.ejecutar(idCuentaSesion);
+            }
+
+        } while (opcion != null && opcion != MenuCliente.Salir);
+    }
+
+    default void NavCoach(int idCuentaSesion) {
+        MenuCoach opcion;
+        do {
+            opcion = (MenuCoach) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione una opción:",
+                    "Menú Entrenador",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    MenuCoach.values(),
+                    MenuCoach.Alumnos
+            );
+
+            if (opcion != null) {
+                opcion.ejecutar(idCuentaSesion);
+            }
+
+        } while (opcion != null && opcion != MenuCoach.Salir);
+    }
 	
 }

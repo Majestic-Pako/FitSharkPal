@@ -28,32 +28,5 @@ public class Fuerza extends Ejercicios{
 		this.usarMaquinas = usarMaquinas;
 	}
 	
-	public static void afk(String nivel) {
-        switch (nivel) {
-            case "Principiante":
-                Pri();
-                break;
-            case "Intermedio":
-                Int();
-                break;
-            case "Avanzado":
-                Ava();
-                break;
-            default:
-                JOptionPane.showMessageDialog(null, "Nivel no válido");
-        }
-    }
-
 	
-	public static void Pri() {
-		JOptionPane.showMessageDialog(null, "eSTE ENTRENAMIENTO ES PA NOOBS");
-	}
-	
-	public static void Ava() {
-		JOptionPane.showMessageDialog(null, "eSTE ENTRENAMIENTO ES PA Pros");
-	}
-	
-	public static void Int() {
-		JOptionPane.showMessageDialog(null, "eSTE ENTRENAMIENTO ES para q te importa");
-	}
 }
