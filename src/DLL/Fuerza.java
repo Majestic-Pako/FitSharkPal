@@ -1,4 +1,8 @@
-package Code;
+package DLL;
+
+import javax.swing.JOptionPane;
+
+import BLL.Ejercicios;
 
 public class Fuerza extends Ejercicios{
 	private Ejercicios ejercicios;
@@ -24,5 +28,5 @@ public class Fuerza extends Ejercicios{
 		this.usarMaquinas = usarMaquinas;
 	}
 	
-
+	
 }

@@ -1,4 +1,4 @@
-package Code;
+package DLL;
 public class Entrenamientos {
 	private double peso;
 	private double altura;

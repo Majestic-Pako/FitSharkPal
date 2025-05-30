@@ -1,4 +1,6 @@
-package Code;
+package DLL;
+
+import BLL.Ejercicios;
 
 public class Volumen extends Ejercicios {
 	private Ejercicios ejercicios;
