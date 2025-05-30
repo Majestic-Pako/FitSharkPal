@@ -13,7 +13,6 @@ public class Cliente extends Cuenta implements Encriptador{
 	
 	private Cuenta cuenta;
 	private LinkedList<String> Nivel;
-	private Fuerza fuerza;
 	
 	public Cliente(int idCuenta,String nombre, String usuario, String contrasena, int edad, String genero, Rol rol) {
 		super(idCuenta, nombre, usuario, contrasena, edad, genero, rol);
@@ -21,7 +20,7 @@ public class Cliente extends Cuenta implements Encriptador{
         Nivel.add("Principiante");
         Nivel.add("Intermedio");
         Nivel.add("Avanzado");
-        this.fuerza = fuerza;
+        
 	}
 
 	public LinkedList<String> getNivel() {
