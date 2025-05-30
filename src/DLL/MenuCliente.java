@@ -14,7 +14,7 @@ public enum MenuCliente {
                     new Object[]{"Hombre", "Mujer", "Otro"}, "Hombre");
             String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
                     new Object[]{"Principiante", "Intermedio", "Avanzado"}, "Principiante");
-
+            
             boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivel.toUpperCase());
             if (registrado) {
                 JOptionPane.showMessageDialog(null, "Registro exitoso.");
