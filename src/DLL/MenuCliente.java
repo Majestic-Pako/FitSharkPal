@@ -15,7 +15,8 @@ public enum MenuCliente {
             String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
                     new Object[]{"Principiante", "Intermedio", "Avanzado"}, "Principiante");
             
-            boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivel.toUpperCase());
+            Nivel nivelAct = Nivel.valueOf(nivel.toUpperCase());
+            boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivelAct);
             if (registrado) {
                 JOptionPane.showMessageDialog(null, "Registro exitoso.");
             } else {
@@ -27,7 +28,13 @@ public enum MenuCliente {
     Entrenamientos("Entrenamientos activos") {
         @Override
         public void ejecutar(int idCuentaSesion) {
-            JOptionPane.showMessageDialog(null, "Visualizando entrenamientos activos...");
+        	 Cliente cliente = Cliente.InfoCliente(idCuentaSesion);
+             if (cliente != null) {
+                 JOptionPane.showMessageDialog(null, "Nivel actual: " + cliente.getNivel());
+                 JOptionPane.showMessageDialog(null, "Visualizando entrenamientos activos...");
+             } else {
+                 JOptionPane.showMessageDialog(null, "No se pudo obtener el nivel del cliente. Ingresa los datos pa");
+             }
         }
     },
 

@@ -140,7 +140,7 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	                if (rol == Rol.ENTRENADOR) {
 	                    return new Entrenador(id, null, user, pass, 0, null, rol);
 	                } else {
-	                    return new Cliente(id, null, user, pass, 0, null, rol);
+	                    return new Cliente(id, null, user, pass, 0, null, rol, cuenta, null);
 	                }
 	            }
 	        } catch (Exception e) {
