@@ -15,7 +15,7 @@ public class Main implements Validacion {
 		int opcion;
 		do {
 			String[] opciones = { "Registrar", "Login", "Salir" };
-			opcion = JOptionPane.showOptionDialog(null, "Seleccione una opción", "Menu", 0, 3, null, opciones,
+			opcion = JOptionPane.showOptionDialog(null, "Bienvenido a Fitshark", "Menu", 0, 3, null, opciones,
 					opciones[0]);
 
 			switch (opcion) {
