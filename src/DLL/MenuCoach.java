@@ -2,17 +2,13 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
-public enum MenuCoach {
-	Alumnos("Ver alumnos") {
+import BLL.Validacion;
+
+public enum MenuCoach implements Validacion {
+	Alumnos("Menu de alumnos") {
         @Override
         public void ejecutar(int idCuentaSesion) {
-            JOptionPane.showMessageDialog(null, "Lista de alumnos asignados...");
-        }
-    },
-    Editar_Perfiles("Editar perfiles de clientes") {
-        @Override
-        public void ejecutar(int idCuentaSesion) {
-            JOptionPane.showMessageDialog(null, "Editar perfiles de los clientes...");
+        	Crud(idCuentaSesion);
         }
     },
     Ver_Actividades("Ver actividades asignadas") {

@@ -2,6 +2,7 @@ package BLL;
 
 import javax.swing.JOptionPane;
 
+import DLL.CrudCoach;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
 
@@ -69,6 +70,26 @@ public interface Validacion {
             }
 
         } while (opcion != null && opcion != MenuCoach.Salir);
+    }
+    
+    default void Crud(int idCuentaSesion) {
+    	CrudCoach opcion;
+        do {
+            opcion = (CrudCoach) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione una opción:",
+                    "Menú de Actividades",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    CrudCoach.values(),
+                    CrudCoach.Crear_Perfil
+            );
+
+            if (opcion != null) {
+                opcion.ejecutar(idCuentaSesion);
+            }
+
+        } while (opcion != null && opcion != CrudCoach.Volver);
     }
 	
 }
