@@ -69,5 +69,28 @@ public class Cliente extends Cuenta implements Encriptador {
 	    }
 	    return null;
 	}
+	
+	public static LinkedList<Cliente> Listado() {
+	    LinkedList<Cliente> clientes = new LinkedList<>();
+	    try {
+	        String sql = "SELECT * FROM cuenta INNER JOIN cliente ON cuenta.idCuenta = cliente.Cuenta_idCuenta WHERE cuenta.rol = 'CLIENTE'";
+	        PreparedStatement stmt = con.prepareStatement(sql);
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            int id = rs.getInt("idCuenta");
+	            String nombre = rs.getString("nombre");
+	            String genero = rs.getString("genero");
+	            int edad = rs.getInt("edad");
+	            String nivelStr = rs.getString("nivel");
+	            Nivel nivel = Nivel.valueOf(nivelStr.toUpperCase());
+
+	            Cliente cliente = new Cliente(id, nombre, null, null, edad, genero, Rol.CLIENTE, null, nivel);
+	            clientes.add(cliente);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return clientes;
+	}
 
 }
