@@ -8,6 +8,7 @@ import DLL.Cliente;
 import DLL.CrudCoach;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
+import DLL.Nivel;
 
 public interface Validacion {
 	
@@ -34,6 +35,17 @@ public interface Validacion {
 
 	    return true;
 	}
+	 default boolean ValidarDatos(String nombre, int edad, String genero,int peso, int altura, Nivel nivel ) {
+			
+			if(nombre.isEmpty() || edad<=0 && edad>=200 || genero!=null || nivel !=nivel.INTERMEDIO || nivel!=nivel.PRINCIPIANTE || nivel!=nivel.AVANZADO || peso<0 || peso>=200 || altura<0 || altura>=3 ) {
+				JOptionPane.showMessageDialog(null, "Ingreso algo incorrecto, vuelva a intentarlo");
+				return false;
+				
+			}
+			JOptionPane.showMessageDialog(null, "Completado con exito los datos");
+			return true;
+			
+		}
 
 	default void NavCliente(int idCuentaSesion) {
         MenuCliente opcion;

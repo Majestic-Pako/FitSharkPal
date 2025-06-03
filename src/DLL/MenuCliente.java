@@ -2,6 +2,8 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
+import GUI.Main;
+
 public enum MenuCliente {
 	Datos("Ingresar datos") {
         @Override
@@ -16,8 +18,10 @@ public enum MenuCliente {
             int altura = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su altura en centimetros"));
             String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
                     new Object[]{"Principiante", "Intermedio", "Avanzado"}, "Principiante");
-            
+     
             Nivel nivelAct = Nivel.valueOf(nivel.toUpperCase());
+            Main llamada= new Main();
+            llamada.ValidarDatos(nombre, edad, genero, peso, altura, nivelAct);
             boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), peso, altura ,nivelAct);
             if (registrado) {
                 JOptionPane.showMessageDialog(null, "Registro exitoso.");
