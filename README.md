@@ -44,8 +44,20 @@ fitsharkpal/
     │   └── Main.java            # Clase principal, contiene el menú inicial
 ```
 
-<h2>Diagrama de Clases </h2>
-<img src="https://github.com/user-attachments/assets/89a37df5-550c-46e7-9ceb-b64854e16d94"></img>
-<h2>Diagrama de Caso de Usos</h2>
-<img src="https://github.com/user-attachments/assets/385b0116-bbc7-446e-b977-82dc7a15e40e"></img>
-<h2>Diagrama de entidades</h2>
+## 📘 Diagrama de Clases
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/89a37df5-550c-46e7-9ceb-b64854e16d94" alt="Diagrama de Clases" width="700"/>
+</p>
+
+## 🎯 Diagrama de Caso de Usos
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/385b0116-bbc7-446e-b977-82dc7a15e40e" alt="Diagrama de Caso de Usos" width="700"/>
+</p>
+
+## 📊 Diagrama de Entidades
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5124f21e-f5b0-4fc7-80b4-e5f7d7d8e079" alt="Diagrama de entidades" width="700"/>
+</p>
