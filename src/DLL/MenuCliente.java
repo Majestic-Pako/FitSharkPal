@@ -21,8 +21,8 @@ public enum MenuCliente {
             
             
             Nivel nivelAct = Nivel.valueOf(nivel.toUpperCase());
-            //Validacion a= new Validacion(nombre,edad,genero,nivel);
-            //a.ValidarDatos(nombre, edad, genero, nivel);
+            Validacion validar = null;
+            validar.ValidarDatos(nombre, edad, genero, nivelAct);
             boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivelAct);
             if (registrado) {
                 JOptionPane.showMessageDialog(null, "Registro exitoso.");

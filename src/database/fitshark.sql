@@ -7,7 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-
+use fitshark;
 -- -----------------------------------------------------
 -- Table `Cuenta`
 -- -----------------------------------------------------
@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `Cuenta` ;
 
 CREATE TABLE IF NOT EXISTS `Cuenta` (
   `idCuenta` INT NOT NULL,
-  `usuario_mail` VARCHAR(65) NULL,
+  `usuario` VARCHAR(65) NULL,
   `contrasena` VARCHAR(45) NULL,
   `rol` ENUM('cliente', 'entrenador') NULL,
   PRIMARY KEY (`idCuenta`))
@@ -63,9 +63,9 @@ CREATE TABLE IF NOT EXISTS `Cliente` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Cliente_Cuenta1_idx` ON `Cliente` (`Cuenta_idCuenta` ASC) VISIBLE;
+CREATE INDEX `fk_Cliente_Cuenta1_idx` ON `Cliente` (`Cuenta_idCuenta` ASC) ;
 
-CREATE INDEX `fk_Cliente_Gamificacion1_idx` ON `Cliente` (`Gamificacion_idGamificacion` ASC) VISIBLE;
+CREATE INDEX `fk_Cliente_Gamificacion1_idx` ON `Cliente` (`Gamificacion_idGamificacion` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `Entrenador` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Entrenador_Cuenta1_idx` ON `Entrenador` (`Cuenta_idCuenta` ASC) VISIBLE;
+CREATE INDEX `fk_Entrenador_Cuenta1_idx` ON `Entrenador` (`Cuenta_idCuenta` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -210,17 +210,17 @@ CREATE TABLE IF NOT EXISTS `Ejercicios` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Ejercicios_Espalda1_idx` ON `Ejercicios` (`Espalda_idEspalda` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_Espalda1_idx` ON `Ejercicios` (`Espalda_idEspalda` ASC) ;
 
-CREATE INDEX `fk_Ejercicios_Brazos1_idx` ON `Ejercicios` (`Brazos_idBrazos` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_Brazos1_idx` ON `Ejercicios` (`Brazos_idBrazos` ASC) ;
 
-CREATE INDEX `fk_Ejercicios_Pecho1_idx` ON `Ejercicios` (`Pecho_idPecho` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_Pecho1_idx` ON `Ejercicios` (`Pecho_idPecho` ASC) ;
 
-CREATE INDEX `fk_Ejercicios_Cardio1_idx` ON `Ejercicios` (`Cardio_idCardio` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_Cardio1_idx` ON `Ejercicios` (`Cardio_idCardio` ASC) ;
 
-CREATE INDEX `fk_Ejercicios_ZonaMedia1_idx` ON `Ejercicios` (`ZonaMedia_idZonaMedia` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_ZonaMedia1_idx` ON `Ejercicios` (`ZonaMedia_idZonaMedia` ASC) ;
 
-CREATE INDEX `fk_Ejercicios_Piernas1_idx` ON `Ejercicios` (`Piernas_idPiernas` ASC) VISIBLE;
+CREATE INDEX `fk_Ejercicios_Piernas1_idx` ON `Ejercicios` (`Piernas_idPiernas` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -251,11 +251,11 @@ CREATE TABLE IF NOT EXISTS `Rutina` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Entrenamientos_Cuenta1_idx` ON `Rutina` (`Cuenta_idCuenta` ASC) VISIBLE;
+CREATE INDEX `fk_Entrenamientos_Cuenta1_idx` ON `Rutina` (`Cuenta_idCuenta` ASC) ;
 
-CREATE INDEX `fk_Rutina_Ejercicios1_idx` ON `Rutina` (`Ejercicios_idEjercicios` ASC) VISIBLE;
+CREATE INDEX `fk_Rutina_Ejercicios1_idx` ON `Rutina` (`Ejercicios_idEjercicios` ASC) ;
 
-CREATE INDEX `fk_Rutina_Gamificacion1_idx` ON `Rutina` (`Gamificacion_idGamificacion` ASC) VISIBLE;
+CREATE INDEX `fk_Rutina_Gamificacion1_idx` ON `Rutina` (`Gamificacion_idGamificacion` ASC) ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
