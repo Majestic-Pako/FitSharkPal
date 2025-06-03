@@ -1,7 +1,10 @@
 package BLL;
 
+import java.util.LinkedList;
+
 import javax.swing.JOptionPane;
 
+import DLL.Cliente;
 import DLL.CrudCoach;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
@@ -22,7 +25,7 @@ public interface Validacion {
 	        return false;
 
 	    }else {
-	    	if (contrasena.length() < 6) {
+	    	if (contrasena.length() < 2) {
 		    	JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
 		    	return false;
 	    	}
@@ -90,6 +93,42 @@ public interface Validacion {
             }
 
         } while (opcion != null && opcion != CrudCoach.Volver);
+    }
+    
+    default void MostrarAlumnos() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+
+        String seleccionado = (String) JOptionPane.showInputDialog(
+            null,
+            "Seleccione un alumno para ver sus datos:",
+            "Lista de Alumnos",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            nombres,
+            nombres[0]
+        );
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    String datos = 
+                        "Nombre: " + c.getNombre() + "\n" +
+                        "Edad: " + c.getEdad() + "\n" +
+                        "Género: " + c.getGenero() + "\n" +
+                        "Nivel: " + c.getNivel();
+                    
+                    JOptionPane.showMessageDialog(null, datos, "Datos del Alumno", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
+            }
+        }
     }
 	
 }

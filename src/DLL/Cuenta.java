@@ -16,9 +16,11 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	private String contrasena;
 	private int edad;
 	private String genero;
+	private int peso;
+	private int altura;
 	private Rol rol;
 
-	public Cuenta(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero,
+	public Cuenta(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero,int peso, int altura,
 			Rol rol) {
 		super();
 		this.idCuenta = idCuenta;
@@ -27,6 +29,8 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.contrasena = contrasena;
 		this.edad = edad;
 		this.genero = genero;
+		this.peso = peso;
+		this.altura = altura;
 		this.rol = rol;
 	}
 
@@ -80,7 +84,22 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	public void setIdCuenta(int id) {
 		this.idCuenta = idCuenta;
 	}
-	
+
+	public int getPeso() {
+		return peso;
+	}
+
+	public void setPeso(int peso) {
+		this.peso = peso;
+	}
+
+	public int getAltura() {
+		return altura;
+	}
+
+	public void setAltura(int altura) {
+		this.altura = altura;
+	}
 
 	public Rol getRol() {
 		return rol;
@@ -138,9 +157,9 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	                
 	                
 	                if (rol == Rol.ENTRENADOR) {
-	                    return new Entrenador(id, null, user, pass, 0, null, rol);
+	                    return new Entrenador(id, null, user, pass, 0, null, id, id, rol);
 	                } else {
-	                    return new Cliente(id, null, user, pass, 0, null, rol, cuenta, null);
+	                    return new Cliente(id, null, user, pass, 0, null, id, id, rol, cuenta, null);
 	                }
 	            }
 	        } catch (Exception e) {

@@ -7,18 +7,43 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-
+use fitshark;
 -- -----------------------------------------------------
 -- Table `Cuenta`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Cuenta` ;
 
 CREATE TABLE IF NOT EXISTS `Cuenta` (
-  `idCuenta` INT NOT NULL,
-  `usuario_mail` VARCHAR(65) NULL,
-  `contrasena` VARCHAR(45) NULL,
+  `idCuenta` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(65) NOT NULL,
+  `contrasena` VARCHAR(45) NOT NULL,
   `rol` ENUM('cliente', 'entrenador') NULL,
   PRIMARY KEY (`idCuenta`))
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+-- Table `Cliente`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Cliente` ;
+
+CREATE TABLE IF NOT EXISTS `Cliente` (
+  `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NOT NULL,
+  `edad` INT NOT NULL,
+  `genero` ENUM('Hombre', 'Mujer', 'Otro') NOT NULL,
+  `peso` INT NOT NULL,
+  `altura` INT NOT NULL,
+  `nivel` ENUM('Principiante', 'Intermedio', 'Avanzado') NOT NULL,
+  `Cuenta_idCuenta` INT NOT NULL,
+  PRIMARY KEY (`idCliente`, `Cuenta_idCuenta`),
+  INDEX `fk_Cliente_Cuenta1_idx` (`Cuenta_idCuenta` ASC),
+  CONSTRAINT `fk_Cliente_Cuenta1`
+    FOREIGN KEY (`Cuenta_idCuenta`)
+    REFERENCES `Cuenta` (`idCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -28,44 +53,19 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Gamificacion` ;
 
 CREATE TABLE IF NOT EXISTS `Gamificacion` (
-  `idGamificacion` INT NOT NULL,
+  `idGamificacion` INT NOT NULL AUTO_INCREMENT,
   `puntaje` INT NOT NULL,
   `carta` ENUM('Bronce', 'Plata', 'Oro') NOT NULL,
-  PRIMARY KEY (`idGamificacion`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Cliente`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Cliente` ;
-
-CREATE TABLE IF NOT EXISTS `Cliente` (
-  `idCliente` INT NOT NULL,
-  `nombre` VARCHAR(45) NOT NULL,
-  `edad` INT NOT NULL,
-  `genero` ENUM('Hombre', 'Mujer', 'Otro') NOT NULL,
-  `peso` INT NOT NULL,
-  `altura` INT NOT NULL,
-  `nivel` ENUM('Principiante', 'Intermedio', 'Avanzado') NOT NULL,
-  `Cuenta_idCuenta` INT NOT NULL,
-  `Gamificacion_idGamificacion` INT NOT NULL,
-  PRIMARY KEY (`idCliente`, `Cuenta_idCuenta`, `Gamificacion_idGamificacion`),
-  CONSTRAINT `fk_Cliente_Cuenta1`
-    FOREIGN KEY (`Cuenta_idCuenta`)
-    REFERENCES `Cuenta` (`idCuenta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Cliente_Gamificacion1`
-    FOREIGN KEY (`Gamificacion_idGamificacion`)
-    REFERENCES `Gamificacion` (`idGamificacion`)
+  `Cliente_idCliente` INT NOT NULL,
+  `Cliente_Cuenta_idCuenta` INT NOT NULL,
+  PRIMARY KEY (`idGamificacion`),
+  INDEX `fk_Gamificacion_Cliente1_idx` (`Cliente_idCliente` ASC, `Cliente_Cuenta_idCuenta` ASC),
+  CONSTRAINT `fk_Gamificacion_Cliente1`
+    FOREIGN KEY (`Cliente_idCliente`, `Cliente_Cuenta_idCuenta`)
+    REFERENCES `Cliente` (`idCliente`, `Cuenta_idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_Cliente_Cuenta1_idx` ON `Cliente` (`Cuenta_idCuenta` ASC) VISIBLE;
-
-CREATE INDEX `fk_Cliente_Gamificacion1_idx` ON `Cliente` (`Gamificacion_idGamificacion` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -74,18 +74,17 @@ CREATE INDEX `fk_Cliente_Gamificacion1_idx` ON `Cliente` (`Gamificacion_idGamifi
 DROP TABLE IF EXISTS `Entrenador` ;
 
 CREATE TABLE IF NOT EXISTS `Entrenador` (
-  `idEntrenador` INT NOT NULL,
+  `idEntrenador` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `Cuenta_idCuenta` INT NOT NULL,
   PRIMARY KEY (`idEntrenador`, `Cuenta_idCuenta`),
+  INDEX `fk_Entrenador_Cuenta1_idx` (`Cuenta_idCuenta` ASC) ,
   CONSTRAINT `fk_Entrenador_Cuenta1`
     FOREIGN KEY (`Cuenta_idCuenta`)
     REFERENCES `Cuenta` (`idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_Entrenador_Cuenta1_idx` ON `Entrenador` (`Cuenta_idCuenta` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -94,7 +93,7 @@ CREATE INDEX `fk_Entrenador_Cuenta1_idx` ON `Entrenador` (`Cuenta_idCuenta` ASC)
 DROP TABLE IF EXISTS `Espalda` ;
 
 CREATE TABLE IF NOT EXISTS `Espalda` (
-  `idEspalda` INT NULL,
+  `idEspalda` INT NULL AUTO_INCREMENT,
   `ejercicio_espalda` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idEspalda`))
 ENGINE = InnoDB;
@@ -106,7 +105,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Brazos` ;
 
 CREATE TABLE IF NOT EXISTS `Brazos` (
-  `idBrazos` INT NULL,
+  `idBrazos` INT NULL AUTO_INCREMENT,
   `ejercicio_brazos` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idBrazos`))
 ENGINE = InnoDB;
@@ -118,7 +117,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Pecho` ;
 
 CREATE TABLE IF NOT EXISTS `Pecho` (
-  `idPecho` INT NULL,
+  `idPecho` INT NULL AUTO_INCREMENT,
   `ejercicio_pecho` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idPecho`))
 ENGINE = InnoDB;
@@ -130,7 +129,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Cardio` ;
 
 CREATE TABLE IF NOT EXISTS `Cardio` (
-  `idCardio` INT NULL,
+  `idCardio` INT NULL AUTO_INCREMENT,
   `Actividad` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idCardio`))
 ENGINE = InnoDB;
@@ -142,7 +141,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `ZonaMedia` ;
 
 CREATE TABLE IF NOT EXISTS `ZonaMedia` (
-  `idZonaMedia` INT NULL,
+  `idZonaMedia` INT NULL AUTO_INCREMENT,
   `ejercicio_zona_media` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idZonaMedia`))
 ENGINE = InnoDB;
@@ -154,7 +153,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Piernas` ;
 
 CREATE TABLE IF NOT EXISTS `Piernas` (
-  `idPiernas` INT NULL,
+  `idPiernas` INT NULL AUTO_INCREMENT,
   `ejercicio_piernas` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idPiernas`))
 ENGINE = InnoDB;
@@ -166,7 +165,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Ejercicios` ;
 
 CREATE TABLE IF NOT EXISTS `Ejercicios` (
-  `idEjercicios` INT NOT NULL,
+  `idEjercicios` INT NOT NULL AUTO_INCREMENT,
   `repeticiones` INT NOT NULL,
   `series` INT NOT NULL,
   `cantidad_peso` INT NOT NULL,
@@ -178,6 +177,12 @@ CREATE TABLE IF NOT EXISTS `Ejercicios` (
   `ZonaMedia_idZonaMedia` INT NOT NULL,
   `Piernas_idPiernas` INT NOT NULL,
   PRIMARY KEY (`idEjercicios`, `Espalda_idEspalda`, `Brazos_idBrazos`, `Pecho_idPecho`, `Cardio_idCardio`, `ZonaMedia_idZonaMedia`, `Piernas_idPiernas`),
+  INDEX `fk_Ejercicios_Espalda1_idx` (`Espalda_idEspalda` ASC) ,
+  INDEX `fk_Ejercicios_Brazos1_idx` (`Brazos_idBrazos` ASC) ,
+  INDEX `fk_Ejercicios_Pecho1_idx` (`Pecho_idPecho` ASC) ,
+  INDEX `fk_Ejercicios_Cardio1_idx` (`Cardio_idCardio` ASC) ,
+  INDEX `fk_Ejercicios_ZonaMedia1_idx` (`ZonaMedia_idZonaMedia` ASC) ,
+  INDEX `fk_Ejercicios_Piernas1_idx` (`Piernas_idPiernas` ASC) ,
   CONSTRAINT `fk_Ejercicios_Espalda1`
     FOREIGN KEY (`Espalda_idEspalda`)
     REFERENCES `Espalda` (`idEspalda`)
@@ -210,18 +215,6 @@ CREATE TABLE IF NOT EXISTS `Ejercicios` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Ejercicios_Espalda1_idx` ON `Ejercicios` (`Espalda_idEspalda` ASC) VISIBLE;
-
-CREATE INDEX `fk_Ejercicios_Brazos1_idx` ON `Ejercicios` (`Brazos_idBrazos` ASC) VISIBLE;
-
-CREATE INDEX `fk_Ejercicios_Pecho1_idx` ON `Ejercicios` (`Pecho_idPecho` ASC) VISIBLE;
-
-CREATE INDEX `fk_Ejercicios_Cardio1_idx` ON `Ejercicios` (`Cardio_idCardio` ASC) VISIBLE;
-
-CREATE INDEX `fk_Ejercicios_ZonaMedia1_idx` ON `Ejercicios` (`ZonaMedia_idZonaMedia` ASC) VISIBLE;
-
-CREATE INDEX `fk_Ejercicios_Piernas1_idx` ON `Ejercicios` (`Piernas_idPiernas` ASC) VISIBLE;
-
 
 -- -----------------------------------------------------
 -- Table `Rutina`
@@ -234,28 +227,29 @@ CREATE TABLE IF NOT EXISTS `Rutina` (
   `Ejercicios_idEjercicios` INT NOT NULL,
   `Gamificacion_idGamificacion` INT NOT NULL,
   PRIMARY KEY (`idRutina`, `Cuenta_idCuenta`, `Ejercicios_idEjercicios`, `Gamificacion_idGamificacion`),
-  CONSTRAINT `fk_Entrenamientos_Cuenta1`
+  INDEX `fk_Rutina_Cuenta1_idx` (`Cuenta_idCuenta` ASC),
+  INDEX `fk_Rutina_Ejercicios1_idx` (`Ejercicios_idEjercicios` ASC),
+  INDEX `fk_Rutina_Gamificacion1_idx` (`Gamificacion_idGamificacion` ASC),
+  
+  CONSTRAINT `fk_Rutina_Cuenta1`
     FOREIGN KEY (`Cuenta_idCuenta`)
     REFERENCES `Cuenta` (`idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+
   CONSTRAINT `fk_Rutina_Ejercicios1`
     FOREIGN KEY (`Ejercicios_idEjercicios`)
     REFERENCES `Ejercicios` (`idEjercicios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+
   CONSTRAINT `fk_Rutina_Gamificacion1`
     FOREIGN KEY (`Gamificacion_idGamificacion`)
     REFERENCES `Gamificacion` (`idGamificacion`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_Entrenamientos_Cuenta1_idx` ON `Rutina` (`Cuenta_idCuenta` ASC) VISIBLE;
-
-CREATE INDEX `fk_Rutina_Ejercicios1_idx` ON `Rutina` (`Ejercicios_idEjercicios` ASC) VISIBLE;
-
-CREATE INDEX `fk_Rutina_Gamificacion1_idx` ON `Rutina` (`Gamificacion_idGamificacion` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

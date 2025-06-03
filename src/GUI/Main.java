@@ -20,7 +20,6 @@ public class Main implements Validacion {
 
 			switch (opcion) {
 			case 0:
-				
 				String usuario = JOptionPane.showInputDialog("Ingrese usuario:");
 				String contrasena = JOptionPane.showInputDialog("Ingrese contraseña:");
 
