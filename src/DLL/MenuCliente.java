@@ -2,6 +2,8 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
+import BLL.Validacion;
+
 public enum MenuCliente {
 	Datos("Ingresar datos") {
         @Override
@@ -15,7 +17,12 @@ public enum MenuCliente {
             String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones", JOptionPane.QUESTION_MESSAGE, null,
                     new Object[]{"Principiante", "Intermedio", "Avanzado"}, "Principiante");
             
+            
+            
+            
             Nivel nivelAct = Nivel.valueOf(nivel.toUpperCase());
+            //Validacion a= new Validacion(nombre,edad,genero,nivel);
+            //a.ValidarDatos(nombre, edad, genero, nivel);
             boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), nivelAct);
             if (registrado) {
                 JOptionPane.showMessageDialog(null, "Registro exitoso.");

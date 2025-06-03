@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import DLL.CrudCoach;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
+import DLL.Nivel;
 
 public interface Validacion {
 	
@@ -31,7 +32,16 @@ public interface Validacion {
 
 	    return true;
 	}
-
+   default boolean ValidarDatos(String nombre, int edad, String genero, Nivel nivel ) {
+		
+		if(nombre.isEmpty() || edad<=0 && edad>=200 || genero!=null || nivel !=nivel.INTERMEDIO || nivel!=nivel.PRINCIPIANTE || nivel!=nivel.AVANZADO  ) {
+			return false;
+			
+		}
+		return true;
+		
+	}
+	
 	default void NavCliente(int idCuentaSesion) {
         MenuCliente opcion;
         do {
