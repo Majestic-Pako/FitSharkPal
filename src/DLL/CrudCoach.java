@@ -2,6 +2,8 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
+import BLL.Validacion;
+
 public enum CrudCoach {
 	Crear_Perfil("Crear nueva Cuenta"){
 		@Override
@@ -19,6 +21,14 @@ public enum CrudCoach {
     	@Override
     	public void ejecutar(int idCuentaSesion) {
     	JOptionPane.showMessageDialog(null, "Eliminando cuenta de Cliente");	
+    	}
+    },
+	Ver_Alumnos("Listado de Alumnos"){
+    	@Override
+    	public void ejecutar(int idCuentaSesion) {
+    	JOptionPane.showMessageDialog(null, "Mostrando a todos los alumnos.....");
+    	Validacion validacion = new Validacion() {}; //Eta wea es lo mismo q hice en main pa llamar al default :b
+        validacion.MostrarAlumnos();
     	}
     },
 	Asignar_Actividad("Asignar Actividad al Alumno"){
