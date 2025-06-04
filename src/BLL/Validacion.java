@@ -25,7 +25,7 @@ public interface Validacion {
 	        return false;
 
 	    }else {
-	    	if (contrasena.length() < 6) {
+	    	if (contrasena.length() < 2) {
 		    	JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
 		    	return false;
 	    	}

@@ -15,9 +15,9 @@ public class Cliente extends Cuenta implements Encriptador {
 	private Cuenta cuenta;
 	private Nivel nivel;
 
-	public Cliente(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero, Rol rol,
+	public Cliente(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero, int peso, int altura , Rol rol,
 			Cuenta cuenta, Nivel nivel) {
-		super(idCuenta, nombre, usuario, contrasena, edad, genero, rol);
+		super(idCuenta, nombre, usuario, contrasena, edad, genero, peso, altura ,rol);
 		this.cuenta = cuenta;
 		this.nivel = nivel;
 	}
@@ -32,15 +32,17 @@ public class Cliente extends Cuenta implements Encriptador {
 
 	private static Connection con = Conexion.getInstance().getConnection();
 
-	public static boolean registrarCliente(int idCuenta, String nombre, int edad, String genero, Nivel nivel) {
+	public static boolean registrarCliente(int idCuenta, String nombre, int edad, String genero, int peso, int altura, Nivel nivel) {
 		try {
-			String sql = "INSERT INTO cliente (nombre, edad, genero, nivel, Cuenta_idCuenta) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO cliente (nombre, edad, genero, peso, altura, nivel, Cuenta_idCuenta) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, nombre);
 			stmt.setInt(2, edad);
 			stmt.setString(3, genero);
-			stmt.setString(4, nivel.name());
-			stmt.setInt(5, idCuenta);
+			stmt.setInt(4, peso);
+			stmt.setInt(5, altura);
+			stmt.setString(6, nivel.name());
+			stmt.setInt(7, idCuenta);
 			int filas = stmt.executeUpdate();
 			return filas > 0;
 		} catch (Exception e) {
@@ -59,10 +61,12 @@ public class Cliente extends Cuenta implements Encriptador {
 	            String nombre = rs.getString("nombre");
 	            int edad = rs.getInt("edad");
 	            String genero = rs.getString("genero");
+	            int peso = rs.getInt("peso");
+	            int altura = rs.getInt("altura");
 	            String nivelStr = rs.getString("nivel");
 	            Nivel nivel = Nivel.valueOf(nivelStr.toUpperCase());
 
-	            return new Cliente(idCuenta, nombre, null, null, edad, genero, Rol.CLIENTE, null, nivel);
+	            return new Cliente(idCuenta, nombre, null, null, edad, genero, peso, altura ,Rol.CLIENTE, null, nivel);
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -81,10 +85,12 @@ public class Cliente extends Cuenta implements Encriptador {
 	            String nombre = rs.getString("nombre");
 	            String genero = rs.getString("genero");
 	            int edad = rs.getInt("edad");
+	            int peso = rs.getInt("peso");
+	            int altura = rs.getInt("altura");
 	            String nivelStr = rs.getString("nivel");
 	            Nivel nivel = Nivel.valueOf(nivelStr.toUpperCase());
 
-	            Cliente cliente = new Cliente(id, nombre, null, null, edad, genero, Rol.CLIENTE, null, nivel);
+	            Cliente cliente = new Cliente(id, nombre, null, null, edad, genero, peso, altura, Rol.CLIENTE, null, nivel);
 	            clientes.add(cliente);
 	        }
 	    } catch (Exception e) {
