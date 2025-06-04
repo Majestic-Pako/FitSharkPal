@@ -120,6 +120,7 @@ public class Cliente extends Cuenta implements Encriptador {
 			e.printStackTrace();
 			return false;
 		}
+
 	}
 
 	public static boolean Delete(int idCuenta) {
@@ -133,6 +134,7 @@ public class Cliente extends Cuenta implements Encriptador {
 			e.printStackTrace();
 			return false;
 		}
+
 	}
 
 }
