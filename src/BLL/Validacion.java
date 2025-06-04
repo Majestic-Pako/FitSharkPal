@@ -6,8 +6,10 @@ import javax.swing.JOptionPane;
 
 import DLL.Cliente;
 import DLL.CrudCoach;
+import DLL.Cuenta;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
+import DLL.Nivel;
 
 public interface Validacion {
 	
@@ -130,5 +132,75 @@ public interface Validacion {
             }
         }
     }
+    
+    default void CrearCuenta() {
+    	String usuario = JOptionPane.showInputDialog("Ingrese el usuario a crear");
+    	String contraseña = JOptionPane.showInputDialog("Ingrese una contraseña");
+    	if(ValidarRegistro(usuario, contraseña)) {
+    		JOptionPane.showMessageDialog(null, "Nueva Cuenta creada");
+    		int Idnuevo = Cuenta.Registro(usuario, contraseña, "Cliente");
+    		if (Idnuevo != -1) {
+                JOptionPane.showMessageDialog(null, "Nueva cuenta creada con éxito. ID: " + Idnuevo);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al registrar la nueva cuenta.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Datos inválidos :,v. No se pudo registrar la cuenta.");
+        }
+    }
+    
+    default void EditarAlumnos() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+
+        String seleccionado = (String) JOptionPane.showInputDialog(
+            null,
+            "Seleccione un alumno para ver sus datos:",
+            "Lista de Alumnos",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            nombres,
+            nombres[0]
+        );
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    String datos = 
+                        "Nombre: " + c.getNombre() + "\n" +
+                        "Edad: " + c.getEdad() + "\n" +
+                        "Género: " + c.getGenero() + "\n" +
+                        "Nivel: " + c.getNivel();
+                    
+                    String ActN = JOptionPane.showInputDialog("Actualize el nombre:", c.getNombre());
+                    int ActE = Integer.parseInt(JOptionPane.showInputDialog("Actualize la edad:", c.getEdad()));
+                    String ActG = (String) JOptionPane.showInputDialog(null, "Actualize el genero:", "Género",
+                            JOptionPane.QUESTION_MESSAGE, null, new String[]{"Hombre", "Mujer", "Otro"}, c.getGenero());
+                    int ActP = Integer.parseInt(JOptionPane.showInputDialog("Actualize el peso"));
+                    int ActA = Integer.parseInt(JOptionPane.showInputDialog("Actualize la altura"));
+                    String ActL = (String) JOptionPane.showInputDialog(null, "Actualize el nivel:", "Nivel",
+                            JOptionPane.QUESTION_MESSAGE, null, new String[]{"Principiante", "Intermedio", "Avanzado"}, c.getNivel());
+                    Nivel nivelAct = Nivel.valueOf(ActL.toUpperCase());
+                    
+                    boolean actualizado = Cliente.ActCliente(
+                            c.getIdCuenta(), ActN, ActE, ActG.toUpperCase(), ActP, ActA , nivelAct);
+
+                    if (actualizado) {
+                        JOptionPane.showMessageDialog(null, "Datos actualizados con éxito.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al actualizar datos.");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
 	
 }
