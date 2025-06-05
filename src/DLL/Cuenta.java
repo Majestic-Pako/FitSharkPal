@@ -16,10 +16,12 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	private String contrasena;
 	private int edad;
 	private String genero;
+	private int peso;
+	private int altura;
 	private Rol rol;
 
-	public Cuenta(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero,
-			Rol rol) {
+	public Cuenta(int idCuenta, String nombre, String usuario, String contrasena, int edad, String genero, int peso,
+			int altura, Rol rol) {
 		super();
 		this.idCuenta = idCuenta;
 		this.nombre = nombre;
@@ -27,6 +29,8 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.contrasena = contrasena;
 		this.edad = edad;
 		this.genero = genero;
+		this.peso = peso;
+		this.altura = altura;
 		this.rol = rol;
 	}
 
@@ -80,7 +84,22 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	public void setIdCuenta(int id) {
 		this.idCuenta = idCuenta;
 	}
-	
+
+	public int getPeso() {
+		return peso;
+	}
+
+	public void setPeso(int peso) {
+		this.peso = peso;
+	}
+
+	public int getAltura() {
+		return altura;
+	}
+
+	public void setAltura(int altura) {
+		this.altura = altura;
+	}
 
 	public Rol getRol() {
 		return rol;
@@ -90,69 +109,63 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 		this.rol = rol;
 	}
 
-
-
 	private static Connection con = Conexion.getInstance().getConnection();
-	
+
 	public static int Registro(String usuario, String contrasena, String rol) {
 		try {
-	        String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
-	        PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-	        Encriptador cifrador = new Cuenta(); //no me dejaba encriptar si no ponia esto :v
-	        stmt.setString(1, usuario);
-	        stmt.setString(2, cifrador.encriptar(contrasena));
-	        stmt.setString(3, rol);
-	        int filas = stmt.executeUpdate();
-	        if (filas > 0) {
-	            ResultSet rs = stmt.getGeneratedKeys();
-	            if (rs.next()) {
-	                return rs.getInt(1); //esta wea es para que me devuelva el idCuenta pa el Cliente
-	            }
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+			String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
+			PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			Encriptador cifrador = new Cuenta(); // no me dejaba encriptar si no ponia esto :v
+			stmt.setString(1, usuario);
+			stmt.setString(2, cifrador.encriptar(contrasena));
+			stmt.setString(3, rol);
+			int filas = stmt.executeUpdate();
+			if (filas > 0) {
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs.next()) {
+					return rs.getInt(1); // esta wea es para que me devuelva el idCuenta pa el Cliente
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return -1;
 	}
 
-	 public static Cuenta<?> Login(String usuario, String contrasena) {
-		 Cuenta cuenta = null;
-	        try {
-	            PreparedStatement stmt = con.prepareStatement(
-	                "SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?"
-	            );
-	            stmt.setString(1, usuario);
-	            stmt.setString(2, new Cuenta<>().encriptar(contrasena));
-	            
-	            System.out.println("Ejecutando consulta login para usuario: " + usuario);
-	            
-	            ResultSet rs = stmt.executeQuery();
+	public static Cuenta<?> Login(String usuario, String contrasena) {
+		Cuenta cuenta = null;
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM cuenta WHERE usuario = ? AND contrasena = ?");
+			stmt.setString(1, usuario);
+			stmt.setString(2, new Cuenta<>().encriptar(contrasena));
 
-	            if (rs.next()) {
-	                int id = rs.getInt("idCuenta");
-	                String user = rs.getString("usuario");
-	                String pass = rs.getString("contrasena");
-	                String rolStr = rs.getString("rol");
+			System.out.println("Ejecutando consulta login para usuario: " + usuario);
 
-	                Rol rol = Rol.valueOf(rolStr.toUpperCase());
-	                
-	                
-	                if (rol == Rol.ENTRENADOR) {
-	                    return new Entrenador(id, null, user, pass, 0, null, rol);
-	                } else {
-	                    return new Cliente(id, null, user, pass, 0, null, rol);
-	                }
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	        return null;
-	    }
+			ResultSet rs = stmt.executeQuery();
 
-	 @Override
-	 public String toString() {
-	     return "Contraseña: " + contrasena + ", Usuario: " + usuario + ", Rol: " + rol;
-	 }
+			if (rs.next()) {
+				int id = rs.getInt("idCuenta");
+				String user = rs.getString("usuario");
+				String pass = rs.getString("contrasena");
+				String rolStr = rs.getString("rol");
 
+				Rol rol = Rol.valueOf(rolStr.toUpperCase());
+
+				if (rol == Rol.ENTRENADOR) {
+					return new Entrenador(id, null, user, pass, 0, null, id, id, rol);
+				} else {
+					return new Cliente(id, null, user, pass, 0, null, id, id, rol, cuenta, null);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "Contraseña: " + contrasena + ", Usuario: " + usuario + ", Rol: " + rol;
+	}
 
 }

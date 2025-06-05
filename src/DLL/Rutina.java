@@ -1,9 +1,9 @@
 package DLL;
-public class Entrenamientos {
+public class Rutina {
 	private double peso;
 	private double altura;
 	private String plan;
-	public Entrenamientos(double peso, double altura, String plan) {
+	public Rutina(double peso, double altura, String plan) {
 		super();
 		this.peso = peso;
 		this.altura = altura;
