@@ -2,7 +2,6 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
-import BLL.Validacion;
 import GUI.Main;
 
 public enum CrudCoach {
