@@ -120,6 +120,21 @@ public class Cliente extends Cuenta implements Encriptador {
 			e.printStackTrace();
 			return false;
 		}
+
+	}
+
+	public static boolean Delete(int idCuenta) {
+		try {
+			String sql = "DELETE FROM cliente WHERE Cuenta_idCuenta = ?";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setInt(1, idCuenta);
+			int filas = stmt.executeUpdate();
+			return filas > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 }
