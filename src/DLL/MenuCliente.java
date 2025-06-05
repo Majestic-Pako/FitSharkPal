@@ -10,15 +10,16 @@ public enum MenuCliente {
 
 			String nombre = JOptionPane.showInputDialog("Ingrese su nombre");
 			int edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su edad"));
+			//poner un limite de edad de 80
 			String genero = (String) JOptionPane.showInputDialog(null, "Seleccione su género:", "Opciones",
 					JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Hombre", "Mujer", "Otro" }, "Hombre");
-			int peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su peso en centimetros"));
+			int peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su peso en kilos"));
 			int altura = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su altura en centimetros"));
 			String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones",
 					JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Principiante", "Intermedio", "Avanzado" },
 					"Principiante");
-
 			Nivel nivelAct = Nivel.valueOf(nivel.toUpperCase());
+			
 			boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), peso,
 					altura, nivelAct);
 			if (registrado) {
