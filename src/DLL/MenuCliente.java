@@ -12,7 +12,7 @@ public enum MenuCliente {
 			int edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su edad"));
 			//poner un limite de edad de 80
 			String genero = (String) JOptionPane.showInputDialog(null, "Seleccione su género:", "Opciones",
-					JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Hombre", "Mujer", "Otro" }, "Hombre");
+					JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Hombre", "Mujer", "Otros" }, "Hombre");
 			int peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su peso en kilos"));
 			int altura = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su altura en centimetros"));
 			String nivel = (String) JOptionPane.showInputDialog(null, "Seleccione su nivel:", "Opciones",
