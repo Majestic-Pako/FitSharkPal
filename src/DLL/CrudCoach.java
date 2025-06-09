@@ -17,7 +17,7 @@ public enum CrudCoach {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Editando cuentas del Cliente...");
-            Main edit = new Main() {}; // Se declara con {} para detectar que es un arreglo (aunque no es necesario)
+            Main edit = new Main() ; 
             edit.EditarAlumnos();
         }
     },
@@ -33,7 +33,7 @@ public enum CrudCoach {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Mostrando a todos los alumnos.....");
-            Main validacion = new Main() {}; // Igual que en main para llamar default
+            Main validacion = new Main();
             validacion.MostrarAlumnos();
         }
     },
@@ -41,7 +41,6 @@ public enum CrudCoach {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Asignando Actividad.....");
-            // Falta lógica aquí si se requiere
         }
     },
     Volver("Volver") {
