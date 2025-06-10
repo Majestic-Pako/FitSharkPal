@@ -13,25 +13,39 @@ import DLL.Nivel;
 public interface Validacion {
 
     default boolean ValidarUsuario(String usuario, String contrasena ) {
-        if (usuario == null || usuario.isEmpty() || contrasena == null|| contrasena.isEmpty()) {
+        if (usuario == null || usuario.isEmpty() && contrasena == null|| contrasena.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+            return false;
+        }else if (usuario == null || usuario.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
+            return false;
+        } else if (contrasena == null || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
             return false;
         }
         return true;
     }
 
     default boolean ValidarRegistro(String usuario, String contrasena) {
-        if (usuario == null || usuario.isEmpty() || contrasena == null || contrasena.isEmpty()) {
+        if ((usuario == null || usuario.isEmpty()) && (contrasena == null || contrasena.isEmpty())) {
             JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
             return false;
-        } else {
-            if (contrasena.length() < 6) {  // Cambié a 6 para que coincida con el mensaje
-                JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
-                return false;
-            }
+        } else if (usuario == null || usuario.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
+            return false;
+        } else if (contrasena == null || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
+            return false;
         }
+
+        if (contrasena.length() < 6) {
+            JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
+            return false;
+        }
+
         return true;
     }
+
 
     default void NavCliente(int idCuentaSesion) {
         MenuCliente opcion;
