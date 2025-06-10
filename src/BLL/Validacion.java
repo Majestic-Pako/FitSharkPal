@@ -12,16 +12,9 @@ import DLL.Nivel;
 
 public interface Validacion {
 
-    default boolean ValidarUsuario(String usuario) {
-        if (usuario == null || usuario.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Usuario no puede estar vacío.");
-            return false;
-        }
-        return true;
-    }
-    default boolean ValidarUsuario1(String contrasena) {
-        if (contrasena == null || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
+    default boolean ValidarUsuario(String usuario, String contrasena ) {
+        if (usuario == null || usuario.isEmpty() || contrasena == null|| contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
             return false;
         }
         return true;
