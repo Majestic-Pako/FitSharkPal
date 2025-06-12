@@ -12,9 +12,10 @@ import DLL.Nivel;
 
 public interface Validacion {
 
-    default boolean ValidarUsuario(String usuario, String contrasena ) {
-        if (usuario == null || usuario.isEmpty() && contrasena == null|| contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+    default boolean ValidarUsuario(String usuario, String contrasena) {
+        if (usuario == null || usuario.isEmpty() || contrasena == null || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
+
             return false;
         }else if (usuario == null || usuario.isEmpty()) {
             JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
@@ -28,14 +29,18 @@ public interface Validacion {
 
     default boolean ValidarRegistro(String usuario, String contrasena) {
         if ((usuario == null || usuario.isEmpty()) && (contrasena == null || contrasena.isEmpty())) {
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
             return false;
+
         } else if (usuario == null || usuario.isEmpty()) {
             JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
             return false;
-        } else if (contrasena == null || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
-            return false;
+        } else {
+            if (contrasena.length() < 3) { 
+                JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 3 caracteres.");
+                return false;
+            }
+
         }
 
         if (contrasena.length() < 6) {
@@ -202,4 +207,47 @@ public interface Validacion {
             }
         }
     }
+    
+    default boolean validarDatos(String nombre, int edad, String genero, int peso, int altura, Nivel nivel) {
+        boolean valido = true;
+        StringBuilder errores = new StringBuilder("Errores:\n");
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            errores.append("- El nombre no puede estar vacío.\n");
+            valido = false;
+        }
+
+        if (edad <= 0 || edad >= 200) {
+            errores.append("- Edad inválida (1-199).\n");
+            valido = false;
+        }
+
+        if (genero == null || 
+            !(genero.equalsIgnoreCase("HOMBRE") || genero.equalsIgnoreCase("MUJER") || genero.equalsIgnoreCase("OTRO"))) {
+            errores.append("- Género inválido (Hombre, Mujer u Otro).\n");
+            valido = false;
+        }
+
+        if (peso <= 0 || peso >= 200) {
+            errores.append("- Peso inválido (1-199kg).\n");
+            valido = false;
+        }
+
+        if (altura <= 0 || altura >= 300) {
+            errores.append("- Altura inválida (1-299cm).\n");
+            valido = false;
+        }
+
+        if (nivel == null) {
+            errores.append("- Nivel inválido.\n");
+            valido = false;
+        }
+
+        if (!valido) {
+            JOptionPane.showMessageDialog(null, errores.toString(), "Errores de validación", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return valido;
+    }
+
 }
