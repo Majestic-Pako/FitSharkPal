@@ -9,6 +9,7 @@ import DLL.Cuenta;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
 import DLL.Nivel;
+import DLL.Rutina;
 
 public interface Validacion {
 
@@ -137,8 +138,10 @@ public interface Validacion {
 			switch (opcion) {
 			case 0:
 				JOptionPane.showMessageDialog(null, "Llevando a formulario para asignar el ejercicio");
-				ConfigEjercicios cardio = new ConfigEjercicios(null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				ConfigRutina cardio = new ConfigRutina(null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
 				cardio.Configuracion(opcion, opcion, opcion, opcion, opcion);
+				Rutina e = new Rutina(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				e.Ver(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
 				break;
 			case 1:
 				JOptionPane.showMessageDialog(null, "gaga1");
