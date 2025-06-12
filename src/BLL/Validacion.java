@@ -43,10 +43,6 @@ public interface Validacion {
 
         }
 
-        if (contrasena.length() < 6) {
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
-            return false;
-        }
 
         return true;
     }
@@ -132,6 +128,41 @@ public interface Validacion {
         }
     }
 
+    default void AsignarEj() {
+    	int opcion;
+		do {
+			String[] opciones = { "Cardio","Piernas","Pecho","Brazos","Espalda","Zona Media" ,"Salir" };
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione rutina a Asignar", "Menu", 0, 3, null, opciones,
+					opciones[0]);
+			switch (opcion) {
+			case 0:
+				JOptionPane.showMessageDialog(null, "Llevando a formulario para asignar el ejercicio");
+				ConfigEjercicios cardio = new ConfigEjercicios(null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				cardio.Configuracion(opcion, opcion, opcion, opcion, opcion);
+				break;
+			case 1:
+				JOptionPane.showMessageDialog(null, "gaga1");
+				break;
+			case 2:
+				JOptionPane.showMessageDialog(null, "gaga2");
+				break;
+			case 3:
+				JOptionPane.showMessageDialog(null, "gaga3");
+				break;
+			case 4:
+				JOptionPane.showMessageDialog(null, "gaga4");
+				break;
+			case 5:
+				JOptionPane.showMessageDialog(null, "gaga5");
+				break;
+			case 6:
+				JOptionPane.showMessageDialog(null, "q miras bovo");
+				break;
+			}
+			
+			}while(opcion!=6);	
+    }
+    
     default void EditarAlumnos() {
         LinkedList<Cliente> lista = Cliente.Listado();
 
@@ -250,4 +281,6 @@ public interface Validacion {
         return valido;
     }
 
+    
+    
 }

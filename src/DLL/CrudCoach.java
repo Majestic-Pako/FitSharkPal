@@ -41,6 +41,8 @@ public enum CrudCoach {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Asignando Actividad.....");
+            Main gaga = new Main();
+            gaga.AsignarEj();
         }
     },
     Volver("Volver") {

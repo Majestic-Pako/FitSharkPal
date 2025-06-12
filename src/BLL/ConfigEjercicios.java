@@ -65,6 +65,7 @@ public class ConfigEjercicios extends Ejercicios {
 		
 		tiempo = Integer.parseInt(
 				JOptionPane.showInputDialog("Ingrese tiempo de entrada en calor:"));
+		
 		repeticiones = Integer.parseInt(
 				JOptionPane.showInputDialog("Ingrese cuantas repeticiones se hara por cada ejercicio:"));
 		series = Integer.parseInt(
