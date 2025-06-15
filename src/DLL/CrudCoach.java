@@ -2,50 +2,58 @@ package DLL;
 
 import javax.swing.JOptionPane;
 
-import BLL.Validacion;
+import GUI.Main;
 
 public enum CrudCoach {
-	Crear_Perfil("Crear nueva Cuenta"){
-		@Override
-		public void ejecutar(int idCuentaSesion) {
-			JOptionPane.showMessageDialog(null, "Creando nueva cuenta para Cliente");
-		}
-	} ,
-	Editar_Perfil("Editar perfiles de clientes") {
+    Crear_Perfil("Crear nueva Cuenta") {
         @Override
         public void ejecutar(int idCuentaSesion) {
-            JOptionPane.showMessageDialog(null, "Editando cuentas del Cliente");
+            JOptionPane.showMessageDialog(null, "Creando nueva cuenta para Cliente");
+            Main crear = new Main(); // Por alguna razón con Main directo funciona la validación
+            crear.CrearCuenta();
         }
     },
-	Eliminar_Perfil("Eliminar Cuenta"){
-    	@Override
-    	public void ejecutar(int idCuentaSesion) {
-    	JOptionPane.showMessageDialog(null, "Eliminando cuenta de Cliente");	
-    	}
+    Editar_Perfil("Editar perfiles de clientes") {
+        @Override
+        public void ejecutar(int idCuentaSesion) {
+            JOptionPane.showMessageDialog(null, "Editando cuentas del Cliente...");
+            Main edit = new Main() ; 
+            edit.EditarAlumnos();
+        }
     },
-	Ver_Alumnos("Listado de Alumnos"){
-    	@Override
-    	public void ejecutar(int idCuentaSesion) {
-    	JOptionPane.showMessageDialog(null, "Mostrando a todos los alumnos.....");
-    	Validacion validacion = new Validacion() {}; //Eta wea es lo mismo q hice en main pa llamar al default :b
-        validacion.MostrarAlumnos();
-    	}
+    Eliminar_Perfil("Eliminar Cuenta") {
+        @Override
+        public void ejecutar(int idCuentaSesion) {
+            JOptionPane.showMessageDialog(null, "Eliminando cuenta de Cliente");
+            Main adios = new Main();
+            adios.BorrarAlumno();
+        }
     },
-	Asignar_Actividad("Asignar Actividad al Alumno"){
-    	@Override
-    	public void ejecutar(int idCuentaSesion) {
-    	JOptionPane.showMessageDialog(null, "Asignando Activadad.....");	
-    	}
+    Ver_Alumnos("Listado de Alumnos") {
+        @Override
+        public void ejecutar(int idCuentaSesion) {
+            JOptionPane.showMessageDialog(null, "Mostrando a todos los alumnos.....");
+            Main validacion = new Main();
+            validacion.MostrarAlumnos();
+        }
     },
-	Volver("Volver") {
+    Asignar_Actividad("Asignar Actividad al Alumno") {
+        @Override
+        public void ejecutar(int idCuentaSesion) {
+            JOptionPane.showMessageDialog(null, "Asignando Actividad.....");
+            Main gaga = new Main();
+            gaga.AsignarEj();
+        }
+    },
+    Volver("Volver") {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Volviendo al menu anterior......");
         }
     };
-	
-	public abstract void ejecutar(int idCuentaSesion);
-	
+
+    public abstract void ejecutar(int idCuentaSesion);
+
     private final String descripcion;
 
     CrudCoach(String descripcion) {
@@ -57,3 +65,4 @@ public enum CrudCoach {
         return descripcion;
     }
 }
+
