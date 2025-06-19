@@ -56,13 +56,12 @@ CREATE TABLE IF NOT EXISTS `Gamificacion` (
   `idGamificacion` INT NOT NULL AUTO_INCREMENT,
   `puntaje` INT NOT NULL,
   `carta` ENUM('Bronce', 'Plata', 'Oro') NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `Cliente_Cuenta_idCuenta` INT NOT NULL,
+  `Cuenta_idCuenta` INT NOT NULL,
   PRIMARY KEY (`idGamificacion`),
-  INDEX `fk_Gamificacion_Cliente1_idx` (`Cliente_idCliente` ASC, `Cliente_Cuenta_idCuenta` ASC),
-  CONSTRAINT `fk_Gamificacion_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`, `Cliente_Cuenta_idCuenta`)
-    REFERENCES `Cliente` (`idCliente`, `Cuenta_idCuenta`)
+  INDEX `fk_Gamificacion_Cuenta1_idx` (`Cuenta_idCuenta` ASC),
+  CONSTRAINT `fk_Gamificacion_Cuenta1`
+    FOREIGN KEY (`Cuenta_idCuenta`)
+    REFERENCES `Cuenta` (`Cuenta_idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
