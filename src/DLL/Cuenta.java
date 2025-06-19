@@ -110,7 +110,7 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 	}
 
 	private static Connection con = Conexion.getInstance().getConnection();
-
+	
 	public static int Registro(String usuario, String contrasena, String rol) {
 		try {
 			String sql = "INSERT INTO cuenta (usuario, contrasena, rol) VALUES (?, ?, ?)";
@@ -154,7 +154,7 @@ public class Cuenta<T extends Cuenta> implements Encriptador {
 				if (rol == Rol.ENTRENADOR) {
 					return new Entrenador(id, null, user, pass, 0, null, id, id, rol);
 				} else {
-					return new Cliente(id, null, user, pass, 0, null, id, id, rol, cuenta, null);
+					return new Cliente(id, id ,null, user, pass, 0, null, id, id, rol, cuenta, null);
 				}
 			}
 		} catch (Exception e) {

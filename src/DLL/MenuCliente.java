@@ -56,8 +56,8 @@ public enum MenuCliente implements Validacion{
 	            return;
 	        }
 
-	        boolean registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), peso, altura, nivel);
-	        if (registrado) {
+	        int registrado = Cliente.registrarCliente(idCuentaSesion, nombre, edad, genero.toUpperCase(), peso, altura, nivel);
+	        if (registrado!=-1) {
 	            JOptionPane.showMessageDialog(null, "Registro exitoso.");
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Error al registrar datos del cliente.");
@@ -68,6 +68,7 @@ public enum MenuCliente implements Validacion{
 	Entrenamientos("Entrenamientos activos") {
 		@Override
 		public void ejecutar(int idCuentaSesion) {
+			//Falta la logica para que el cliente vea desde su cuenta
 			Cliente cliente = Cliente.InfoCliente(idCuentaSesion);
 			if (cliente != null) {
 				JOptionPane.showMessageDialog(null, "Nivel actual: " + cliente.getNivel());
@@ -81,6 +82,7 @@ public enum MenuCliente implements Validacion{
 	Historial("Historial de entrenamientos") {
 		@Override
 		public void ejecutar(int idCuentaSesion) {
+			//Falta la logica para que el cliente vea desde su cuenta
 			JOptionPane.showMessageDialog(null, "Mostrando historial de entrenamientos completados...");
 		}
 	},
@@ -88,6 +90,7 @@ public enum MenuCliente implements Validacion{
 	Calificacion("Ver calificación") {
 		@Override
 		public void ejecutar(int idCuentaSesion) {
+			//Falta la logica para que el cliente vea desde su cuenta
 			JOptionPane.showMessageDialog(null, "Mostrando calificación de progreso...");
 		}
 	},
