@@ -9,29 +9,45 @@ import DLL.Cuenta;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
 import DLL.Nivel;
+import DLL.Rutina;
 
 public interface Validacion {
 
     default boolean ValidarUsuario(String usuario, String contrasena) {
         if (usuario == null || usuario.isEmpty() || contrasena == null || contrasena.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
+
+            return false;
+        }else if (usuario == null || usuario.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
+            return false;
+        } else if (contrasena == null || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
             return false;
         }
         return true;
     }
 
     default boolean ValidarRegistro(String usuario, String contrasena) {
-        if (usuario == null || usuario.isEmpty() || contrasena == null || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+        if ((usuario == null || usuario.isEmpty()) && (contrasena == null || contrasena.isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
+            return false;
+
+        } else if (usuario == null || usuario.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
             return false;
         } else {
             if (contrasena.length() < 3) { 
                 JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 3 caracteres.");
                 return false;
             }
+
         }
+
+
         return true;
     }
+
 
     default void NavCliente(int idCuentaSesion) {
         MenuCliente opcion;
@@ -113,6 +129,43 @@ public interface Validacion {
         }
     }
 
+    default void AsignarEj() {
+    	int opcion;
+		do {
+			String[] opciones = { "Cardio","Piernas","Pecho","Brazos","Espalda","Zona Media" ,"Salir" };
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione rutina a Asignar", "Menu", 0, 3, null, opciones,
+					opciones[0]);
+			switch (opcion) {
+			case 0:
+				JOptionPane.showMessageDialog(null, "Llevando a formulario para asignar el ejercicio");
+				ConfigRutina cardio = new ConfigRutina(null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				cardio.Configuracion(opcion, opcion, opcion, opcion, opcion);
+				Rutina e = new Rutina(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				e.Ver(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
+				break;
+			case 1:
+				JOptionPane.showMessageDialog(null, "gaga1");
+				break;
+			case 2:
+				JOptionPane.showMessageDialog(null, "gaga2");
+				break;
+			case 3:
+				JOptionPane.showMessageDialog(null, "gaga3");
+				break;
+			case 4:
+				JOptionPane.showMessageDialog(null, "gaga4");
+				break;
+			case 5:
+				JOptionPane.showMessageDialog(null, "gaga5");
+				break;
+			case 6:
+				JOptionPane.showMessageDialog(null, "q miras bovo");
+				break;
+			}
+			
+			}while(opcion!=6);	
+    }
+    
     default void EditarAlumnos() {
         LinkedList<Cliente> lista = Cliente.Listado();
 
@@ -231,4 +284,6 @@ public interface Validacion {
         return valido;
     }
 
+    
+    
 }

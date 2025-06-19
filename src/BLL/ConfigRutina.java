@@ -4,14 +4,14 @@ import javax.swing.JOptionPane;
 
 import DLL.Ejercicios;
 
-public class ConfigEjercicios extends Ejercicios {
+public class ConfigRutina extends Ejercicios {
 	private int repeticiones;
 	private int series;
 	private int cantPeso;
 	private int pausaEntreSerie;
 	private int tiempo;
 
-	public ConfigEjercicios(String piernas, String brazos, String pecho, String espalda, String zonaMedia,
+	public ConfigRutina(String piernas, String brazos, String pecho, String espalda, String zonaMedia,
 			String cardio, int repeticiones, int series, int cantPeso, int pausaEntreSerie, int tiempo) {
 		super(piernas, brazos, pecho, espalda, zonaMedia, cardio);
 		this.repeticiones = repeticiones;
@@ -65,6 +65,7 @@ public class ConfigEjercicios extends Ejercicios {
 		
 		tiempo = Integer.parseInt(
 				JOptionPane.showInputDialog("Ingrese tiempo de entrada en calor:"));
+		
 		repeticiones = Integer.parseInt(
 				JOptionPane.showInputDialog("Ingrese cuantas repeticiones se hara por cada ejercicio:"));
 		series = Integer.parseInt(
