@@ -1,11 +1,13 @@
 package BLL;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 import DLL.Cliente;
 import DLL.CrudCoach;
 import DLL.Cuenta;
+import DLL.Ejercicios;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
 import DLL.Nivel;
@@ -130,40 +132,50 @@ public interface Validacion {
     }
 
     default void AsignarEj() {
-    	int opcion;
-		do {
-			String[] opciones = { "Cardio","Piernas","Pecho","Brazos","Espalda","Zona Media" ,"Salir" };
-			opcion = JOptionPane.showOptionDialog(null, "Seleccione rutina a Asignar", "Menu", 0, 3, null, opciones,
-					opciones[0]);
-			switch (opcion) {
-			case 0:
-				JOptionPane.showMessageDialog(null, "Llevando a formulario para asignar el ejercicio");
-				ConfigRutina cardio = new ConfigRutina(null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
-				cardio.Configuracion(opcion, opcion, opcion, opcion, opcion);
-				Rutina e = new Rutina(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
-				e.Ver(opcion, opcion, null, null, null, null, null, null, null, opcion, opcion, opcion, opcion, opcion);
-				break;
-			case 1:
-				JOptionPane.showMessageDialog(null, "gaga1");
-				break;
-			case 2:
-				JOptionPane.showMessageDialog(null, "gaga2");
-				break;
-			case 3:
-				JOptionPane.showMessageDialog(null, "gaga3");
-				break;
-			case 4:
-				JOptionPane.showMessageDialog(null, "gaga4");
-				break;
-			case 5:
-				JOptionPane.showMessageDialog(null, "gaga5");
-				break;
-			case 6:
-				JOptionPane.showMessageDialog(null, "q miras bovo");
-				break;
-			}
-			
-			}while(opcion!=6);	
+    	 LinkedList<Cliente> lista = Cliente.Listado();
+
+         if (lista.isEmpty()) {
+             JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
+             return;
+         }
+
+         String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+
+         String seleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione un alumno para ver Asignar Rutina:",
+                 "Lista de Alumnos", JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+         if (seleccionado != null) {
+             for (Cliente c : lista) {
+                 if (c.getNombre().equals(seleccionado)) {
+                	 int idCuenta = c.getIdCuenta();
+                     int idCliente = Cliente.obtenerIdCliente(idCuenta); // 🔁 Usa tu método
+
+                     ConfigRutina rutina = ConfigRutina.Form();
+
+                     try {
+                         int idEjercicios = Ejercicios.EjercicioBD(rutina);
+
+                         int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
+
+                         boolean guardado = Rutina.RutinaBD(idCuenta, idEjercicios, idGamificacion);
+
+                         int puntaje = ConfigRutina.Calculo(rutina);
+                         Gamificacion.ActPts(idGamificacion, puntaje);
+
+                         if (guardado) {
+                             JOptionPane.showMessageDialog(null, "Rutina y gamificación registradas correctamente.");
+                         } else {
+                             JOptionPane.showMessageDialog(null, "Error al registrar la rutina.");
+                         }
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                         JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar la rutina.");
+                     }
+
+                     break;
+                 }
+             }
+         }
     }
     
     default void EditarAlumnos() {
@@ -284,6 +296,79 @@ public interface Validacion {
         return valido;
     }
 
-    
+    default void verRutinas() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay clientes registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+        String seleccionado = (String) JOptionPane.showInputDialog(null,
+            "Seleccione un cliente para ver su rutina:", "Rutinas",
+            JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    ConfigRutina rutina = Rutina.RutinaVer(idCuenta);
+
+                    if (rutina != null) {
+                        int puntaje = ConfigRutina.Calculo(rutina);
+                        String carta = (puntaje <= 0) ? "Bronce" :
+                                       (puntaje <= 20) ? "Bronce" :
+                                       (puntaje <= 46) ? "Plata" : "Oro";
+                        ArrayList<String> cartas = new ArrayList<>();
+                        cartas.add(carta);
+
+                        Rutina.Ver(
+                            puntaje, puntaje, cartas,
+                            rutina.getPiernas(), rutina.getBrazos(), rutina.getPecho(), rutina.getEspalda(),
+                            rutina.getZonaMedia(), rutina.getCardio(),
+                            rutina.getRepeticiones(), rutina.getSeries(), rutina.getCantPeso(),
+                            rutina.getPausaEntreSerie(), rutina.getTiempo()
+                        );
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El cliente no tiene rutina asignada.");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    default void verGamificacion() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay clientes registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+        String seleccionado = (String) JOptionPane.showInputDialog(null,
+            "Seleccione un cliente para ver su gamificación:", "Gamificación",
+            JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    Gamificacion datos = Gamificacion.GamiVer(idCuenta);
+
+                    if (datos != null) {
+                        JOptionPane.showMessageDialog(null,
+                            "Puntaje actual: " + datos.getPts() +
+                            "\nCarta: " + (datos.getCarta().isEmpty() ? "No asignada" : datos.getCarta().get(0)));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Este cliente aún no tiene datos de gamificación.");
+                    }
+                    break;
+                }
+            }
+        }
+    }
     
 }
