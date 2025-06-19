@@ -15,12 +15,14 @@ public enum MenuCoach implements Validacion {
 		@Override
 		public void ejecutar(int idCuentaSesion) {
 			JOptionPane.showMessageDialog(null, "Mostrando actividades asignadas a los clientes...");
+			verRutinas();
 		}
 	},
 	Calificaciones("Ver calificaciones de clientes") {
 		@Override
 		public void ejecutar(int idCuentaSesion) {
 			JOptionPane.showMessageDialog(null, "Mostrando calificaciones de progreso...");
+			verGamificacion();
 		}
 	},
 	Salir("Salir") {
