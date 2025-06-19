@@ -222,7 +222,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Rutina` ;
 
 CREATE TABLE IF NOT EXISTS `Rutina` (
-  `idRutina` INT NOT NULL,
+  `idRutina` INT NOT NULL AUTO_INCREMENT,
   `Cuenta_idCuenta` INT NOT NULL,
   `Ejercicios_idEjercicios` INT NOT NULL,
   `Gamificacion_idGamificacion` INT NOT NULL,
