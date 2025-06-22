@@ -158,8 +158,8 @@ public interface Validacion {
                          int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
 
                          boolean guardado = Rutina.RutinaBD(idCuenta, idEjercicios, idGamificacion);
-
-                         int puntaje = ConfigRutina.Calculo(rutina);
+                         //Ete de abajo hay que probarlo ndea si anda con el cambio
+                         int puntaje = Ejercicios.Calculo(idCliente, idEjercicios, idGamificacion);
                          Gamificacion.ActPts(idGamificacion, puntaje);
 
                          if (guardado) {
@@ -316,7 +316,7 @@ public interface Validacion {
                     ConfigRutina rutina = Rutina.RutinaVer(idCuenta);
 
                     if (rutina != null) {
-                        int puntaje = ConfigRutina.Calculo(rutina);
+                        int puntaje = Ejercicios.Calculo(idCuenta, idCuenta, idCuenta);
                         String carta = (puntaje <= 0) ? "Bronce" :
                                        (puntaje <= 20) ? "Bronce" :
                                        (puntaje <= 46) ? "Plata" : "Oro";

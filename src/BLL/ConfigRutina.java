@@ -120,20 +120,14 @@ public class ConfigRutina extends Ejercicios {
 	    }
 	    return null;
 	}
-	// eta wea tambien hay que corregir esta muy basico xD
-	public static int Calculo(ConfigRutina rutina) {
-	    int puntos = 0;
-	    puntos += rutina.getRepeticiones() / 5;
-	    puntos += rutina.getSeries();
-	    puntos += rutina.getCantPeso() / 5;
-	    return Math.min(puntos, 10); 
-	}
-
+	
 	//esto serian getter y setter de las rutinas pero como no existen en esta clase se le tuvo q declarar asi
-	//No deberia aparecer en el modelo final solo es un prototipo para ver como funciona el sistema
+	//Ta dificil sacarlos porque esta clase tiene datos q necesita Ejercicios
+	//Hablar si lo hacemos todo en la clase Ejercicios para mayor simplicidad
     public int getRepeticiones() { return repeticiones; }
     public int getSeries() { return series; }
     public int getCantPeso() { return cantPeso; }
     public int getPausaEntreSerie() { return pausaEntreSerie; }
     public int getTiempo() { return tiempo; }
+	
 }
