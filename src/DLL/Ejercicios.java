@@ -1,4 +1,15 @@
 package DLL;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.Statement;
+
+import BLL.ConfigRutina;
+import repository.Conexion;
+
 public class Ejercicios {
 	private String piernas;
 	private String brazos;
@@ -65,6 +76,101 @@ public class Ejercicios {
 		this.cardio = cardio;
 	}
 	
+	private static Connection con1 = Conexion.getInstance().getConnection();
+
 	
+	public static int NombreID(String nombreEjercicio, String tabla, String columnaEjercicio, String columnaId) {
+	    int id = -1;
+	    try {
+	        String sqlSelect = "SELECT " + columnaId + " FROM " + tabla + " WHERE " + columnaEjercicio + " = ?";
+	        PreparedStatement ps = con1.prepareStatement(sqlSelect);
+	        ps.setString(1, nombreEjercicio);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            id = rs.getInt(columnaId);
+	        } else {
+	            String sqlInsert = "INSERT INTO " + tabla + " (" + columnaEjercicio + ") VALUES (?)";
+	            PreparedStatement psInsert = con1.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+	            psInsert.setString(1, nombreEjercicio);
+	            psInsert.executeUpdate();
+
+	            ResultSet rsInsert = psInsert.getGeneratedKeys();
+	            if (rsInsert.next()) {
+	                id = rsInsert.getInt(1);
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return id;
+	}
+	 
+		private static Connection con = Conexion.getInstance().getConnection();
+
+		public static int ind(String tabla, String columna, String valor) {
+		    String sql = "INSERT INTO " + tabla + " (" + columna + ") VALUES (?)";
+		    try (PreparedStatement ps = con1.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		        ps.setString(1, valor);
+		        ps.executeUpdate();
+		        ResultSet rs = ps.getGeneratedKeys();
+		        if (rs.next()) {
+		            return rs.getInt(1);
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return -1; 
+		}
+	 
+		public static int EjercicioBD(ConfigRutina rutina) {
+		    int idEjercicios = -1;
+		    try {
+		        int idEspalda = Ejercicios.NombreID(rutina.getEspalda(), "Espalda", "ejercicio_espalda", "idEspalda");
+		        int idBrazos = Ejercicios.NombreID(rutina.getBrazos(), "Brazos", "ejercicio_brazos", "idBrazos");
+		        int idPecho = Ejercicios.NombreID(rutina.getPecho(), "Pecho", "ejercicio_pecho", "idPecho");
+		        int idCardio = Ejercicios.NombreID(rutina.getCardio(), "Cardio", "Actividad", "idCardio");
+		        int idZonaMedia = Ejercicios.NombreID(rutina.getZonaMedia(), "ZonaMedia", "ejercicio_zona_media", "idZonaMedia");
+		        int idPiernas = Ejercicios.NombreID(rutina.getPiernas(), "Piernas", "ejercicio_piernas", "idPiernas");
+
+		        String sql = "INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, " +
+		                "Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) " +
+		                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		        try (PreparedStatement ps = con1.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		            ps.setInt(1, rutina.getRepeticiones());
+		            ps.setInt(2, rutina.getSeries());
+		            ps.setInt(3, rutina.getCantPeso());
+		            ps.setInt(4, rutina.getPausaEntreSerie());
+		            ps.setInt(5, idEspalda);
+		            ps.setInt(6, idBrazos);
+		            ps.setInt(7, idPecho);
+		            ps.setInt(8, idCardio);
+		            ps.setInt(9, idZonaMedia);
+		            ps.setInt(10, idPiernas);
+
+		            if (ps.executeUpdate() > 0) {
+		                ResultSet rs = ps.getGeneratedKeys();
+		                if (rs.next()) {
+		                    idEjercicios = rs.getInt(1);
+		                }
+		            }
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return idEjercicios;
+		}
+		
+		public static int Calculo(int repeticiones, int series, int cantPeso) {
+		    int puntos = 0;
+		    puntos += repeticiones / 5;
+		    puntos += series;
+		    puntos += cantPeso / 5;
+		    return Math.min(puntos, 10); 
+		}
+
 	
 }

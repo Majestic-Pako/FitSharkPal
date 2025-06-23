@@ -22,12 +22,15 @@ Aplicación de escritorio en Java para la gestión de un gimnasio, donde usuario
 ```plaintext
 fitsharkpal/
 └── src/
-    ├── bll/                 # Lógica de negocio
+    ├── BLL/                 # Lógica de negocio
     │   ├── Ejercicios.java      # Lógica para ejercicios personalizados
     │   ├── Gamificacion.java    # Sistema de puntos y niveles
     │   ├── Validacion.java      # Validaciones generales (login, datos, etc.)
     │   └── Encriptador.java     # Interfaz para cifrar contraseñas
-    ├── dll/                 # Clases modelo (entidades) y menús
+    ├── database/        #Diagrama y Script de la Base de Datos
+    |   ├── Diagrama-BD-FitsharkPal.mwb      #Diagrama de la Base de Datos
+    |   └── fitshark.sql         # Script de la Base de Datos    
+    ├── DLL/                 # Clases modelo (entidades) y menús
     │   ├── Cliente.java         # Clase Cliente con atributos y nivel
     │   ├── Cuenta.java          # Clase base con datos de usuario y login
     │   ├── Entrenador.java      # Clase Entrenador
@@ -38,10 +41,16 @@ fitsharkpal/
     │   ├── Rol.java             # Enum con roles: CLIENTE, ENTRENADOR
     │   ├── MenuCliente.java     # Menú e interacción del cliente
     │   └── MenuCoach.java       # Menú e interacción del entrenador
+    ├── GUI/                 # Punto de entrada del sistema
+    │   ├── Main.java            # Clase principal, contiene el menú inicial
+    |   └── Index.java           # Jframe del Menu de Inicio
+    ├── img/          # Imagenes del Proyecto
+    │   ├── agregar-usuario.png
+    |   ├── salida.png
+    |   ├── shark.png
+    |   └── usuario.png
     ├── repository/          # Acceso a la base de datos
     │   └── Conexion.java        # Clase singleton para conexión MySQL
-    ├── gui/                 # Punto de entrada del sistema
-    │   └── Main.java            # Clase principal, contiene el menú inicial
 ```
 
 ## 📘 Diagrama de Clases
@@ -59,5 +68,6 @@ fitsharkpal/
 ## 📊 Diagrama de Entidades
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/5124f21e-f5b0-4fc7-80b4-e5f7d7d8e079" alt="Diagrama de entidades" width="700"/>
+  <img src="https://github.com/user-attachments/assets/1963cb16-1b95-41f7-b4a2-b83dff4a3060" alt="Diagrama de entidades" width="700"/>
 </p>
+

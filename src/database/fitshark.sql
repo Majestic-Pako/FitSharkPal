@@ -94,7 +94,7 @@ DROP TABLE IF EXISTS `Espalda` ;
 
 CREATE TABLE IF NOT EXISTS `Espalda` (
   `idEspalda` INT NULL AUTO_INCREMENT,
-  `ejercicio_espalda` VARCHAR(45) NOT NULL,
+  `ejercicio_espalda` ENUM('Narrow Grip Lat Pulldowns', 'Wide Grip Chest Supported Row', 'One-Arm Cable Row') NOT NULL,
   PRIMARY KEY (`idEspalda`))
 ENGINE = InnoDB;
 
@@ -106,7 +106,7 @@ DROP TABLE IF EXISTS `Brazos` ;
 
 CREATE TABLE IF NOT EXISTS `Brazos` (
   `idBrazos` INT NULL AUTO_INCREMENT,
-  `ejercicio_brazos` VARCHAR(45) NOT NULL,
+  `ejercicio_brazos` ENUM('Face Away Bayesian Cable Curls', 'Preacher Hammer Curls', 'EZ Bar Skull Crushers') NOT NULL,
   PRIMARY KEY (`idBrazos`))
 ENGINE = InnoDB;
 
@@ -118,7 +118,7 @@ DROP TABLE IF EXISTS `Pecho` ;
 
 CREATE TABLE IF NOT EXISTS `Pecho` (
   `idPecho` INT NULL AUTO_INCREMENT,
-  `ejercicio_pecho` VARCHAR(45) NOT NULL,
+  `ejercicio_pecho` ENUM('Bench Press', 'Incline Shoulder Press', 'Dumbbell Fly') NOT NULL,
   PRIMARY KEY (`idPecho`))
 ENGINE = InnoDB;
 
@@ -130,7 +130,7 @@ DROP TABLE IF EXISTS `Cardio` ;
 
 CREATE TABLE IF NOT EXISTS `Cardio` (
   `idCardio` INT NULL AUTO_INCREMENT,
-  `Actividad` VARCHAR(45) NOT NULL,
+  `Actividad` ENUM('Incline Walk', 'Biking', 'Jogging') NOT NULL,
   PRIMARY KEY (`idCardio`))
 ENGINE = InnoDB;
 
@@ -142,7 +142,7 @@ DROP TABLE IF EXISTS `ZonaMedia` ;
 
 CREATE TABLE IF NOT EXISTS `ZonaMedia` (
   `idZonaMedia` INT NULL AUTO_INCREMENT,
-  `ejercicio_zona_media` VARCHAR(45) NOT NULL,
+  `ejercicio_zona_media` ENUM('Crunches', 'Planche', 'Leg Raises') NOT NULL,
   PRIMARY KEY (`idZonaMedia`))
 ENGINE = InnoDB;
 
@@ -154,7 +154,7 @@ DROP TABLE IF EXISTS `Piernas` ;
 
 CREATE TABLE IF NOT EXISTS `Piernas` (
   `idPiernas` INT NULL AUTO_INCREMENT,
-  `ejercicio_piernas` VARCHAR(45) NOT NULL,
+  `ejercicio_piernas` ENUM('Deadlift', 'Bulgarian Split Squat', 'Hip Adductor/Abductor Machine') NOT NULL,
   PRIMARY KEY (`idPiernas`))
 ENGINE = InnoDB;
 
@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `Ejercicios` (
   `series` INT NOT NULL,
   `cantidad_peso` INT NOT NULL,
   `pausa_series` INT NOT NULL,
+  `tiempo` INT NOT NULL,
   `Espalda_idEspalda` INT NOT NULL,
   `Brazos_idBrazos` INT NOT NULL,
   `Pecho_idPecho` INT NOT NULL,
@@ -222,7 +223,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Rutina` ;
 
 CREATE TABLE IF NOT EXISTS `Rutina` (
-  `idRutina` INT NOT NULL,
+  `idRutina` INT NOT NULL AUTO_INCREMENT,
   `Cuenta_idCuenta` INT NOT NULL,
   `Ejercicios_idEjercicios` INT NOT NULL,
   `Gamificacion_idGamificacion` INT NOT NULL,
