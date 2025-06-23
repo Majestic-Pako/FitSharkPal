@@ -148,7 +148,7 @@ public interface Validacion {
              for (Cliente c : lista) {
                  if (c.getNombre().equals(seleccionado)) {
                 	 int idCuenta = c.getIdCuenta();
-                     int idCliente = Cliente.obtenerIdCliente(idCuenta); // 🔁 Usa tu método
+                     int idCliente = Cliente.obtenerIdCliente(idCuenta); 
 
                      ConfigRutina rutina = ConfigRutina.Form();
 
@@ -318,8 +318,8 @@ public interface Validacion {
                     if (rutina != null) {
                         int puntaje = Ejercicios.Calculo(idCuenta, idCuenta, idCuenta);
                         String carta = (puntaje <= 0) ? "Bronce" :
-                                       (puntaje <= 20) ? "Bronce" :
-                                       (puntaje <= 46) ? "Plata" : "Oro";
+                                       (puntaje <= 20) ? "Plata" :
+                                       (puntaje <= 46) ? "Oro" : "";
                         ArrayList<String> cartas = new ArrayList<>();
                         cartas.add(carta);
 
