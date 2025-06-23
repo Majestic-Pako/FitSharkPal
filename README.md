@@ -59,5 +59,6 @@ fitsharkpal/
 ## 📊 Diagrama de Entidades
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/5124f21e-f5b0-4fc7-80b4-e5f7d7d8e079" alt="Diagrama de entidades" width="700"/>
+  <img src="https://github.com/user-attachments/assets/1963cb16-1b95-41f7-b4a2-b83dff4a3060" alt="Diagrama de entidades" width="700"/>
 </p>
+
