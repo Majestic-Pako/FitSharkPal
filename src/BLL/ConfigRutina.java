@@ -2,6 +2,8 @@ package BLL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
@@ -64,12 +66,84 @@ public class ConfigRutina extends Ejercicios {
 
 	//es un prototipo hasta que se diseñe bien el ingreso de datos
 	public static ConfigRutina Form() {
-    	String cardio = JOptionPane.showInputDialog("Ingrese la actividad de cardio (Ej: Cinta, Bicicleta)");
-        String zonaMedia = JOptionPane.showInputDialog("Ingrese un ejercicio para zona media");
-        String piernas = JOptionPane.showInputDialog("Ingrese un ejercicio para piernas");
-        String brazos = JOptionPane.showInputDialog("Ingrese un ejercicio para brazos");
-        String pecho = JOptionPane.showInputDialog("Ingrese un ejercicio para pecho");
-        String espalda = JOptionPane.showInputDialog("Ingrese un ejercicio para espalda");
+        LinkedList<String> cardioList = new LinkedList<>(Arrays.asList(
+                "Incline Walk", "Biking", "Jogging"
+            ));
+            
+            LinkedList<String> zonaMediaList = new LinkedList<>(Arrays.asList(
+                "Crunches", "Planche", "Leg Raises"
+            ));
+            
+            LinkedList<String> piernasList = new LinkedList<>(Arrays.asList(
+                "Deadlift", "Bulgarian Split Squat", "Hip Adductor/Abductor Machine"
+            ));
+            
+            LinkedList<String> brazosList = new LinkedList<>(Arrays.asList(
+                "Face Away Bayesian Cable Curls", "Preacher Hammer Curls", "EZ Bar Skull Crushers"
+            ));
+            
+            LinkedList<String> pechoList = new LinkedList<>(Arrays.asList(
+                "Bench Press", "Incline Shoulder Press", "Dumbbell Fly"
+            ));
+            
+            LinkedList<String> espaldaList = new LinkedList<>(Arrays.asList(
+                "Narrow Grip Lat Pulldowns", "Wide Grip Chest Supported Row", "One-Arm Cable Row"
+            ));
+
+            String cardio = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione actividad de Cardio:",
+                "Cardio",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                cardioList.toArray(),
+                cardioList.getFirst());
+
+            String zonaMedia = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione ejercicio para Zona Media:",
+                "Zona Media",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                zonaMediaList.toArray(),
+                zonaMediaList.getFirst());
+
+            String piernas = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione ejercicio para Piernas:",
+                "Piernas",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                piernasList.toArray(),
+                piernasList.getFirst());
+
+            String brazos = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione ejercicio para Brazos:",
+                "Brazos",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                brazosList.toArray(),
+                brazosList.getFirst());
+
+            String pecho = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione ejercicio para Pecho:",
+                "Pecho",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                pechoList.toArray(),
+                pechoList.getFirst());
+
+            String espalda = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione ejercicio para Espalda:",
+                "Espalda",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                espaldaList.toArray(),
+                espaldaList.getFirst());
+
 
         int tiempo = Integer.parseInt(JOptionPane.showInputDialog("Duración del cardio: "));
         int repeticiones = Integer.parseInt(JOptionPane.showInputDialog("Cantidad de repeticiones por ejercicio:"));
@@ -84,9 +158,9 @@ public class ConfigRutina extends Ejercicios {
 	public static ConfigRutina RutinaVer(int idCuenta) {
 	    try {
 	    	String sql =
-	                "SELECT e.repeticiones, e.series, e.cantidad_peso, e.pausa_series, " +
+	                "SELECT e.repeticiones, e.series, e.cantidad_peso, e.pausa_series, e.tiempo," +
 	                "pi.ejercicio_piernas AS piernas, br.ejercicio_brazos AS brazos, pe.ejercicio_pecho AS pecho, " +
-	                "es.ejercicio_espalda AS espalda, zm.ejercicio_zona_media AS zonaMedia, ca.Actividad AS cardio " +
+	                "es.ejercicio_espalda AS espalda, zm.ejercicio_zona_media AS zonaMedia, ca.Actividad AS cardio "+
 	                "FROM rutina r " +
 	                "JOIN ejercicios e ON r.Ejercicios_idEjercicios = e.idEjercicios " +
 	                "JOIN piernas pi ON e.Piernas_idPiernas = pi.idPiernas " +
@@ -111,8 +185,8 @@ public class ConfigRutina extends Ejercicios {
 	                rs.getInt("repeticiones"),
 	                rs.getInt("series"),
 	                rs.getInt("cantidad_peso"),
-	                rs.getInt("pausa_series")
-	                //Aca deberia estar el tiempo pa cardio pero como no existe en BD no lo puedo llamar
+	                rs.getInt("pausa_series"),
+	                rs.getInt("tiempo")
 	            );
 	        }
 	    } catch (Exception e) {
@@ -120,20 +194,14 @@ public class ConfigRutina extends Ejercicios {
 	    }
 	    return null;
 	}
-	// eta wea tambien hay que corregir esta muy basico xD
-	public static int Calculo(ConfigRutina rutina) {
-	    int puntos = 0;
-	    puntos += rutina.getRepeticiones() / 5;
-	    puntos += rutina.getSeries();
-	    puntos += rutina.getCantPeso() / 5;
-	    return Math.min(puntos, 10); 
-	}
-
+	
 	//esto serian getter y setter de las rutinas pero como no existen en esta clase se le tuvo q declarar asi
-	//No deberia aparecer en el modelo final solo es un prototipo para ver como funciona el sistema
+	//Ta dificil sacarlos porque esta clase tiene datos q necesita Ejercicios
+	//Hablar si lo hacemos todo en la clase Ejercicios para mayor simplicidad
     public int getRepeticiones() { return repeticiones; }
     public int getSeries() { return series; }
     public int getCantPeso() { return cantPeso; }
     public int getPausaEntreSerie() { return pausaEntreSerie; }
     public int getTiempo() { return tiempo; }
+	
 }

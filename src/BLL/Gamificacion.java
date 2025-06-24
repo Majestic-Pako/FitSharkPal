@@ -53,35 +53,34 @@ public class Gamificacion extends ConfigRutina {
 
 	private static Connection con = Conexion.getInstance().getConnection();
 	
-	public static int IdGami(int idCliente, int idCuenta) throws SQLException {
-	    String sqlSelect = "SELECT idGamificacion FROM Gamificacion WHERE Cliente_idCliente = ? AND Cliente_Cuenta_idCuenta = ? LIMIT 1";
-	    PreparedStatement psSelect = con.prepareStatement(sqlSelect);
-	    psSelect.setInt(1, idCliente);
-	    psSelect.setInt(2, idCuenta);
-	    ResultSet rs = psSelect.executeQuery();
-	    if (rs.next()) {
-	        return rs.getInt("idGamificacion");
-	    }
+	public static int IdGami(int idCliente, int idCuenta) {
+	    int id = -1;
+	    try {
+	        String sqlSelect = "SELECT idGamificacion FROM Gamificacion WHERE Cliente_idCliente = ? AND Cliente_Cuenta_idCuenta = ? LIMIT 1";
+	        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+	            psSelect.setInt(1, idCliente);
+	            psSelect.setInt(2, idCuenta);
+	            ResultSet rs = psSelect.executeQuery();
+	            if (rs.next()) return rs.getInt("idGamificacion");
+	        }
 
-	    String sqlInsert = "INSERT INTO Gamificacion (Cliente_idCliente, Cliente_Cuenta_idCuenta, puntaje) VALUES (?, ?, 0)";
-	    PreparedStatement psInsert = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
-	    psInsert.setInt(1, idCliente);
-	    psInsert.setInt(2, idCuenta);
-	    psInsert.executeUpdate();
-	    ResultSet rsInsert = psInsert.getGeneratedKeys();
-	    if (rsInsert.next()) {
-	        return rsInsert.getInt(1);
+	        String sqlInsert = "INSERT INTO Gamificacion (Cliente_idCliente, Cliente_Cuenta_idCuenta, puntaje) VALUES (?, ?, 0)";
+	        try (PreparedStatement psInsert = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+	            psInsert.setInt(1, idCliente);
+	            psInsert.setInt(2, idCuenta);
+	            psInsert.executeUpdate();
+	            ResultSet rsInsert = psInsert.getGeneratedKeys();
+	            if (rsInsert.next()) id = rsInsert.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
 	    }
-
-	    throw new SQLException("No se pudo crear registro en Gamificacion");
+	    return id;
 	}
 	
-	public static void ActPts(int idGamificacion, int puntajeNuevo) throws SQLException {
+	public static void ActPts(int idGamificacion, int puntajeNuevo) {
 	    String carta;
-
-	    if (puntajeNuevo <= 0) {
-	        carta = "Bronce";
-	    } else if (puntajeNuevo <= 20) {
+	    if (puntajeNuevo <= 0 || puntajeNuevo <= 20) {
 	        carta = "Bronce";
 	    } else if (puntajeNuevo <= 46) {
 	        carta = "Plata";
@@ -95,6 +94,8 @@ public class Gamificacion extends ConfigRutina {
 	        ps.setString(2, carta);
 	        ps.setInt(3, idGamificacion);
 	        ps.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
 	    }
 	}
 	
