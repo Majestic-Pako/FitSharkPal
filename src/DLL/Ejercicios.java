@@ -135,21 +135,22 @@ public class Ejercicios {
 		        int idZonaMedia = Ejercicios.NombreID(rutina.getZonaMedia(), "ZonaMedia", "ejercicio_zona_media", "idZonaMedia");
 		        int idPiernas = Ejercicios.NombreID(rutina.getPiernas(), "Piernas", "ejercicio_piernas", "idPiernas");
 
-		        String sql = "INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, " +
+		        String sql = "INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, tiempo," +
 		                "Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) " +
-		                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		        try (PreparedStatement ps = con1.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 		            ps.setInt(1, rutina.getRepeticiones());
 		            ps.setInt(2, rutina.getSeries());
 		            ps.setInt(3, rutina.getCantPeso());
 		            ps.setInt(4, rutina.getPausaEntreSerie());
-		            ps.setInt(5, idEspalda);
-		            ps.setInt(6, idBrazos);
-		            ps.setInt(7, idPecho);
-		            ps.setInt(8, idCardio);
-		            ps.setInt(9, idZonaMedia);
-		            ps.setInt(10, idPiernas);
+		            ps.setInt(5, rutina.getTiempo());
+		            ps.setInt(6, idEspalda);
+		            ps.setInt(7, idBrazos);
+		            ps.setInt(8, idPecho);
+		            ps.setInt(9, idCardio);
+		            ps.setInt(10, idZonaMedia);
+		            ps.setInt(11, idPiernas);
 
 		            if (ps.executeUpdate() > 0) {
 		                ResultSet rs = ps.getGeneratedKeys();
