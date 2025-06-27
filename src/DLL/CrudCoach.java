@@ -9,7 +9,7 @@ public enum CrudCoach {
         @Override
         public void ejecutar(int idCuentaSesion) {
             JOptionPane.showMessageDialog(null, "Creando nueva cuenta para Cliente");
-            Main crear = new Main(); // Por alguna razón con Main directo funciona la validación
+            Main crear = new Main();
             crear.CrearCuenta();
         }
     },

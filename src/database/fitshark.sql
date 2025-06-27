@@ -7,7 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-
+use fitshark;
 -- -----------------------------------------------------
 -- Table `Cuenta`
 -- -----------------------------------------------------
@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `Cuenta` (
   `rol` ENUM('cliente', 'entrenador') NULL,
   PRIMARY KEY (`idCuenta`))
 ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -37,10 +38,31 @@ CREATE TABLE IF NOT EXISTS `Cliente` (
   `nivel` ENUM('Principiante', 'Intermedio', 'Avanzado') NOT NULL,
   `Cuenta_idCuenta` INT NOT NULL,
   PRIMARY KEY (`idCliente`, `Cuenta_idCuenta`),
-  INDEX `fk_Cliente_Cuenta1_idx` (`Cuenta_idCuenta` ASC) VISIBLE,
+  INDEX `fk_Cliente_Cuenta1_idx` (`Cuenta_idCuenta` ASC),
   CONSTRAINT `fk_Cliente_Cuenta1`
     FOREIGN KEY (`Cuenta_idCuenta`)
     REFERENCES `Cuenta` (`idCuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Gamificacion`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Gamificacion` ;
+
+CREATE TABLE IF NOT EXISTS `Gamificacion` (
+  `idGamificacion` INT NOT NULL AUTO_INCREMENT,
+  `puntaje` INT NOT NULL,
+  `carta` ENUM('Bronce', 'Plata', 'Oro') NOT NULL,
+  `Cliente_idCliente` INT NOT NULL,
+  `Cliente_Cuenta_idCuenta` INT NOT NULL,
+  PRIMARY KEY (`idGamificacion`),
+  INDEX `fk_Gamificacion_Cliente1_idx` (`Cliente_idCliente` ASC, `Cliente_Cuenta_idCuenta` ASC),
+  CONSTRAINT `fk_Gamificacion_Cliente1`
+    FOREIGN KEY (`Cliente_idCliente`, `Cliente_Cuenta_idCuenta`)
+    REFERENCES `Cliente` (`idCliente`, `Cuenta_idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -56,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `Entrenador` (
   `nombre` VARCHAR(45) NULL,
   `Cuenta_idCuenta` INT NOT NULL,
   PRIMARY KEY (`idEntrenador`, `Cuenta_idCuenta`),
-  INDEX `fk_Entrenador_Cuenta1_idx` (`Cuenta_idCuenta` ASC) VISIBLE,
+  INDEX `fk_Entrenador_Cuenta1_idx` (`Cuenta_idCuenta` ASC) ,
   CONSTRAINT `fk_Entrenador_Cuenta1`
     FOREIGN KEY (`Cuenta_idCuenta`)
     REFERENCES `Cuenta` (`idCuenta`)
@@ -72,7 +94,7 @@ DROP TABLE IF EXISTS `Espalda` ;
 
 CREATE TABLE IF NOT EXISTS `Espalda` (
   `idEspalda` INT NULL AUTO_INCREMENT,
-  `ejercicio_espalda` VARCHAR(45) NOT NULL,
+  `ejercicio_espalda` ENUM('Narrow Grip Lat Pulldowns', 'Wide Grip Chest Supported Row', 'One-Arm Cable Row') NOT NULL,
   PRIMARY KEY (`idEspalda`))
 ENGINE = InnoDB;
 
@@ -84,7 +106,7 @@ DROP TABLE IF EXISTS `Brazos` ;
 
 CREATE TABLE IF NOT EXISTS `Brazos` (
   `idBrazos` INT NULL AUTO_INCREMENT,
-  `ejercicio_brazos` VARCHAR(45) NOT NULL,
+  `ejercicio_brazos` ENUM('Face Away Bayesian Cable Curls', 'Preacher Hammer Curls', 'EZ Bar Skull Crushers') NOT NULL,
   PRIMARY KEY (`idBrazos`))
 ENGINE = InnoDB;
 
@@ -96,7 +118,7 @@ DROP TABLE IF EXISTS `Pecho` ;
 
 CREATE TABLE IF NOT EXISTS `Pecho` (
   `idPecho` INT NULL AUTO_INCREMENT,
-  `ejercicio_pecho` VARCHAR(45) NOT NULL,
+  `ejercicio_pecho` ENUM('Bench Press', 'Incline Shoulder Press', 'Dumbbell Fly') NOT NULL,
   PRIMARY KEY (`idPecho`))
 ENGINE = InnoDB;
 
@@ -108,7 +130,7 @@ DROP TABLE IF EXISTS `Cardio` ;
 
 CREATE TABLE IF NOT EXISTS `Cardio` (
   `idCardio` INT NULL AUTO_INCREMENT,
-  `Actividad` VARCHAR(45) NOT NULL,
+  `Actividad` ENUM('Incline Walk', 'Biking', 'Jogging') NOT NULL,
   PRIMARY KEY (`idCardio`))
 ENGINE = InnoDB;
 
@@ -120,7 +142,7 @@ DROP TABLE IF EXISTS `ZonaMedia` ;
 
 CREATE TABLE IF NOT EXISTS `ZonaMedia` (
   `idZonaMedia` INT NULL AUTO_INCREMENT,
-  `ejercicio_zona_media` VARCHAR(45) NOT NULL,
+  `ejercicio_zona_media` ENUM('Crunches', 'Planche', 'Leg Raises') NOT NULL,
   PRIMARY KEY (`idZonaMedia`))
 ENGINE = InnoDB;
 
@@ -132,22 +154,23 @@ DROP TABLE IF EXISTS `Piernas` ;
 
 CREATE TABLE IF NOT EXISTS `Piernas` (
   `idPiernas` INT NULL AUTO_INCREMENT,
-  `ejercicio_piernas` VARCHAR(45) NOT NULL,
+  `ejercicio_piernas` ENUM('Deadlift', 'Bulgarian Split Squat', 'Hip Adductor/Abductor Machine') NOT NULL,
   PRIMARY KEY (`idPiernas`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ConfiguracionEjercicios`
+-- Table `Ejercicios`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ConfiguracionEjercicios` ;
+DROP TABLE IF EXISTS `Ejercicios` ;
 
-CREATE TABLE IF NOT EXISTS `ConfiguracionEjercicios` (
+CREATE TABLE IF NOT EXISTS `Ejercicios` (
   `idEjercicios` INT NOT NULL AUTO_INCREMENT,
   `repeticiones` INT NOT NULL,
   `series` INT NOT NULL,
   `cantidad_peso` INT NOT NULL,
   `pausa_series` INT NOT NULL,
+  `tiempo` INT NOT NULL,
   `Espalda_idEspalda` INT NOT NULL,
   `Brazos_idBrazos` INT NOT NULL,
   `Pecho_idPecho` INT NOT NULL,
@@ -155,12 +178,12 @@ CREATE TABLE IF NOT EXISTS `ConfiguracionEjercicios` (
   `ZonaMedia_idZonaMedia` INT NOT NULL,
   `Piernas_idPiernas` INT NOT NULL,
   PRIMARY KEY (`idEjercicios`, `Espalda_idEspalda`, `Brazos_idBrazos`, `Pecho_idPecho`, `Cardio_idCardio`, `ZonaMedia_idZonaMedia`, `Piernas_idPiernas`),
-  INDEX `fk_Ejercicios_Espalda1_idx` (`Espalda_idEspalda` ASC) VISIBLE,
-  INDEX `fk_Ejercicios_Brazos1_idx` (`Brazos_idBrazos` ASC) VISIBLE,
-  INDEX `fk_Ejercicios_Pecho1_idx` (`Pecho_idPecho` ASC) VISIBLE,
-  INDEX `fk_Ejercicios_Cardio1_idx` (`Cardio_idCardio` ASC) VISIBLE,
-  INDEX `fk_Ejercicios_ZonaMedia1_idx` (`ZonaMedia_idZonaMedia` ASC) VISIBLE,
-  INDEX `fk_Ejercicios_Piernas1_idx` (`Piernas_idPiernas` ASC) VISIBLE,
+  INDEX `fk_Ejercicios_Espalda1_idx` (`Espalda_idEspalda` ASC) ,
+  INDEX `fk_Ejercicios_Brazos1_idx` (`Brazos_idBrazos` ASC) ,
+  INDEX `fk_Ejercicios_Pecho1_idx` (`Pecho_idPecho` ASC) ,
+  INDEX `fk_Ejercicios_Cardio1_idx` (`Cardio_idCardio` ASC) ,
+  INDEX `fk_Ejercicios_ZonaMedia1_idx` (`ZonaMedia_idZonaMedia` ASC) ,
+  INDEX `fk_Ejercicios_Piernas1_idx` (`Piernas_idPiernas` ASC) ,
   CONSTRAINT `fk_Ejercicios_Espalda1`
     FOREIGN KEY (`Espalda_idEspalda`)
     REFERENCES `Espalda` (`idEspalda`)
@@ -195,32 +218,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Gamificacion`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Gamificacion` ;
-
-CREATE TABLE IF NOT EXISTS `Gamificacion` (
-  `idGamificacion` INT NOT NULL AUTO_INCREMENT,
-  `puntaje` INT NOT NULL,
-  `carta` ENUM('Bronce', 'Plata', 'Oro') NOT NULL,
-  `ConfiguracionEjercicios_idEjercicios` INT NOT NULL,
-  `ConfiguracionEjercicios_Espalda_idEspalda` INT NOT NULL,
-  `ConfiguracionEjercicios_Brazos_idBrazos` INT NOT NULL,
-  `ConfiguracionEjercicios_Pecho_idPecho` INT NOT NULL,
-  `ConfiguracionEjercicios_Cardio_idCardio` INT NOT NULL,
-  `ConfiguracionEjercicios_ZonaMedia_idZonaMedia` INT NOT NULL,
-  `ConfiguracionEjercicios_Piernas_idPiernas` INT NOT NULL,
-  PRIMARY KEY (`idGamificacion`, `ConfiguracionEjercicios_idEjercicios`, `ConfiguracionEjercicios_Espalda_idEspalda`, `ConfiguracionEjercicios_Brazos_idBrazos`, `ConfiguracionEjercicios_Pecho_idPecho`, `ConfiguracionEjercicios_Cardio_idCardio`, `ConfiguracionEjercicios_ZonaMedia_idZonaMedia`, `ConfiguracionEjercicios_Piernas_idPiernas`),
-  INDEX `fk_Gamificacion_ConfiguracionEjercicios1_idx` (`ConfiguracionEjercicios_idEjercicios` ASC, `ConfiguracionEjercicios_Espalda_idEspalda` ASC, `ConfiguracionEjercicios_Brazos_idBrazos` ASC, `ConfiguracionEjercicios_Pecho_idPecho` ASC, `ConfiguracionEjercicios_Cardio_idCardio` ASC, `ConfiguracionEjercicios_ZonaMedia_idZonaMedia` ASC, `ConfiguracionEjercicios_Piernas_idPiernas` ASC) VISIBLE,
-  CONSTRAINT `fk_Gamificacion_ConfiguracionEjercicios1`
-    FOREIGN KEY (`ConfiguracionEjercicios_idEjercicios` , `ConfiguracionEjercicios_Espalda_idEspalda` , `ConfiguracionEjercicios_Brazos_idBrazos` , `ConfiguracionEjercicios_Pecho_idPecho` , `ConfiguracionEjercicios_Cardio_idCardio` , `ConfiguracionEjercicios_ZonaMedia_idZonaMedia` , `ConfiguracionEjercicios_Piernas_idPiernas`)
-    REFERENCES `ConfiguracionEjercicios` (`idEjercicios` , `Espalda_idEspalda` , `Brazos_idBrazos` , `Pecho_idPecho` , `Cardio_idCardio` , `ZonaMedia_idZonaMedia` , `Piernas_idPiernas`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `Rutina`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Rutina` ;
@@ -228,27 +225,31 @@ DROP TABLE IF EXISTS `Rutina` ;
 CREATE TABLE IF NOT EXISTS `Rutina` (
   `idRutina` INT NOT NULL AUTO_INCREMENT,
   `Cuenta_idCuenta` INT NOT NULL,
+  `Ejercicios_idEjercicios` INT NOT NULL,
   `Gamificacion_idGamificacion` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_idEjercicios` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_Espalda_idEspalda` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_Brazos_idBrazos` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_Pecho_idPecho` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_Cardio_idCardio` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_ZonaMedia_idZonaMedia` INT NOT NULL,
-  `Gamificacion_ConfiguracionEjercicios_Piernas_idPiernas` INT NOT NULL,
-  PRIMARY KEY (`idRutina`, `Cuenta_idCuenta`, `Gamificacion_idGamificacion`, `Gamificacion_ConfiguracionEjercicios_idEjercicios`, `Gamificacion_ConfiguracionEjercicios_Espalda_idEspalda`, `Gamificacion_ConfiguracionEjercicios_Brazos_idBrazos`, `Gamificacion_ConfiguracionEjercicios_Pecho_idPecho`, `Gamificacion_ConfiguracionEjercicios_Cardio_idCardio`, `Gamificacion_ConfiguracionEjercicios_ZonaMedia_idZonaMedia`, `Gamificacion_ConfiguracionEjercicios_Piernas_idPiernas`),
-  INDEX `fk_Entrenamientos_Cuenta1_idx` (`Cuenta_idCuenta` ASC) VISIBLE,
-  INDEX `fk_Rutina_Gamificacion1_idx` (`Gamificacion_idGamificacion` ASC, `Gamificacion_ConfiguracionEjercicios_idEjercicios` ASC, `Gamificacion_ConfiguracionEjercicios_Espalda_idEspalda` ASC, `Gamificacion_ConfiguracionEjercicios_Brazos_idBrazos` ASC, `Gamificacion_ConfiguracionEjercicios_Pecho_idPecho` ASC, `Gamificacion_ConfiguracionEjercicios_Cardio_idCardio` ASC, `Gamificacion_ConfiguracionEjercicios_ZonaMedia_idZonaMedia` ASC, `Gamificacion_ConfiguracionEjercicios_Piernas_idPiernas` ASC) VISIBLE,
-  CONSTRAINT `fk_Entrenamientos_Cuenta1`
+  PRIMARY KEY (`idRutina`, `Cuenta_idCuenta`, `Ejercicios_idEjercicios`, `Gamificacion_idGamificacion`),
+  INDEX `fk_Rutina_Cuenta1_idx` (`Cuenta_idCuenta` ASC),
+  INDEX `fk_Rutina_Ejercicios1_idx` (`Ejercicios_idEjercicios` ASC),
+  INDEX `fk_Rutina_Gamificacion1_idx` (`Gamificacion_idGamificacion` ASC),
+  
+  CONSTRAINT `fk_Rutina_Cuenta1`
     FOREIGN KEY (`Cuenta_idCuenta`)
     REFERENCES `Cuenta` (`idCuenta`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Rutina_Gamificacion1`
-    FOREIGN KEY (`Gamificacion_idGamificacion` , `Gamificacion_ConfiguracionEjercicios_idEjercicios` , `Gamificacion_ConfiguracionEjercicios_Espalda_idEspalda` , `Gamificacion_ConfiguracionEjercicios_Brazos_idBrazos` , `Gamificacion_ConfiguracionEjercicios_Pecho_idPecho` , `Gamificacion_ConfiguracionEjercicios_Cardio_idCardio` , `Gamificacion_ConfiguracionEjercicios_ZonaMedia_idZonaMedia` , `Gamificacion_ConfiguracionEjercicios_Piernas_idPiernas`)
-    REFERENCES `Gamificacion` (`idGamificacion` , `ConfiguracionEjercicios_idEjercicios` , `ConfiguracionEjercicios_Espalda_idEspalda` , `ConfiguracionEjercicios_Brazos_idBrazos` , `ConfiguracionEjercicios_Pecho_idPecho` , `ConfiguracionEjercicios_Cardio_idCardio` , `ConfiguracionEjercicios_ZonaMedia_idZonaMedia` , `ConfiguracionEjercicios_Piernas_idPiernas`)
+
+  CONSTRAINT `fk_Rutina_Ejercicios1`
+    FOREIGN KEY (`Ejercicios_idEjercicios`)
+    REFERENCES `Ejercicios` (`idEjercicios`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+
+  CONSTRAINT `fk_Rutina_Gamificacion1`
+    FOREIGN KEY (`Gamificacion_idGamificacion`)
+    REFERENCES `Gamificacion` (`idGamificacion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 
