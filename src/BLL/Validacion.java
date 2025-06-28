@@ -1,20 +1,24 @@
 package BLL;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 import DLL.Cliente;
 import DLL.CrudCoach;
 import DLL.Cuenta;
+import DLL.Ejercicios;
 import DLL.MenuCliente;
 import DLL.MenuCoach;
 import DLL.Nivel;
+import DLL.Rutina;
 
 public interface Validacion {
 
-    default boolean ValidarUsuario(String usuario, String contrasena ) {
-        if (usuario == null || usuario.isEmpty() && contrasena == null|| contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+    default boolean ValidarUsuario(String usuario, String contrasena) {
+        if (usuario == null || usuario.isEmpty() || contrasena == null || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
+
             return false;
         }else if (usuario == null || usuario.isEmpty()) {
             JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
@@ -28,20 +32,20 @@ public interface Validacion {
 
     default boolean ValidarRegistro(String usuario, String contrasena) {
         if ((usuario == null || usuario.isEmpty()) && (contrasena == null || contrasena.isEmpty())) {
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña no pueden estar vacíos.");
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña no pueden estar vacíos.");
             return false;
+
         } else if (usuario == null || usuario.isEmpty()) {
             JOptionPane.showMessageDialog(null, "El usuario no puede estar vacío.");
             return false;
-        } else if (contrasena == null || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.");
-            return false;
+        } else {
+            if (contrasena.length() < 3) { 
+                JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 3 caracteres.");
+                return false;
+            }
+
         }
 
-        if (contrasena.length() < 6) {
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 6 caracteres.");
-            return false;
-        }
 
         return true;
     }
@@ -127,6 +131,62 @@ public interface Validacion {
         }
     }
 
+    default void AsignarEj() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+
+        String seleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione un alumno para ver Asignar Rutina:",
+                "Lista de Alumnos", JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    int idCliente = Cliente.obtenerIdCliente(idCuenta); 
+
+                    ConfigRutina rutina = ConfigRutina.Form();
+
+                    try {
+                        int idEjercicios = Ejercicios.EjercicioBD(rutina);
+                        int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
+
+                        // Calculamos el puntaje basado en la rutina
+                        int puntaje = ConfigRutina.Calculo(
+                            rutina.getRepeticiones(), 
+                            rutina.getSeries(), 
+                            rutina.getCantPeso()
+                        );
+
+                        // Llamamos al método que realmente existe para guardar
+                        ConfigRutina.Calculo(idCliente, idEjercicios, idGamificacion);
+                        
+                        // Obtenemos el puntaje actual y sumamos el nuevo
+                        Gamificacion gamiActual = Gamificacion.GamiVer(idCuenta);
+                        int nuevoPuntaje = (gamiActual != null) ? gamiActual.getPts() + puntaje : puntaje;
+                        
+                        // Actualizamos los puntos en la gamificación
+                        Gamificacion.ActPts(idGamificacion, nuevoPuntaje);
+                        
+                        JOptionPane.showMessageDialog(null, 
+                            "Rutina asignada correctamente. Puntos ganados: " + puntaje + 
+                            "\nPuntos totales: " + nuevoPuntaje);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al guardar la rutina: " + e.getMessage());
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
     default void EditarAlumnos() {
         LinkedList<Cliente> lista = Cliente.Listado();
 
@@ -202,4 +262,126 @@ public interface Validacion {
             }
         }
     }
+    
+    default boolean validarDatos(String nombre, int edad, String genero, int peso, int altura, Nivel nivel) {
+        boolean valido = true;
+        StringBuilder errores = new StringBuilder("Errores:\n");
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            errores.append("- El nombre no puede estar vacío.\n");
+            valido = false;
+        }
+
+        if (edad <= 0 || edad >= 200) {
+            errores.append("- Edad inválida (1-199).\n");
+            valido = false;
+        }
+
+        if (genero == null || 
+            !(genero.equalsIgnoreCase("HOMBRE") || genero.equalsIgnoreCase("MUJER") || genero.equalsIgnoreCase("OTRO"))) {
+            errores.append("- Género inválido (Hombre, Mujer u Otro).\n");
+            valido = false;
+        }
+
+        if (peso <= 0 || peso >= 200) {
+            errores.append("- Peso inválido (1-199kg).\n");
+            valido = false;
+        }
+
+        if (altura <= 0 || altura >= 300) {
+            errores.append("- Altura inválida (1-299cm).\n");
+            valido = false;
+        }
+
+        if (nivel == null) {
+            errores.append("- Nivel inválido.\n");
+            valido = false;
+        }
+
+        if (!valido) {
+            JOptionPane.showMessageDialog(null, errores.toString(), "Errores de validación", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return valido;
+    }
+
+    default void verRutinas() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay clientes registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+        String seleccionado = (String) JOptionPane.showInputDialog(null,
+            "Seleccione un cliente para ver su rutina:", "Rutinas",
+            JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    ConfigRutina rutina = Rutina.RutinaVer(idCuenta);
+
+                    if (rutina != null) {
+                        int puntaje = ConfigRutina.Calculo(
+                                rutina.getRepeticiones(), 
+                                rutina.getSeries(), 
+                                rutina.getCantPeso()
+                            );
+                        String carta = (puntaje <= 0) ? "Bronce" :
+                                       (puntaje <= 20) ? "Plata" :
+                                       (puntaje <= 46) ? "Oro" : "";
+                        ArrayList<String> cartas = new ArrayList<>();
+                        cartas.add(carta);
+
+                        Rutina.Ver(
+                            puntaje, puntaje, cartas,
+                            rutina.getPiernas(), rutina.getBrazos(), rutina.getPecho(), rutina.getEspalda(),
+                            rutina.getZonaMedia(), rutina.getCardio(),
+                            rutina.getRepeticiones(), rutina.getSeries(), rutina.getCantPeso(),
+                            rutina.getPausaEntreSerie(), rutina.getTiempo()
+                        );
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El cliente no tiene rutina asignada.");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    default void verGamificacion() {
+        LinkedList<Cliente> lista = Cliente.Listado();
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay clientes registrados.");
+            return;
+        }
+
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+        String seleccionado = (String) JOptionPane.showInputDialog(null,
+            "Seleccione un cliente para ver su gamificación:", "Gamificación",
+            JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    Gamificacion datos = Gamificacion.GamiVer(idCuenta);
+
+                    if (datos != null) {
+                        JOptionPane.showMessageDialog(null,
+                            "Puntaje actual: " + datos.getPts() +
+                            "\nCarta: " + (datos.getCarta().isEmpty() ? "No asignada" : datos.getCarta().get(0)));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Este cliente aún no tiene datos de gamificación.");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
 }
