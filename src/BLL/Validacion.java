@@ -1,5 +1,6 @@
 package BLL;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
@@ -156,21 +157,17 @@ public interface Validacion {
                         int idEjercicios = Ejercicios.EjercicioBD(rutina);
                         int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
 
-                        // Calculamos el puntaje basado en la rutina
                         int puntaje = ConfigRutina.Calculo(
                             rutina.getRepeticiones(), 
                             rutina.getSeries(), 
                             rutina.getCantPeso()
                         );
 
-                        // Llamamos al método que realmente existe para guardar
                         ConfigRutina.Calculo(idCliente, idEjercicios, idGamificacion);
                         
-                        // Obtenemos el puntaje actual y sumamos el nuevo
                         Gamificacion gamiActual = Gamificacion.GamiVer(idCuenta);
                         int nuevoPuntaje = (gamiActual != null) ? gamiActual.getPts() + puntaje : puntaje;
                         
-                        // Actualizamos los puntos en la gamificación
                         Gamificacion.ActPts(idGamificacion, nuevoPuntaje);
                         
                         JOptionPane.showMessageDialog(null, 
@@ -262,6 +259,100 @@ public interface Validacion {
             }
         }
     }
+    
+    default void crearJF(String usuario, String contraseña, Component parentComponent) {
+        if (usuario == null || usuario.isEmpty() || contraseña == null || contraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Datos inválidos. No se pudo registrar la cuenta.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        int Idnuevo = Cuenta.Registro(usuario, contraseña, "Cliente");
+        if (Idnuevo != -1) {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Nueva cuenta creada con éxito. ID: " + Idnuevo, 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Error al registrar la nueva cuenta.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    default void RutinaJF(Cliente cliente, ConfigRutina rutina, Component parentComponent) {
+    	try {
+            int idCuenta = cliente.getIdCuenta();
+            int idCliente = Cliente.obtenerIdCliente(idCuenta);
+            int idEjercicios = Ejercicios.EjercicioBD(rutina);
+            int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
+
+            int puntaje = ConfigRutina.Calculo(rutina.getRepeticiones(), rutina.getSeries(), rutina.getCantPeso());
+            ConfigRutina.Calculo(idCliente, idEjercicios, idGamificacion);
+            
+            Gamificacion gamiActual = Gamificacion.GamiVer(idCuenta);
+            int nuevoPuntaje = (gamiActual != null) ? gamiActual.getPts() + puntaje : puntaje;
+            
+            Gamificacion.ActPts(idGamificacion, nuevoPuntaje);
+            
+            Gamificacion gamiActualizado = Gamificacion.GamiVer(idCuenta);
+            if (gamiActualizado != null && gamiActualizado.getPts() == nuevoPuntaje) {
+                JOptionPane.showMessageDialog(parentComponent, 
+                    "Rutina asignada correctamente. Puntos ganados: " + puntaje + 
+                    "\nPuntos totales: " + nuevoPuntaje +
+                    "\nNueva carta: " + gamiActualizado.getCarta().get(0),
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(parentComponent, 
+                    "Error al guardar la rutina", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Error al guardar la rutina: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    default void EditarJF(Cliente cliente, String nuevoNombre, int nuevaEdad, String nuevoGenero, 
+                            int nuevoPeso, int nuevaAltura, String nuevoNivel, Component parentComponent) {
+        Nivel nivelAct = Nivel.valueOf(nuevoNivel.toUpperCase());
+        if (Cliente.ActCliente(cliente.getIdCuenta(), nuevoNombre, nuevaEdad, 
+                             nuevoGenero.toUpperCase(), nuevoPeso, nuevaAltura, nivelAct)) {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Datos actualizados con éxito.", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Error al actualizar datos.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    default void EliminarJF(Cliente cliente, Component parentComponent) {
+        if (Cliente.Delete(cliente.getIdCuenta())) {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Alumno eliminado correctamente.", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(parentComponent, 
+                "Error al eliminar el alumno.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    default LinkedList<Cliente> listarClientes() {
+        return Cliente.Listado();
+    }
+
+    default ConfigRutina crearRutina(String cardio, String zonaMedia, String piernas, String brazos, 
+                                   String pecho, String espalda, int tiempo, int repeticiones, 
+                                   int series, int peso, int pausa) {
+        return new ConfigRutina(piernas, brazos, pecho, espalda, zonaMedia, cardio,
+                              repeticiones, series, peso, pausa, tiempo);
+    }
+    
     
     default boolean validarDatos(String nombre, int edad, String genero, int peso, int altura, Nivel nivel) {
         boolean valido = true;

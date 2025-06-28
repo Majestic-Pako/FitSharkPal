@@ -61,9 +61,9 @@ public class MenuCoach extends JFrame {
 	
 	
     public MenuCoach(int idCuenta) {
-        this(); // Llama al constructor sin parámetros
+        this();
         this.idCuenta = idCuenta;
-        setTitle("Menú Entrenador - ID: " + idCuenta); // Ejemplo de uso
+        setTitle("Menú Entrenador - ID: " + idCuenta); 
     }
 	/**
 	 * Create the frame.

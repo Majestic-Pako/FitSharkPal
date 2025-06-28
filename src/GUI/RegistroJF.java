@@ -61,9 +61,15 @@ public class RegistroJF extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Registrar");
-		btnNewButton.setBounds(33, 200, 89, 23);
-		panel.add(btnNewButton);
+		JButton btnRegistrarse = new JButton("Registrar");
+		btnRegistrarse.setBounds(33, 200, 89, 23);
+		panel.add(btnRegistrarse);
+		
+        btnRegistrarse.addActionListener(e -> {
+            this.dispose();
+            RegistroJF registro = new RegistroJF();
+            registro.setVisible(true);
+        });
 		
 		txtNombre = new JTextField();
 		txtNombre.setHorizontalAlignment(SwingConstants.LEFT);
