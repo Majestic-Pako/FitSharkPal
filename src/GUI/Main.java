@@ -14,7 +14,6 @@ public class Main implements Validacion {
 
 		 //int admin = Cuenta.Registro("admin", "123456", "Entrenador"); //Eto es pa
 		// testear como anda el admin
-		
 		int idCuentaSesion = -1;
 		int opcion;
 		do {

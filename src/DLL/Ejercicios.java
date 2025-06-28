@@ -165,13 +165,6 @@ public class Ejercicios {
 		    return idEjercicios;
 		}
 		
-		public static int Calculo(int repeticiones, int series, int cantPeso) {
-		    int puntos = 0;
-		    puntos += repeticiones / 5;
-		    puntos += series;
-		    puntos += cantPeso / 5;
-		    return Math.min(puntos, 10); 
-		}
 
 	
 }

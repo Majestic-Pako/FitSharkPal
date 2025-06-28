@@ -80,9 +80,9 @@ public class Gamificacion extends ConfigRutina {
 	
 	public static void ActPts(int idGamificacion, int puntajeNuevo) {
 	    String carta;
-	    if (puntajeNuevo <= 0 || puntajeNuevo <= 20) {
+	    if (puntajeNuevo < 30) {
 	        carta = "Bronce";
-	    } else if (puntajeNuevo <= 46) {
+	    } else if (puntajeNuevo < 70) {
 	        carta = "Plata";
 	    } else {
 	        carta = "Oro";

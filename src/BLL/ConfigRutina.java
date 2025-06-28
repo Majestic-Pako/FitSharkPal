@@ -64,7 +64,6 @@ public class ConfigRutina extends Ejercicios {
 	
 	private static Connection con = Conexion.getInstance().getConnection();
 
-	//es un prototipo hasta que se diseñe bien el ingreso de datos
 	public static ConfigRutina Form() {
         LinkedList<String> cardioList = new LinkedList<>(Arrays.asList(
                 "Incline Walk", "Biking", "Jogging"
@@ -195,6 +194,28 @@ public class ConfigRutina extends Ejercicios {
 	    return null;
 	}
 	
+	public static int Calculo(int repeticiones, int series, int cantPeso) {
+	    // Validación de valores mínimos
+	    repeticiones = Math.max(0, repeticiones);
+	    series = Math.max(0, series);
+	    cantPeso = Math.max(0, cantPeso);
+	    
+	    // Factores de ponderación (ajustables)
+	    double factorRepeticiones = 0.15;  // Más sensible a repeticiones
+	    double factorSeries = 0.5;         // Valor intermedio para series
+	    double factorPeso = 0.03;          // Menos peso al kilogramaje
+	    
+	    // Cálculo proporcional
+	    double puntos = 0;
+	    puntos += repeticiones * factorRepeticiones;
+	    puntos += series * factorSeries;
+	    puntos += cantPeso * factorPeso;
+	    
+	    // Redondeo y límite máximo
+	    int puntosFinales = (int) Math.round(puntos);
+	    return puntosFinales;  // Aumentamos límite a 15 para permitir crecimiento
+	}
+	
 	//esto serian getter y setter de las rutinas pero como no existen en esta clase se le tuvo q declarar asi
 	//Ta dificil sacarlos porque esta clase tiene datos q necesita Ejercicios
 	//Hablar si lo hacemos todo en la clase Ejercicios para mayor simplicidad
@@ -203,5 +224,6 @@ public class ConfigRutina extends Ejercicios {
     public int getCantPeso() { return cantPeso; }
     public int getPausaEntreSerie() { return pausaEntreSerie; }
     public int getTiempo() { return tiempo; }
+
 	
 }
