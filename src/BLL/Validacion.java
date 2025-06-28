@@ -132,50 +132,59 @@ public interface Validacion {
     }
 
     default void AsignarEj() {
-    	 LinkedList<Cliente> lista = Cliente.Listado();
+        LinkedList<Cliente> lista = Cliente.Listado();
 
-         if (lista.isEmpty()) {
-             JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
-             return;
-         }
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay alumnos registrados.");
+            return;
+        }
 
-         String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
+        String[] nombres = lista.stream().map(Cliente::getNombre).toArray(String[]::new);
 
-         String seleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione un alumno para ver Asignar Rutina:",
-                 "Lista de Alumnos", JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
+        String seleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione un alumno para ver Asignar Rutina:",
+                "Lista de Alumnos", JOptionPane.PLAIN_MESSAGE, null, nombres, nombres[0]);
 
-         if (seleccionado != null) {
-             for (Cliente c : lista) {
-                 if (c.getNombre().equals(seleccionado)) {
-                	 int idCuenta = c.getIdCuenta();
-                     int idCliente = Cliente.obtenerIdCliente(idCuenta); 
+        if (seleccionado != null) {
+            for (Cliente c : lista) {
+                if (c.getNombre().equals(seleccionado)) {
+                    int idCuenta = c.getIdCuenta();
+                    int idCliente = Cliente.obtenerIdCliente(idCuenta); 
 
-                     ConfigRutina rutina = ConfigRutina.Form();
+                    ConfigRutina rutina = ConfigRutina.Form();
 
-                     try {
-                         int idEjercicios = Ejercicios.EjercicioBD(rutina);
+                    try {
+                        int idEjercicios = Ejercicios.EjercicioBD(rutina);
+                        int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
 
-                         int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
+                        // Calculamos el puntaje basado en la rutina
+                        int puntaje = ConfigRutina.Calculo(
+                            rutina.getRepeticiones(), 
+                            rutina.getSeries(), 
+                            rutina.getCantPeso()
+                        );
 
-                         boolean guardado = Rutina.RutinaBD(idCuenta, idEjercicios, idGamificacion);
-                         //Ete de abajo hay que probarlo ndea si anda con el cambio
-                         int puntaje = Ejercicios.Calculo(idCliente, idEjercicios, idGamificacion);
-                         Gamificacion.ActPts(idGamificacion, puntaje);
+                        // Llamamos al método que realmente existe para guardar
+                        ConfigRutina.Calculo(idCliente, idEjercicios, idGamificacion);
+                        
+                        // Obtenemos el puntaje actual y sumamos el nuevo
+                        Gamificacion gamiActual = Gamificacion.GamiVer(idCuenta);
+                        int nuevoPuntaje = (gamiActual != null) ? gamiActual.getPts() + puntaje : puntaje;
+                        
+                        // Actualizamos los puntos en la gamificación
+                        Gamificacion.ActPts(idGamificacion, nuevoPuntaje);
+                        
+                        JOptionPane.showMessageDialog(null, 
+                            "Rutina asignada correctamente. Puntos ganados: " + puntaje + 
+                            "\nPuntos totales: " + nuevoPuntaje);
 
-                         if (guardado) {
-                             JOptionPane.showMessageDialog(null, "Rutina y gamificación registradas correctamente.");
-                         } else {
-                             JOptionPane.showMessageDialog(null, "Error al registrar la rutina.");
-                         }
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                         JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar la rutina.");
-                     }
-
-                     break;
-                 }
-             }
-         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al guardar la rutina: " + e.getMessage());
+                    }
+                    break;
+                }
+            }
+        }
     }
     
     default void EditarAlumnos() {
@@ -316,7 +325,11 @@ public interface Validacion {
                     ConfigRutina rutina = Rutina.RutinaVer(idCuenta);
 
                     if (rutina != null) {
-                        int puntaje = Ejercicios.Calculo(idCuenta, idCuenta, idCuenta);
+                        int puntaje = ConfigRutina.Calculo(
+                                rutina.getRepeticiones(), 
+                                rutina.getSeries(), 
+                                rutina.getCantPeso()
+                            );
                         String carta = (puntaje <= 0) ? "Bronce" :
                                        (puntaje <= 20) ? "Plata" :
                                        (puntaje <= 46) ? "Oro" : "";
