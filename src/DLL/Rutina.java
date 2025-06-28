@@ -52,8 +52,6 @@ public class Rutina extends Gamificacion {
 						+ "\n" + piernas + " -> " + repeticiones + " reps x" + series + " sets, con " + cantPeso + "kg"
 						+ "\n Pausa recomendada entre cada set: " + pausaEntreSerie + "\n Puntaje Final = " + ptsTotal
 						+ "\n Clasificacion = " + carta);
-		// Calificacion final= Pensar nombre
-		// Clasifiacion==
 	}
 	
 
