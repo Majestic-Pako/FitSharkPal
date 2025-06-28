@@ -128,7 +128,7 @@ public class LoginJF extends JFrame {
 		                menuCoach.setVisible(true);
 		                break;
 		            case CLIENTE:
-		                // Aquí iría la apertura del menú de cliente
+		                // Aquí iría la apertura del menú de cliente.... si tuviera uno :,v
 		                break;
 		            default:
 		                JOptionPane.showMessageDialog(this, "Rol no reconocido");

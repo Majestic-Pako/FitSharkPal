@@ -157,16 +157,41 @@ public class Cliente extends Cuenta implements Encriptador {
 
 	public static boolean Delete(int idCuenta) {
 		try {
-			String sql = "DELETE FROM cliente WHERE Cuenta_idCuenta = ?";
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setInt(1, idCuenta);
-			int filas = stmt.executeUpdate();
-			return filas > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+	        String sqlDeleteRutinas = "DELETE FROM rutina WHERE Gamificacion_idGamificacion IN " +
+	                                "(SELECT idGamificacion FROM gamificacion WHERE Cliente_Cuenta_idCuenta = ?)";
+	        
+	        try (PreparedStatement psRutinas = con.prepareStatement(sqlDeleteRutinas)) {
+	            psRutinas.setInt(1, idCuenta);
+	            psRutinas.executeUpdate();
+	        }
 
+	        String sqlDeleteGamificacion = "DELETE FROM gamificacion WHERE Cliente_Cuenta_idCuenta = ?";
+	        
+	        try (PreparedStatement psGami = con.prepareStatement(sqlDeleteGamificacion)) {
+	            psGami.setInt(1, idCuenta);
+	            psGami.executeUpdate();
+	        }
+
+	        String sqlDeleteCliente = "DELETE FROM cliente WHERE Cuenta_idCuenta = ?";
+	        int rowsAffected;
+	        
+	        try (PreparedStatement psCliente = con.prepareStatement(sqlDeleteCliente)) {
+	            psCliente.setInt(1, idCuenta);
+	            rowsAffected = psCliente.executeUpdate();
+	        }
+
+	        String sqlDeleteCuenta = "DELETE FROM cuenta WHERE idCuenta = ?";
+	        
+	        try (PreparedStatement psCuenta = con.prepareStatement(sqlDeleteCuenta)) {
+	            psCuenta.setInt(1, idCuenta);
+	            psCuenta.executeUpdate();
+	        }
+
+	        return rowsAffected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 }

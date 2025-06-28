@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import BLL.ConfigRutina;
+import BLL.Validacion;
 import DLL.Cliente;
 import java.awt.event.*;
 
@@ -28,9 +31,9 @@ public class CrudJF extends JFrame {
     }
     
     public CrudJF(int idCuenta) {
-        this(); // Llama al constructor sin parámetros
+        this(); 
         this.idCuenta = idCuenta;
-        setTitle("Menú Entrenador - ID: " + idCuenta); // Ejemplo de uso
+        setTitle("Menú Entrenador - ID: " + idCuenta); 
     }
 
     public CrudJF() {
@@ -76,7 +79,7 @@ public class CrudJF extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
             	Main validacion = new Main();
-                validacion.MostrarAlumnos();
+                validacion.crearJF(getWarningString(), getName(), panel);;
                 return false;
             }
         };
@@ -115,11 +118,12 @@ public class CrudJF extends JFrame {
         
         JButton btnRegistrar = new JButton("Crear Cuenta");
         btnRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         btnRegistrar.addActionListener(e -> {
             String usuario = txtUsuario.getText();
             String password = new String(txtPassword.getPassword());
-            Main crear = new Main();
-            crear.CrearCuenta();
+            Validacion validador = new Main();
+            validador.CrearCuenta(); 
             JOptionPane.showMessageDialog(this, "Cuenta creada para: " + usuario);
         });
         panel.add(Box.createVerticalStrut(20));
@@ -202,9 +206,19 @@ public class CrudJF extends JFrame {
         panel.add(panelDatos, BorderLayout.CENTER);
         
         JButton btnGuardar = new JButton("Guardar Cambios");
+        
         btnGuardar.addActionListener(e -> {
-            Main edit = new Main() ; 
-            edit.EditarAlumnos();
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            String nuevoNombre = txtNombre.getText();
+            int nuevaEdad = Integer.parseInt(txtEdad.getText());
+            String nuevoGenero = (String) comboGenero.getSelectedItem();
+            int nuevoPeso = Integer.parseInt(txtPeso.getText());
+            int nuevaAltura = Integer.parseInt(txtAltura.getText());
+            String nuevoNivel = (String) comboNivel.getSelectedItem();
+            
+            Validacion validador = new Main();
+            validador.EditarJF(cliente, nuevoNombre, nuevaEdad, nuevoGenero, 
+                              nuevoPeso, nuevaAltura, nuevoNivel, this);
             JOptionPane.showMessageDialog(this, "Datos actualizados");
         });
         panel.add(btnGuardar, BorderLayout.SOUTH);
@@ -321,9 +335,26 @@ public class CrudJF extends JFrame {
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton btnAsignar = new JButton("Asignar Rutina");
+        
         btnAsignar.addActionListener(e -> {
-            Main ej = new Main();
-            ej.AsignarEj();
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            
+            ConfigRutina rutina = new ConfigRutina(
+                (String) comboPiernas.getSelectedItem(),
+                (String) comboBrazos.getSelectedItem(),
+                (String) comboPecho.getSelectedItem(),
+                (String) comboEspalda.getSelectedItem(),
+                (String) comboZonaMedia.getSelectedItem(),
+                (String) comboCardio.getSelectedItem(),
+                Integer.parseInt(txtRepeticiones.getText()),
+                Integer.parseInt(txtSeries.getText()),
+                Integer.parseInt(txtPeso.getText()),
+                Integer.parseInt(txtDescanso.getText()),
+                Integer.parseInt(txtTiempo.getText())
+            );
+            
+            Validacion validador = new Main();
+            validador.RutinaJF(cliente, rutina, this); 
             JOptionPane.showMessageDialog(this, "Rutina asignada");
         });
         panel.add(btnAsignar, BorderLayout.SOUTH);
@@ -370,9 +401,18 @@ public class CrudJF extends JFrame {
         JButton btnEliminar = new JButton("Eliminar");
         btnEliminar.setForeground(Color.RED);
         btnEliminar.addActionListener(e -> {
-            Main adios = new Main();
-            adios.BorrarAlumno();
-            JOptionPane.showMessageDialog(this, "Alumno eliminado");
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            if (cliente != null) {
+                int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de eliminar a " + cliente.getNombre() + "?",
+                    "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                
+                if (confirm == JOptionPane.YES_OPTION) {
+                    Validacion validador = new Main();
+                    validador.EliminarJF(cliente, this);
+                    comboClientes.removeItem(cliente);
+                }
+            }
         });
         panel.add(btnEliminar, BorderLayout.SOUTH);
         
@@ -413,7 +453,7 @@ public class CrudJF extends JFrame {
         btnVolver.addActionListener(e -> {
             JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnVolver);
             currentFrame.dispose();
-            new MenuCoach(idCuenta).setVisible(true); // Reabre MenuCoach con el ID
+            new MenuCoach(idCuenta).setVisible(true);
         });
         
         return panel;
