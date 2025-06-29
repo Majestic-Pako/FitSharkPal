@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/xampp/htdocs/FitSharkPal-Esteban/FitSharkPal/src/repository/mysql-connector-java-5.1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/agust/OneDrive/Documentos/GitHub/FitSharkPal/src/repository/mysql-connector-java-5.1.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
