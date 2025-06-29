@@ -23,34 +23,38 @@ Aplicación de escritorio en Java para la gestión de un gimnasio, donde usuario
 fitsharkpal/
 └── src/
     ├── BLL/                 # Lógica de negocio
-    │   ├── Ejercicios.java      # Lógica para ejercicios personalizados
-    │   ├── Gamificacion.java    # Sistema de puntos y niveles
-    │   ├── Validacion.java      # Validaciones generales (login, datos, etc.)
-    │   └── Encriptador.java     # Interfaz para cifrar contraseñas
+    │   ├── ConfigRutina.java     # Logica de ingreso de ejercicios y calculo de puntaje
+    │   ├── Encriptador.java      # Interfaz para cifrar contraseñas
+    │   ├── Gamificacion.java     # Sistema de puntos y niveles 
+    │   └── Validacion.java       # Validaciones generales (login, datos, etc.)
+    |
     ├── database/        #Diagrama y Script de la Base de Datos
     |   ├── Diagrama-BD-FitsharkPal.mwb      #Diagrama de la Base de Datos
-    |   └── fitshark.sql         # Script de la Base de Datos    
+    |   ├── Diagrama-BD-FitsharkPal.mwb.bak      
+    |   └── fitshark.sql                     # Script de la Base de Datos    
+    |
     ├── DLL/                 # Clases modelo (entidades) y menús
     │   ├── Cliente.java         # Clase Cliente con atributos y nivel
-    │   ├── Cuenta.java          # Clase base con datos de usuario y login
+    │   ├── CrudCoach.java       # Clase para modificar datos del Cliente
+    │   ├── Cuenta.java          # Clase con datos de usuario y login
+    │   ├── Ejercicios           # Clase para llamar la base de datos
     │   ├── Entrenador.java      # Clase Entrenador
-    │   ├── Entrenamientos.java  # Lógica base para entrenamientos
-    │   ├── Fuerza.java          # Entrenamiento específico de fuerza
-    │   ├── Resistencia.java     # Entrenamiento específico de resistencia
-    │   ├── Volumen.java         # Entrenamiento específico de volumen
+    │   ├── MenuCliente.java     # Menu e interaccion del cliente
+    │   ├── MenuCoach.java       # Menú e interacción del entrenador
+    │   ├── Nivel.java           # Enum con niveles: PRINCIPIANTE, INTERMEDIO, AVANZADO
     │   ├── Rol.java             # Enum con roles: CLIENTE, ENTRENADOR
-    │   ├── MenuCliente.java     # Menú e interacción del cliente
-    │   └── MenuCoach.java       # Menú e interacción del entrenador
+    │   └── Rutina.java          # Clase para mostrar mensaje final con la rutina completa configurada con su gamificacion
+    |
     ├── GUI/                 # Punto de entrada del sistema
     │   ├── Main.java            # Clase principal, contiene el menú inicial
-    |   └── Index.java           # Jframe del Menu de Inicio
+    |   └── JFrames              # Todas las interfaces graficas del usuario
+    |
     ├── img/          # Imagenes del Proyecto
-    │   ├── agregar-usuario.png
-    |   ├── salida.png
-    |   ├── shark.png
-    |   └── usuario.png
+    |   └── Muchos PNGS          # Imagenes usadas en el JFrame
+    |
     ├── repository/          # Acceso a la base de datos
-    │   └── Conexion.java        # Clase singleton para conexión MySQL
+    │   ├── Conexion.java                    # Clase singleton para conexión MySQL
+    │   └── mysql-connector-java-5.1.13.jar  # Llamada a Conexion.java para que la bdd funcione
 ```
 
 ## 📘 Diagrama de Clases
