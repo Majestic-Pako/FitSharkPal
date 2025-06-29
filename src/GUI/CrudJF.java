@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import BLL.ConfigRutina;
+import BLL.Validacion;
 import DLL.Cliente;
 import java.awt.event.*;
 
@@ -14,6 +17,7 @@ public class CrudJF extends JFrame {
     private JPanel contentPane;
     private JTable tableClientes;
     private DefaultTableModel tableModel;
+	private int idCuenta;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -24,6 +28,12 @@ public class CrudJF extends JFrame {
                 e.printStackTrace();
             }
         });
+    }
+    
+    public CrudJF(int idCuenta) {
+        this(); 
+        this.idCuenta = idCuenta;
+        setTitle("Menú Entrenador - ID: " + idCuenta); 
     }
 
     public CrudJF() {
@@ -40,27 +50,21 @@ public class CrudJF extends JFrame {
         tabbedPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         contentPane.add(tabbedPane, BorderLayout.CENTER);
         
-        // Pestaña 1: Listado de Alumnos
         JPanel panelAlumnos = createAlumnosPanel();
         tabbedPane.addTab("Alumnos", null, panelAlumnos, null);
         
-        // Pestaña 2: Registro
         JPanel panelRegistro = createRegistroPanel();
         tabbedPane.addTab("Registro", null, panelRegistro, null);
         
-        // Pestaña 3: Edición
         JPanel panelEdicion = createEdicionPanel();
         tabbedPane.addTab("Editar", null, panelEdicion, null);
         
-        // Pestaña 4: Asignar Rutina
         JPanel panelRutina = createRutinaPanel();
         tabbedPane.addTab("Rutina", null, panelRutina, null);
         
-        // Pestaña 5: Eliminar
         JPanel panelEliminar = createEliminarPanel();
         tabbedPane.addTab("Eliminar", null, panelEliminar, null);
 
-        //Pestaña 6: Volver al Menu Anterior
         JPanel panelVolver = createVolverPanel();
         tabbedPane.addTab("Volver", null, panelVolver, null);
         
@@ -75,7 +79,7 @@ public class CrudJF extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
             	Main validacion = new Main();
-                validacion.MostrarAlumnos();
+                validacion.crearJF(getWarningString(), getName(), panel);;
                 return false;
             }
         };
@@ -87,10 +91,6 @@ public class CrudJF extends JFrame {
         
         JScrollPane scrollPane = new JScrollPane(tableClientes);
         panel.add(scrollPane, BorderLayout.CENTER);
-        
-        JButton btnDetalles = new JButton("Ver Detalles");
-        btnDetalles.addActionListener(e -> mostrarDetallesAlumno());
-        panel.add(btnDetalles, BorderLayout.SOUTH);
         
         return panel;
     }
@@ -118,11 +118,12 @@ public class CrudJF extends JFrame {
         
         JButton btnRegistrar = new JButton("Crear Cuenta");
         btnRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         btnRegistrar.addActionListener(e -> {
             String usuario = txtUsuario.getText();
             String password = new String(txtPassword.getPassword());
-            Main crear = new Main();
-            crear.CrearCuenta();
+            Validacion validador = new Main();
+            validador.CrearCuenta(); 
             JOptionPane.showMessageDialog(this, "Cuenta creada para: " + usuario);
         });
         panel.add(Box.createVerticalStrut(20));
@@ -135,9 +136,29 @@ public class CrudJF extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
+        LinkedList<Cliente> listaClientes = Cliente.Listado();
+        
         JPanel panelSeleccion = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboClientes = new JComboBox<>();
+        JComboBox<Cliente> comboClientes = new JComboBox<>();
         comboClientes.setPreferredSize(new Dimension(200, 25));
+        
+        for(Cliente cliente : listaClientes) {
+            comboClientes.addItem(cliente);
+        }
+        
+        comboClientes.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Cliente) {
+                    Cliente cliente = (Cliente) value;
+                    setText(cliente.getNombre()); 
+                }
+                return this;
+            }
+        });
+        
         panelSeleccion.add(new JLabel("Seleccionar alumno:"));
         panelSeleccion.add(comboClientes);
         panel.add(panelSeleccion, BorderLayout.NORTH);
@@ -185,9 +206,19 @@ public class CrudJF extends JFrame {
         panel.add(panelDatos, BorderLayout.CENTER);
         
         JButton btnGuardar = new JButton("Guardar Cambios");
+        
         btnGuardar.addActionListener(e -> {
-            Main edit = new Main() ; 
-            edit.EditarAlumnos();
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            String nuevoNombre = txtNombre.getText();
+            int nuevaEdad = Integer.parseInt(txtEdad.getText());
+            String nuevoGenero = (String) comboGenero.getSelectedItem();
+            int nuevoPeso = Integer.parseInt(txtPeso.getText());
+            int nuevaAltura = Integer.parseInt(txtAltura.getText());
+            String nuevoNivel = (String) comboNivel.getSelectedItem();
+            
+            Validacion validador = new Main();
+            validador.EditarJF(cliente, nuevoNombre, nuevaEdad, nuevoGenero, 
+                              nuevoPeso, nuevaAltura, nuevoNivel, this);
             JOptionPane.showMessageDialog(this, "Datos actualizados");
         });
         panel.add(btnGuardar, BorderLayout.SOUTH);
@@ -199,9 +230,29 @@ public class CrudJF extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
+        LinkedList<Cliente> listaClientes = Cliente.Listado();
+        
         JPanel panelSeleccion = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboClientes = new JComboBox<>();
+        JComboBox<Cliente> comboClientes = new JComboBox<>();
         comboClientes.setPreferredSize(new Dimension(200, 25));
+        
+        for(Cliente cliente : listaClientes) {
+            comboClientes.addItem(cliente);
+        }
+        
+        comboClientes.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Cliente) {
+                    Cliente cliente = (Cliente) value;
+                    setText(cliente.getNombre()); 
+                }
+                return this;
+            }
+        });
+        
         panelSeleccion.add(new JLabel("Seleccionar alumno:"));
         panelSeleccion.add(comboClientes);
         panel.add(panelSeleccion, BorderLayout.NORTH);
@@ -209,6 +260,11 @@ public class CrudJF extends JFrame {
         JPanel panelEjercicios = new JPanel();
         panelEjercicios.setLayout(new BoxLayout(panelEjercicios, BoxLayout.Y_AXIS));
         panelEjercicios.setBorder(new TitledBorder("Configurar Rutina"));
+        
+        JScrollPane scrollPane = new JScrollPane(panelEjercicios);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(400, 300)); 
         
         JPanel panelCardio = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelCardio.add(new JLabel("Cardio:"));
@@ -276,12 +332,29 @@ public class CrudJF extends JFrame {
         panelDescanso.add(txtDescanso);
         panelEjercicios.add(panelDescanso);
         
-        panel.add(panelEjercicios, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton btnAsignar = new JButton("Asignar Rutina");
+        
         btnAsignar.addActionListener(e -> {
-            Main ej = new Main();
-            ej.AsignarEj();
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            
+            ConfigRutina rutina = new ConfigRutina(
+                (String) comboPiernas.getSelectedItem(),
+                (String) comboBrazos.getSelectedItem(),
+                (String) comboPecho.getSelectedItem(),
+                (String) comboEspalda.getSelectedItem(),
+                (String) comboZonaMedia.getSelectedItem(),
+                (String) comboCardio.getSelectedItem(),
+                Integer.parseInt(txtRepeticiones.getText()),
+                Integer.parseInt(txtSeries.getText()),
+                Integer.parseInt(txtPeso.getText()),
+                Integer.parseInt(txtDescanso.getText()),
+                Integer.parseInt(txtTiempo.getText())
+            );
+            
+            Validacion validador = new Main();
+            validador.RutinaJF(cliente, rutina, this); 
             JOptionPane.showMessageDialog(this, "Rutina asignada");
         });
         panel.add(btnAsignar, BorderLayout.SOUTH);
@@ -293,9 +366,29 @@ public class CrudJF extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
+        LinkedList<Cliente> listaClientes = Cliente.Listado();
+        
         JPanel panelSeleccion = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboClientes = new JComboBox<>();
+        JComboBox<Cliente> comboClientes = new JComboBox<>();
         comboClientes.setPreferredSize(new Dimension(200, 25));
+        
+        for(Cliente cliente : listaClientes) {
+            comboClientes.addItem(cliente);
+        }
+        
+        comboClientes.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Cliente) {
+                    Cliente cliente = (Cliente) value;
+                    setText(cliente.getNombre()); 
+                }
+                return this;
+            }
+        });
+        
         panelSeleccion.add(new JLabel("Seleccionar alumno:"));
         panelSeleccion.add(comboClientes);
         panel.add(panelSeleccion, BorderLayout.NORTH);
@@ -308,9 +401,18 @@ public class CrudJF extends JFrame {
         JButton btnEliminar = new JButton("Eliminar");
         btnEliminar.setForeground(Color.RED);
         btnEliminar.addActionListener(e -> {
-            Main adios = new Main();
-            adios.BorrarAlumno();
-            JOptionPane.showMessageDialog(this, "Alumno eliminado");
+        	Cliente cliente = (Cliente) comboClientes.getSelectedItem();
+            if (cliente != null) {
+                int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de eliminar a " + cliente.getNombre() + "?",
+                    "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                
+                if (confirm == JOptionPane.YES_OPTION) {
+                    Validacion validador = new Main();
+                    validador.EliminarJF(cliente, this);
+                    comboClientes.removeItem(cliente);
+                }
+            }
         });
         panel.add(btnEliminar, BorderLayout.SOUTH);
         
@@ -347,6 +449,12 @@ public class CrudJF extends JFrame {
         panelCenter.add(btnVolver);
         
         panel.add(panelCenter, BorderLayout.CENTER);
+        
+        btnVolver.addActionListener(e -> {
+            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnVolver);
+            currentFrame.dispose();
+            new MenuCoach(idCuenta).setVisible(true);
+        });
         
         return panel;
     }

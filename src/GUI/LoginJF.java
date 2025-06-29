@@ -5,7 +5,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import DLL.Cuenta;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Font;
@@ -88,10 +92,10 @@ public class LoginJF extends JFrame {
 		passwordField.setBounds(32, 208, 124, 21);
 		panel.add(passwordField);
 		
-		JButton btnNewButton = new JButton("Ingresar");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnNewButton.setBounds(53, 249, 103, 21);
-		panel.add(btnNewButton);
+		JButton btnIngresar = new JButton("Ingresar");
+		btnIngresar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnIngresar.setBounds(53, 249, 103, 21);
+		panel.add(btnIngresar);
 		
 		JLabel lblNewLabel_4 = new JLabel("");
 		lblNewLabel_4.setIcon(new ImageIcon(LoginJF.class.getResource("/img/perfil.png")));
@@ -108,5 +112,31 @@ public class LoginJF extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(LoginJF.class.getResource("/img/banner-login.png")));
 		lblNewLabel.setBounds(0, 0, 502, 293);
 		contentPane.add(lblNewLabel);
+		
+		btnIngresar.addActionListener(e -> {
+		    String usuario = textField.getText();
+		    String contrasena = new String(passwordField.getPassword());
+		    
+		    Cuenta<?> cuenta = Cuenta.Login(usuario, contrasena);
+		    
+		    if (cuenta != null) {
+		        this.dispose(); 
+		        
+		        switch(cuenta.getRol()) {
+		            case ENTRENADOR:
+		                MenuCoach menuCoach = new MenuCoach(cuenta.getIdCuenta());
+		                menuCoach.setVisible(true);
+		                break;
+		            case CLIENTE:
+		                // Aquí iría la apertura del menú de cliente.... si tuviera uno :,v
+		                break;
+		            default:
+		                JOptionPane.showMessageDialog(this, "Rol no reconocido");
+		                new Index().setVisible(true); 
+		        }
+		    } else {
+		        JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
+		    }
+		});
 	}
 }

@@ -195,25 +195,21 @@ public class ConfigRutina extends Ejercicios {
 	}
 	
 	public static int Calculo(int repeticiones, int series, int cantPeso) {
-	    // Validación de valores mínimos
 	    repeticiones = Math.max(0, repeticiones);
 	    series = Math.max(0, series);
 	    cantPeso = Math.max(0, cantPeso);
 	    
-	    // Factores de ponderación (ajustables)
-	    double factorRepeticiones = 0.15;  // Más sensible a repeticiones
-	    double factorSeries = 0.5;         // Valor intermedio para series
-	    double factorPeso = 0.03;          // Menos peso al kilogramaje
+	    double factorRepeticiones = 0.15;  
+	    double factorSeries = 0.5;        
+	    double factorPeso = 0.03;         
 	    
-	    // Cálculo proporcional
 	    double puntos = 0;
 	    puntos += repeticiones * factorRepeticiones;
 	    puntos += series * factorSeries;
 	    puntos += cantPeso * factorPeso;
 	    
-	    // Redondeo y límite máximo
 	    int puntosFinales = (int) Math.round(puntos);
-	    return puntosFinales;  // Aumentamos límite a 15 para permitir crecimiento
+	    return puntosFinales; 
 	}
 	
 	//esto serian getter y setter de las rutinas pero como no existen en esta clase se le tuvo q declarar asi
