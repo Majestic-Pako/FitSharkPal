@@ -7,27 +7,20 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.LinkedList;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 
 import BLL.ConfigRutina;
 import BLL.Gamificacion;
@@ -40,9 +33,6 @@ public class MenuCliente extends JFrame {
     private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private int idCuenta;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -60,11 +50,9 @@ public class MenuCliente extends JFrame {
         this();
         this.idCuenta = idCuenta;
         setTitle("Menú Cliente - ID: " + idCuenta);
+        cargarDatosCliente(); // Cargar datos al iniciar
     }
 
-    /**
-     * Create the frame.
-     */
     public MenuCliente() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 520, 340);
@@ -76,8 +64,22 @@ public class MenuCliente extends JFrame {
         tabbedPane.setBounds(0, 0, 504, 301);
         contentPane.add(tabbedPane);
 
+        crearPanelInicio();
+        tabbedPane.addTab("Mi Rutina", null, crearPanelRutina(), null);
+        tabbedPane.addTab("Mi Progreso", null, crearPanelProgreso(), null);
+        tabbedPane.addTab("Salir", null, crearPanelSalir(), null);
+    }
+
+    private void cargarDatosCliente() {
+        // Puedes cargar datos adicionales del cliente aquí si es necesario
+        Cliente cliente = Cliente.Buscar(idCuenta);
+        if (cliente != null) {
+            setTitle("Menú Cliente - " + cliente.getNombre());
+        }
+    }
+
+    private void crearPanelInicio() {
         JLayeredPane layeredPane = new JLayeredPane();
-        tabbedPane.addTab("Inicio", null, layeredPane, null);
         layeredPane.setLayout(null);
 
         JLabel lblBienvenido = new JLabel("Bienvenido Cliente");
@@ -86,63 +88,64 @@ public class MenuCliente extends JFrame {
         lblBienvenido.setBounds(180, 25, 200, 31);
         layeredPane.add(lblBienvenido);
 
-        JLabel lblNewLabel_2_1 = new JLabel("Ver mi rutina de entrenamiento");
-        lblNewLabel_2_1.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblNewLabel_2_1.setForeground(Color.WHITE);
-        lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel_2_1.setBounds(134, 66, 231, 23);
-        layeredPane.add(lblNewLabel_2_1);
+        JLabel lblRutina = new JLabel("Ver mi rutina de entrenamiento");
+        lblRutina.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
+        lblRutina.setForeground(Color.WHITE);
+        lblRutina.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblRutina.setBounds(134, 66, 231, 23);
+        layeredPane.add(lblRutina);
 
-        JLabel lblNewLabel_2 = new JLabel("Ver mi progreso y puntaje");
-        lblNewLabel_2.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel_2.setForeground(new Color(255, 255, 255));
-        lblNewLabel_2.setBounds(134, 96, 231, 23);
-        layeredPane.add(lblNewLabel_2);
+        JLabel lblProgreso = new JLabel("Ver mi progreso y puntaje");
+        lblProgreso.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
+        lblProgreso.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblProgreso.setForeground(Color.WHITE);
+        lblProgreso.setBounds(134, 96, 231, 23);
+        layeredPane.add(lblProgreso);
 
-        JLabel lblNewLabel_3 = new JLabel("Consultar mis datos personales");
-        lblNewLabel_3.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel_3.setForeground(new Color(255, 255, 255));
-        lblNewLabel_3.setBounds(134, 129, 231, 23);
-        layeredPane.add(lblNewLabel_3);
+        JLabel lblDatos = new JLabel("Consultar mis datos personales");
+        lblDatos.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
+        lblDatos.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblDatos.setForeground(Color.WHITE);
+        lblDatos.setBounds(134, 126, 231, 23);
+        layeredPane.add(lblDatos);
 
-        JLabel lblNewLabel_5 = new JLabel("Editar mi perfil");
-        lblNewLabel_5.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel_5.setForeground(new Color(255, 255, 255));
-        lblNewLabel_5.setBounds(134, 162, 231, 23);
-        layeredPane.add(lblNewLabel_5);
+        JLabel lblEditar = new JLabel("Editar mi perfil");
+        lblEditar.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
+        lblEditar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblEditar.setForeground(Color.WHITE);
+        lblEditar.setBounds(134, 156, 231, 23);
+        layeredPane.add(lblEditar);
 
-        JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setBounds(0, 0, 499, 273);
-        lblNewLabel.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/banner-cliente.png")));
-        layeredPane.add(lblNewLabel);
+        JButton btnEditarPerfil = new JButton("Editar Perfil");
+        btnEditarPerfil.setBounds(180, 200, 120, 25);
+        btnEditarPerfil.setBackground(new Color(0, 128, 128));
+        btnEditarPerfil.setForeground(Color.WHITE);
+        layeredPane.add(btnEditarPerfil);
 
-        JPanel panelRutinas = createMiRutinaPanel();
-        tabbedPane.addTab("Mi Rutina", null, panelRutinas, null);
+        JLabel fondo = new JLabel("");
+        fondo.setBounds(0, 0, 499, 273);
+        fondo.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/banner-cliente.png")));
+        layeredPane.add(fondo);
 
-        JPanel panelPuntajes = createMiPuntajePanel();
-        tabbedPane.addTab("Mi Progreso", null, panelPuntajes, null);
-
-        JPanel panelSalir = createSalirPanel();
-        tabbedPane.addTab("Salir", null, panelSalir, null);
+        tabbedPane.addTab("Inicio", null, layeredPane, null);
     }
 
-    private JPanel createMiRutinaPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+    private JPanel crearPanelRutina() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         String[] etiquetas = {
             "Cardio:", "Zona Media:", "Piernas:", "Brazos:", "Pecho:", 
-            "Espalda:", "Duración cardio:", "Repeticiones:", "Series:", 
+            "Espalda:", "Duración:", "Repeticiones:", "Series:", 
             "Peso (kg):", "Descanso (seg):"
         };
 
-        JLabel[] valores = new JLabel[etiquetas.length];
         JPanel dataPanel = new JPanel();
         dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
-        dataPanel.setBorder(new TitledBorder("Detalles de mi Rutina"));
+        dataPanel.setBorder(new TitledBorder("Mi Rutina de Entrenamiento"));
+
+        // Cargar rutina del cliente actual
+        ConfigRutina rutina = ConfigRutina.RutinaVer(idCuenta);
 
         for (int i = 0; i < etiquetas.length; i++) {
             JPanel row = new JPanel(new BorderLayout(10, 0));
@@ -150,80 +153,35 @@ public class MenuCliente extends JFrame {
             label.setFont(new Font("Tahoma", Font.BOLD, 12));
             label.setPreferredSize(new Dimension(120, 20));
 
-            valores[i] = new JLabel("-");
-            valores[i].setFont(new Font("Tahoma", Font.PLAIN, 12));
+            JLabel valor = new JLabel("-");
+            valor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+
+            // Llenar con datos si existen
+            if (rutina != null) {
+                switch (i) {
+                    case 0: valor.setText(rutina.getCardio()); break;
+                    case 1: valor.setText(rutina.getZonaMedia()); break;
+                    case 2: valor.setText(rutina.getPiernas()); break;
+                    case 3: valor.setText(rutina.getBrazos()); break;
+                    case 4: valor.setText(rutina.getPecho()); break;
+                    case 5: valor.setText(rutina.getEspalda()); break;
+                    case 6: valor.setText(rutina.getTiempo() + " min"); break;
+                    case 7: valor.setText(String.valueOf(rutina.getRepeticiones())); break;
+                    case 8: valor.setText(String.valueOf(rutina.getSeries())); break;
+                    case 9: valor.setText(rutina.getCantPeso() + " kg"); break;
+                    case 10: valor.setText(rutina.getPausaEntreSerie() + " seg"); break;
+                }
+            }
 
             row.add(label, BorderLayout.WEST);
-            row.add(valores[i], BorderLayout.CENTER);
+            row.add(valor, BorderLayout.CENTER);
             row.setBorder(new EmptyBorder(5, 10, 5, 10));
             dataPanel.add(row);
         }
 
-        // Cargar rutina del cliente actual
-        ConfigRutina rutina = ConfigRutina.RutinaVer(idCuenta);
-        if (rutina != null) {
-            valores[0].setText(rutina.getCardio());
-            valores[1].setText(rutina.getZonaMedia());
-            valores[2].setText(rutina.getPiernas());
-            valores[3].setText(rutina.getBrazos());
-            valores[4].setText(rutina.getPecho());
-            valores[5].setText(rutina.getEspalda());
-            valores[6].setText(rutina.getTiempo() + " min");
-            valores[7].setText(String.valueOf(rutina.getRepeticiones()));
-            valores[8].setText(String.valueOf(rutina.getSeries()));
-            valores[9].setText(rutina.getCantPeso() + " kg");
-            valores[10].setText(rutina.getPausaEntreSerie() + " seg");
-        } else {
-            JOptionPane.showMessageDialog(mainPanel, 
-                "No tienes rutina asignada. Contacta a tu entrenador.",
-                "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(dataPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        return mainPanel;
-    }
-
-    private JPanel createMiPuntajePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        String[] etiquetas = {
-            "Puntaje actual:", "Carta actual:", "Progreso mensual:"
-        };
-
-        JLabel[] valores = new JLabel[etiquetas.length];
-        JPanel dataPanel = new JPanel();
-        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
-        dataPanel.setBorder(new TitledBorder("Mi Progreso"));
-
-        for (int i = 0; i < etiquetas.length; i++) {
-            JPanel row = new JPanel(new BorderLayout(10, 0));
-            JLabel label = new JLabel(etiquetas[i]);
-            label.setFont(new Font("Tahoma", Font.BOLD, 12));
-            label.setPreferredSize(new Dimension(150, 20));
-
-            valores[i] = new JLabel("-");
-            valores[i].setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-            row.add(label, BorderLayout.WEST);
-            row.add(valores[i], BorderLayout.CENTER);
-            row.setBorder(new EmptyBorder(5, 10, 5, 10));
-            dataPanel.add(row);
-        }
-
-        // Cargar gamificación del cliente actual
-        Gamificacion gami = Gamificacion.GamiVer(idCuenta);
-        if (gami != null) {
-            valores[0].setText(String.valueOf(gami.getPts()));
-            valores[1].setText(gami.getCarta().get(0));
-            valores[2].setText("Gráfico de progreso aquí"); // Podrías añadir un JProgressBar o similar
-        } else {
+        if (rutina == null) {
             JOptionPane.showMessageDialog(panel, 
-                "No tienes datos de gamificación aún.",
+                "No tienes rutina asignada. Contacta a tu entrenador.",
                 "Información", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -232,7 +190,64 @@ public class MenuCliente extends JFrame {
         return panel;
     }
 
-    private JPanel createSalirPanel() {
+    private JPanel crearPanelProgreso() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        String[] etiquetas = {
+            "Puntaje actual:", "Carta actual:", "Progreso mensual:", 
+            "Última actualización:", "Nivel alcanzado:"
+        };
+
+        JPanel dataPanel = new JPanel();
+        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
+        dataPanel.setBorder(new TitledBorder("Mi Progreso"));
+
+        // Cargar gamificación del cliente actual
+        Gamificacion gami = Gamificacion.GamiVer(idCuenta);
+
+        for (int i = 0; i < etiquetas.length; i++) {
+            JPanel row = new JPanel(new BorderLayout(10, 0));
+            JLabel label = new JLabel(etiquetas[i]);
+            label.setFont(new Font("Tahoma", Font.BOLD, 12));
+            label.setPreferredSize(new Dimension(150, 20));
+
+            JLabel valor = new JLabel("-");
+            valor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+
+            // Llenar con datos si existen
+            if (gami != null) {
+                switch (i) {
+                    case 0: valor.setText(String.valueOf(gami.getPts())); break;
+                    case 1: 
+                        if (!gami.getCarta().isEmpty()) {
+                            valor.setText(gami.getCarta().get(0));
+                        }
+                        break;
+                    case 2: valor.setText("Gráfico de progreso"); break;
+                    case 3: valor.setText("01/06/2023"); break; // Ejemplo
+                    case 4: valor.setText("Nivel " + (gami.getPts()/100)); break;
+                }
+            }
+
+            row.add(label, BorderLayout.WEST);
+            row.add(valor, BorderLayout.CENTER);
+            row.setBorder(new EmptyBorder(5, 10, 5, 10));
+            dataPanel.add(row);
+        }
+
+        if (gami == null) {
+            JOptionPane.showMessageDialog(panel, 
+                "No tienes datos de progreso aún.",
+                "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(dataPanel);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel crearPanelSalir() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.setBackground(new Color(240, 240, 240));
@@ -248,7 +263,7 @@ public class MenuCliente extends JFrame {
         btnSi.setForeground(Color.WHITE);
         btnSi.addActionListener(e -> {
             this.dispose();
-            new Index().setVisible(true); // Vuelve al index
+            new Index().setVisible(true);
         });
 
         JButton btnNo = new JButton("No, cancelar");
