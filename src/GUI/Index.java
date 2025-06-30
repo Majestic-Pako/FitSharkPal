@@ -51,12 +51,12 @@ public class Index extends JFrame implements Validacion {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton(" Registrarse");
-		btnNewButton.setIcon(new ImageIcon(Index.class.getResource("/img/editar.png")));
-		btnNewButton.setBounds(174, 202, 163, 31);
-		contentPane.add(btnNewButton);
-		btnNewButton.setBackground(new Color(255, 255, 255));
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		JButton btnRegistrarse = new JButton(" Registrarse");
+		btnRegistrarse.setIcon(new ImageIcon(Index.class.getResource("/img/editar.png")));
+		btnRegistrarse.setBounds(174, 202, 163, 31);
+		contentPane.add(btnRegistrarse);
+		btnRegistrarse.setBackground(new Color(255, 255, 255));
+		btnRegistrarse.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		JButton btnIniciarSesion = new JButton(" Iniciar Sesion");
 		btnIniciarSesion.setIcon(new ImageIcon(Index.class.getResource("/img/perfil-del-usuario.png")));
@@ -100,51 +100,29 @@ public class Index extends JFrame implements Validacion {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-				btnSalir.addActionListener(e -> {
-					JOptionPane.showMessageDialog(null, "fuiste :3");
-					System.exit(0);
-				});
-		
-				btnIniciarSesion.addActionListener(e -> {
-					String usuario = JOptionPane.showInputDialog("Ingrese usuario:");
-					String contrasena = JOptionPane.showInputDialog("Ingrese contraseña:");
-		
-					if (!ValidarUsuario(usuario, contrasena)) return;
-		
-					Cuenta<?> cuenta = Cuenta.Login(usuario, contrasena);
-					if (cuenta != null) {
-						JOptionPane.showMessageDialog(null, "Bienvenido " + cuenta.getUsuario());
-						int idCuentaSesion = cuenta.getIdCuenta();
-		
-						Rol rol = cuenta.getRol();
-						switch (rol) {
-							case CLIENTE:
-								NavCliente(idCuentaSesion);
-								break;
-							case ENTRENADOR:
-								NavCoach(idCuentaSesion);
-								break;
-							default:
-								JOptionPane.showMessageDialog(null, "Rol no reconocido.");
-						}
-					} else {
-						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
-					}
-				});
-		
-		
-		btnNewButton.addActionListener(e -> {
-			String usuario = JOptionPane.showInputDialog("Ingrese usuario:");
-			String contrasena = JOptionPane.showInputDialog("Ingrese contraseña:");
-
-			if (ValidarRegistro(usuario, contrasena)) {
-				int idCuenta = Cuenta.Registro(usuario, contrasena, "CLIENTE");
-				if (idCuenta != -1) {
-					JOptionPane.showMessageDialog(null, "Registro exitoso.");
-				} else {
-					JOptionPane.showMessageDialog(null, "Error en el registro.");
-				}
-			}
-		});
+        btnRegistrarse.addActionListener(e -> {
+            this.dispose(); 
+            RegistroJF registro = new RegistroJF();
+            registro.setVisible(true);
+        });
+        
+        btnIniciarSesion.addActionListener(e -> {
+            this.dispose(); 
+            LoginJF login = new LoginJF();
+            login.setVisible(true);
+        });
+        
+        btnSalir.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Está seguro que desea salir?", 
+                "Confirmar salida", 
+                JOptionPane.YES_NO_OPTION
+            );
+            
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
 	}
 }
