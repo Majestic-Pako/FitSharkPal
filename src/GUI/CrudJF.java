@@ -9,6 +9,8 @@ import javax.swing.table.*;
 import BLL.ConfigRutina;
 import BLL.Validacion;
 import DLL.Cliente;
+import DLL.Cuenta;
+
 import java.awt.event.*;
 
 public class CrudJF extends JFrame {
@@ -85,7 +87,7 @@ public class CrudJF extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
             	Main validacion = new Main();
-                validacion.crearJF(getWarningString(), getName(), panel);;
+            	validacion.crearJF(getWarningString(), getName(), panel);;
                 return false;
             }
         };
@@ -498,4 +500,5 @@ public class CrudJF extends JFrame {
         
         JOptionPane.showMessageDialog(this, mensaje, "Detalles del Alumno", JOptionPane.INFORMATION_MESSAGE);
     }
+    
 }
