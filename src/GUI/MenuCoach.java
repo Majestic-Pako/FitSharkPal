@@ -63,12 +63,12 @@ public class MenuCoach extends JFrame {
     public MenuCoach(int idCuenta) {
         this();
         this.idCuenta = idCuenta;
-        setTitle("Menú Entrenador - ID: " + idCuenta); 
     }
 	/**
 	 * Create the frame.
 	 */
 	public MenuCoach() {
+		setTitle("Menu Coach - FitSharkPal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 340);
 		contentPane = new JPanel();
