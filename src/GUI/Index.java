@@ -43,6 +43,7 @@ public class Index extends JFrame implements Validacion {
 	 * Create the frame.
 	 */
 	public Index() {
+		setTitle("Index - FitSharkPal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 340);
 		contentPane = new JPanel();

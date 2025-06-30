@@ -18,7 +18,10 @@ public class CrudJF extends JFrame {
     private JTable tableClientes;
     private DefaultTableModel tableModel;
 	private int idCuenta;
-
+	
+	/**
+	 * Launch the application.
+	 */
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -30,10 +33,13 @@ public class CrudJF extends JFrame {
         });
     }
     
+	/**
+	 * Create the frame.
+	 */
     public CrudJF(int idCuenta) {
         this(); 
         this.idCuenta = idCuenta;
-        setTitle("Menú Entrenador - ID: " + idCuenta); 
+        setTitle("Acciones de Alumnos - FitSharkPal"); 
     }
 
     public CrudJF() {

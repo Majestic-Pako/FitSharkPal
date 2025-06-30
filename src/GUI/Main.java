@@ -12,7 +12,7 @@ public class Main implements Validacion {
 
 		Main instancia = new Main(); // llama a los métodos default de la interfaz
 
-		 //int admin = Cuenta.Registro("admin", "123456", "Entrenador"); //Eto es pa
+		//int admin = Cuenta.Registro("admin", "123456", "Entrenador"); //Eto es pa
 		// testear como anda el admin
 		int idCuentaSesion = -1;
 		int opcion;
