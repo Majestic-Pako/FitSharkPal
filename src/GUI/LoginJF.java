@@ -44,6 +44,7 @@ public class LoginJF extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginJF() {
+		setTitle("Login - FitSharkPal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 340);
 		contentPane = new JPanel();
@@ -128,7 +129,8 @@ public class LoginJF extends JFrame {
 		                menuCoach.setVisible(true);
 		                break;
 		            case CLIENTE:
-		                // Aquí iría la apertura del menú de cliente.... si tuviera uno :,v
+		                MenuCliente menuCliente = new MenuCliente(cuenta.getIdCuenta());
+		                menuCliente.setVisible(true);
 		                break;
 		            default:
 		                JOptionPane.showMessageDialog(this, "Rol no reconocido");

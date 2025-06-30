@@ -1,282 +1,335 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import DLL.Cliente;
+import DLL.Nivel;
 import BLL.ConfigRutina;
 import BLL.Gamificacion;
-import DLL.Cliente;
+import BLL.Validacion;
 
-public class MenuCliente extends JFrame {
+public class MenuCliente extends JFrame implements Validacion {
 
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private int idCuenta;
+    private Cliente cliente;
+    private JPanel mainPanel;
+    private JTabbedPane tabbedPane;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    MenuCliente frame = new MenuCliente();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public MenuCliente(int idCuenta) {
-        this();
         this.idCuenta = idCuenta;
-        setTitle("Menú Cliente - ID: " + idCuenta);
-        cargarDatosCliente(); // Cargar datos al iniciar
-    }
-
-    public MenuCliente() {
+        this.cliente = Cliente.InfoCliente(idCuenta);
+        
+        setTitle("Menú Cliente - FitSharkPal");
+        setSize(600, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 520, 340);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
-        tabbedPane.setBounds(0, 0, 504, 301);
-        contentPane.add(tabbedPane);
-
-        crearPanelInicio();
-        tabbedPane.addTab("Mi Rutina", null, crearPanelRutina(), null);
-        tabbedPane.addTab("Mi Progreso", null, crearPanelProgreso(), null);
-        tabbedPane.addTab("Salir", null, crearPanelSalir(), null);
-    }
-
-    private void cargarDatosCliente() {
-        // Puedes cargar datos adicionales del cliente aquí si es necesario
-        Cliente cliente = Cliente.Buscar(idCuenta);
-        if (cliente != null) {
-            setTitle("Menú Cliente - " + cliente.getNombre());
+        setLocationRelativeTo(null);
+        
+        initUI();
+        if (cliente == null) {
+        	showRegistro();
         }
     }
-
-    private void crearPanelInicio() {
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null);
-
-        JLabel lblBienvenido = new JLabel("Bienvenido Cliente");
-        lblBienvenido.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lblBienvenido.setForeground(new Color(255, 255, 255));
-        lblBienvenido.setBounds(180, 25, 200, 31);
-        layeredPane.add(lblBienvenido);
-
-        JLabel lblRutina = new JLabel("Ver mi rutina de entrenamiento");
-        lblRutina.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblRutina.setForeground(Color.WHITE);
-        lblRutina.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblRutina.setBounds(134, 66, 231, 23);
-        layeredPane.add(lblRutina);
-
-        JLabel lblProgreso = new JLabel("Ver mi progreso y puntaje");
-        lblProgreso.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblProgreso.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblProgreso.setForeground(Color.WHITE);
-        lblProgreso.setBounds(134, 96, 231, 23);
-        layeredPane.add(lblProgreso);
-
-        JLabel lblDatos = new JLabel("Consultar mis datos personales");
-        lblDatos.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblDatos.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblDatos.setForeground(Color.WHITE);
-        lblDatos.setBounds(134, 126, 231, 23);
-        layeredPane.add(lblDatos);
-
-        JLabel lblEditar = new JLabel("Editar mi perfil");
-        lblEditar.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/boton.png")));
-        lblEditar.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblEditar.setForeground(Color.WHITE);
-        lblEditar.setBounds(134, 156, 231, 23);
-        layeredPane.add(lblEditar);
-
-        JButton btnEditarPerfil = new JButton("Editar Perfil");
-        btnEditarPerfil.setBounds(180, 200, 120, 25);
-        btnEditarPerfil.setBackground(new Color(0, 128, 128));
-        btnEditarPerfil.setForeground(Color.WHITE);
-        layeredPane.add(btnEditarPerfil);
-
-        JLabel fondo = new JLabel("");
-        fondo.setBounds(0, 0, 499, 273);
-        fondo.setIcon(new ImageIcon(MenuCliente.class.getResource("/img/banner-cliente.png")));
-        layeredPane.add(fondo);
-
-        tabbedPane.addTab("Inicio", null, layeredPane, null);
-    }
-
-    private JPanel crearPanelRutina() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        String[] etiquetas = {
-            "Cardio:", "Zona Media:", "Piernas:", "Brazos:", "Pecho:", 
-            "Espalda:", "Duración:", "Repeticiones:", "Series:", 
-            "Peso (kg):", "Descanso (seg):"
-        };
-
-        JPanel dataPanel = new JPanel();
-        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
-        dataPanel.setBorder(new TitledBorder("Mi Rutina de Entrenamiento"));
-
-        // Cargar rutina del cliente actual
-        ConfigRutina rutina = ConfigRutina.RutinaVer(idCuenta);
-
-        for (int i = 0; i < etiquetas.length; i++) {
-            JPanel row = new JPanel(new BorderLayout(10, 0));
-            JLabel label = new JLabel(etiquetas[i]);
-            label.setFont(new Font("Tahoma", Font.BOLD, 12));
-            label.setPreferredSize(new Dimension(120, 20));
-
-            JLabel valor = new JLabel("-");
-            valor.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-            // Llenar con datos si existen
-            if (rutina != null) {
-                switch (i) {
-                    case 0: valor.setText(rutina.getCardio()); break;
-                    case 1: valor.setText(rutina.getZonaMedia()); break;
-                    case 2: valor.setText(rutina.getPiernas()); break;
-                    case 3: valor.setText(rutina.getBrazos()); break;
-                    case 4: valor.setText(rutina.getPecho()); break;
-                    case 5: valor.setText(rutina.getEspalda()); break;
-                    case 6: valor.setText(rutina.getTiempo() + " min"); break;
-                    case 7: valor.setText(String.valueOf(rutina.getRepeticiones())); break;
-                    case 8: valor.setText(String.valueOf(rutina.getSeries())); break;
-                    case 9: valor.setText(rutina.getCantPeso() + " kg"); break;
-                    case 10: valor.setText(rutina.getPausaEntreSerie() + " seg"); break;
+    
+    private void showRegistro() {
+        JPanel registerPanel = new JPanel(new GridLayout(0, 2, 5, 5));
+        
+        JTextField nombreField = new JTextField();
+        JTextField edadField = new JTextField();
+        JComboBox<String> generoCombo = new JComboBox<>(new String[]{"HOMBRE", "MUJER", "OTRO"});
+        JTextField pesoField = new JTextField();
+        JTextField alturaField = new JTextField();
+        JComboBox<Nivel> nivelCombo = new JComboBox<>(Nivel.values());
+        
+        registerPanel.add(new JLabel("Nombre:"));
+        registerPanel.add(nombreField);
+        registerPanel.add(new JLabel("Edad:"));
+        registerPanel.add(edadField);
+        registerPanel.add(new JLabel("Género:"));
+        registerPanel.add(generoCombo);
+        registerPanel.add(new JLabel("Peso (kg):"));
+        registerPanel.add(pesoField);
+        registerPanel.add(new JLabel("Altura (cm):"));
+        registerPanel.add(alturaField);
+        registerPanel.add(new JLabel("Nivel:"));
+        registerPanel.add(nivelCombo);
+        
+        int result = JOptionPane.showConfirmDialog(
+            this, 
+            registerPanel, 
+            "Completar Registro - Ingrese sus datos personales", 
+            JOptionPane.OK_CANCEL_OPTION, 
+            JOptionPane.PLAIN_MESSAGE
+        );
+        
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String nombre = nombreField.getText();
+                int edad = Integer.parseInt(edadField.getText());
+                String genero = (String) generoCombo.getSelectedItem();
+                int peso = Integer.parseInt(pesoField.getText());
+                int altura = Integer.parseInt(alturaField.getText());
+                Nivel nivel = (Nivel) nivelCombo.getSelectedItem();
+                
+                // Usamos el método de validación de la interfaz
+                if (validarDatos(nombre, edad, genero, peso, altura, nivel)) {
+                    int idCliente = Cliente.registrarCliente(
+                        idCuenta, nombre, edad, genero, peso, altura, nivel
+                    );
+                    
+                    if (idCliente != -1) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Datos registrados correctamente", 
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        cliente = Cliente.InfoCliente(idCuenta);
+                        updateUI();
+                    } else {
+                        JOptionPane.showMessageDialog(this, 
+                            "Error al registrar los datos", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, 
+                    "Por favor ingrese valores numéricos válidos para edad, peso y altura", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                showRegistro();
             }
-
-            row.add(label, BorderLayout.WEST);
-            row.add(valor, BorderLayout.CENTER);
-            row.setBorder(new EmptyBorder(5, 10, 5, 10));
-            dataPanel.add(row);
+        } else {
+            this.dispose();
+            new Index().setVisible(true);
         }
-
-        if (rutina == null) {
-            JOptionPane.showMessageDialog(panel, 
-                "No tienes rutina asignada. Contacta a tu entrenador.",
-                "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(dataPanel);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        return panel;
     }
-
-    private JPanel crearPanelProgreso() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        String[] etiquetas = {
-            "Puntaje actual:", "Carta actual:", "Progreso mensual:", 
-            "Última actualización:", "Nivel alcanzado:"
-        };
-
-        JPanel dataPanel = new JPanel();
-        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
-        dataPanel.setBorder(new TitledBorder("Mi Progreso"));
-
-        // Cargar gamificación del cliente actual
-        Gamificacion gami = Gamificacion.GamiVer(idCuenta);
-
-        for (int i = 0; i < etiquetas.length; i++) {
-            JPanel row = new JPanel(new BorderLayout(10, 0));
-            JLabel label = new JLabel(etiquetas[i]);
-            label.setFont(new Font("Tahoma", Font.BOLD, 12));
-            label.setPreferredSize(new Dimension(150, 20));
-
-            JLabel valor = new JLabel("-");
-            valor.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-            // Llenar con datos si existen
-            if (gami != null) {
-                switch (i) {
-                    case 0: valor.setText(String.valueOf(gami.getPts())); break;
-                    case 1: 
-                        if (!gami.getCarta().isEmpty()) {
-                            valor.setText(gami.getCarta().get(0));
-                        }
-                        break;
-                    case 2: valor.setText("Gráfico de progreso"); break;
-                    case 3: valor.setText("01/06/2023"); break; // Ejemplo
-                    case 4: valor.setText("Nivel " + (gami.getPts()/100)); break;
-                }
-            }
-
-            row.add(label, BorderLayout.WEST);
-            row.add(valor, BorderLayout.CENTER);
-            row.setBorder(new EmptyBorder(5, 10, 5, 10));
-            dataPanel.add(row);
-        }
-
-        if (gami == null) {
-            JOptionPane.showMessageDialog(panel, 
-                "No tienes datos de progreso aún.",
-                "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(dataPanel);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        return panel;
-    }
-
-    private JPanel crearPanelSalir() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        panel.setBackground(new Color(240, 240, 240));
-
-        JLabel lblMensaje = new JLabel("¿Está seguro que desea cerrar sesión?", SwingConstants.CENTER);
-        lblMensaje.setFont(new Font("Arial", Font.BOLD, 14));
-
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        panelBotones.setOpaque(false);
-
-        JButton btnSi = new JButton("Sí, salir");
-        btnSi.setBackground(new Color(220, 80, 80));
-        btnSi.setForeground(Color.WHITE);
-        btnSi.addActionListener(e -> {
+    
+    public void initUI() {
+        mainPanel = new JPanel(new BorderLayout());
+        
+        JPanel infoPanel = createInfoPanel();
+        mainPanel.add(infoPanel, BorderLayout.NORTH);
+        
+        tabbedPane = new JTabbedPane();
+        
+        JPanel dataPanel = createDataPanel();
+        tabbedPane.addTab("Mis Datos", dataPanel);
+        
+        JPanel workoutsPanel = createWorkoutsPanel();
+        tabbedPane.addTab("Mis Rutinas", workoutsPanel);
+        
+        JPanel progressPanel = createProgressPanel();
+        tabbedPane.addTab("Mi Progreso", progressPanel);
+        
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        
+        JButton logoutButton = new JButton("Cerrar Sesión");
+        logoutButton.addActionListener(e -> {
             this.dispose();
             new Index().setVisible(true);
         });
+        
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(logoutButton);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        
+        getContentPane().add(mainPanel);
+    }
 
-        JButton btnNo = new JButton("No, cancelar");
-        btnNo.setBackground(new Color(70, 130, 180));
-        btnNo.setForeground(Color.WHITE);
-        btnNo.addActionListener(e -> tabbedPane.setSelectedIndex(0));
-
-        panelBotones.add(btnSi);
-        panelBotones.add(btnNo);
-
-        panel.add(lblMensaje, BorderLayout.CENTER);
-        panel.add(panelBotones, BorderLayout.SOUTH);
-
+    public JPanel createInfoPanel() {
+        JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder("Información del Cliente"));
+        
+        if (cliente != null) {
+            addInfoRow(panel, "Nombre:", cliente.getNombre());
+            addInfoRow(panel, "Edad:", String.valueOf(cliente.getEdad()));
+            addInfoRow(panel, "Género:", cliente.getGenero());
+            addInfoRow(panel, "Peso:", cliente.getPeso() + " kg");
+            addInfoRow(panel, "Altura:", cliente.getAltura() + " cm");
+            addInfoRow(panel, "Nivel:", cliente.getNivel().toString());
+        } else {
+            panel.add(new JLabel("No se encontraron datos del cliente"));
+        }
+        
         return panel;
+    }
+
+    public void addInfoRow(JPanel panel, String label, String value) {
+        panel.add(new JLabel(label));
+        panel.add(new JLabel(value));
+    }
+
+    public JPanel createDataPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        String[] columnNames = {"Campo", "Valor"};
+        Object[][] data = cliente != null ? 
+            new Object[][] {
+                {"Nombre", cliente.getNombre()},
+                {"Edad", cliente.getEdad()},
+                {"Género", cliente.getGenero()},
+                {"Peso", cliente.getPeso() + " kg"},
+                {"Altura", cliente.getAltura() + " cm"},
+                {"Nivel", cliente.getNivel().toString()}
+            } : new Object[][] {{"Error", "No se encontraron datos"}};
+        
+        JTable dataTable = new JTable(data, columnNames);
+        dataTable.setEnabled(false);
+        JScrollPane scrollPane = new JScrollPane(dataTable);
+        
+        panel.add(scrollPane, BorderLayout.CENTER);
+        
+        JButton editButton = new JButton("Editar Datos");
+        editButton.addActionListener(e -> showEditDialog());
+        panel.add(editButton, BorderLayout.SOUTH);
+        
+        return panel;
+    }
+
+    public void showEditDialog() {
+        if (cliente == null) return;
+        
+        JPanel editPanel = new JPanel(new GridLayout(0, 2, 5, 5));
+        
+        JTextField nombreField = new JTextField(cliente.getNombre());
+        JTextField edadField = new JTextField(String.valueOf(cliente.getEdad()));
+        JComboBox<String> generoCombo = new JComboBox<>(new String[]{"HOMBRE", "MUJER", "OTRO"});
+        generoCombo.setSelectedItem(cliente.getGenero());
+        JTextField pesoField = new JTextField(String.valueOf(cliente.getPeso()));
+        JTextField alturaField = new JTextField(String.valueOf(cliente.getAltura()));
+        JComboBox<Nivel> nivelCombo = new JComboBox<>(Nivel.values());
+        nivelCombo.setSelectedItem(cliente.getNivel());
+        
+        editPanel.add(new JLabel("Nombre:"));
+        editPanel.add(nombreField);
+        editPanel.add(new JLabel("Edad:"));
+        editPanel.add(edadField);
+        editPanel.add(new JLabel("Género:"));
+        editPanel.add(generoCombo);
+        editPanel.add(new JLabel("Peso (kg):"));
+        editPanel.add(pesoField);
+        editPanel.add(new JLabel("Altura (cm):"));
+        editPanel.add(alturaField);
+        editPanel.add(new JLabel("Nivel:"));
+        editPanel.add(nivelCombo);
+        
+        int result = JOptionPane.showConfirmDialog(
+            this, 
+            editPanel, 
+            "Editar Datos Personales", 
+            JOptionPane.OK_CANCEL_OPTION, 
+            JOptionPane.PLAIN_MESSAGE
+        );
+        
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String nombre = nombreField.getText();
+                int edad = Integer.parseInt(edadField.getText());
+                String genero = (String) generoCombo.getSelectedItem();
+                int peso = Integer.parseInt(pesoField.getText());
+                int altura = Integer.parseInt(alturaField.getText());
+                Nivel nivel = (Nivel) nivelCombo.getSelectedItem();
+                
+                if (validarDatos(nombre, edad, genero, peso, altura, nivel)) {
+                    boolean updated = Cliente.ActCliente(
+                        idCuenta, nombre, edad, genero, peso, altura, nivel
+                    );
+                    
+                    if (updated) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Datos actualizados correctamente", 
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        cliente = Cliente.InfoCliente(idCuenta); 
+                        updateUI();
+                    } else {
+                        JOptionPane.showMessageDialog(this, 
+                            "Error al actualizar los datos", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, 
+                    "Por favor ingrese valores numéricos válidos para edad, peso y altura", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public JPanel createWorkoutsPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        ConfigRutina rutina = ConfigRutina.RutinaVer(idCuenta);
+        
+        if (rutina == null) {
+            panel.add(new JLabel("No tienes rutinas asignadas", SwingConstants.CENTER), BorderLayout.CENTER);
+        } else {
+            String[] columnNames = {"Tipo", "Ejercicio"};
+            Object[][] data = {
+                {"Cardio", rutina.getCardio()},
+                {"Zona Media", rutina.getZonaMedia()},
+                {"Piernas", rutina.getPiernas()},
+                {"Brazos", rutina.getBrazos()},
+                {"Pecho", rutina.getPecho()},
+                {"Espalda", rutina.getEspalda()}
+            };
+            
+            JTable exercisesTable = new JTable(data, columnNames);
+            exercisesTable.setEnabled(false);
+            
+            String[] paramsColumnNames = {"Parámetro", "Valor"};
+            Object[][] paramsData = {
+                {"Duración", rutina.getTiempo() + " minutos"},
+                {"Repeticiones", rutina.getRepeticiones()},
+                {"Series", rutina.getSeries()},
+                {"Peso", rutina.getCantPeso() + " kg"},
+                {"Descanso", rutina.getPausaEntreSerie() + " segundos"}
+            };
+            
+            JTable paramsTable = new JTable(paramsData, paramsColumnNames);
+            paramsTable.setEnabled(false);
+            
+            JTabbedPane workoutTabs = new JTabbedPane();
+            workoutTabs.addTab("Ejercicios", new JScrollPane(exercisesTable));
+            workoutTabs.addTab("Parámetros", new JScrollPane(paramsTable));
+            
+            panel.add(workoutTabs, BorderLayout.CENTER);
+        }
+        
+        return panel;
+    }
+
+    public JPanel createProgressPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        Gamificacion gami = Gamificacion.GamiVer(idCuenta);
+        
+        if (gami == null) {
+            panel.add(new JLabel("No tienes datos de progreso aún", SwingConstants.CENTER), BorderLayout.CENTER);
+        } else {
+            String[] columnNames = {"Concepto", "Valor"};
+            Object[][] data = {
+                {"Puntaje Total", gami.getPts()},
+                {"Carta Actual", gami.getCarta()}
+            };
+           
+            JTable progressTable = new JTable(data, columnNames);
+            progressTable.setEnabled(false); 
+            
+            panel.add(new JScrollPane(progressTable), BorderLayout.CENTER);
+        }
+        
+        return panel;
+    }
+
+    private void updateUI() {
+        mainPanel.removeAll();
+        initUI();
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MenuCliente frame = new MenuCliente(1); 
+            frame.setVisible(true);
+        });
     }
 }

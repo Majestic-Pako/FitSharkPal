@@ -257,57 +257,88 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-insert into Cuenta (idCuenta, usuario, contrasena, rol) values 
-(01, 'Toño', 'Shark', 'entrenador'),
-(02, 'Pakon', 'Majestic', 'cliente'),
-(03, 'Ghosty', 'Fantasma', 'cliente'),
-(04, 'Tomasu', '2311', 'cliente'),
-(05, 'Test', 'Dummy', 'cliente');
+insert into Cuenta (usuario, contrasena, rol) values 
+('Toño', '5432', 'entrenador'),
+('Pakon', 'Majestic', 'cliente'),
+('Ghosty', '987', 'cliente'),
+('Tomasu', '2311', 'cliente'),
+('Test', 'Dummy', 'cliente'),
+('Gami','1234','entrenador');
 
-insert into Cliente (idCliente, nombre, edad, genero, peso, altura, nivel, Cuenta_idCuenta) values 
-(002, 'Agustin', 22, 'Hombre', 70, 168, 'Intermedio', 02),
-(003, 'Esteban', 23, 'Hombre', 72, 172, 'Principiante', 03), 
-(004, 'Thomas', 20, 'Hombre', 76, 170, 'Principiante', 04),
-(005, 'Test', 21, 'Hombre', 80, 190, 'Principiante', 05);
+-- Eta wea es porque nustro programa busca la contraseña encriptada xD
+UPDATE Cuenta SET contrasena = '5432' WHERE usuario = 'Toño';
+UPDATE Cuenta SET contrasena = 'Pdmhvwlf' WHERE usuario = 'Pakon';
+UPDATE Cuenta SET contrasena = '987' WHERE usuario = 'Ghosty';
+UPDATE Cuenta SET contrasena = '2311' WHERE usuario = 'Tomasu';
+UPDATE Cuenta SET contrasena = 'Gxppb' WHERE usuario = 'Test';
 
-insert into Entrenador (idEntrenador, nombre, Cuenta_idCuenta) values
-(001, 'Antonio', 01);
+insert into Cliente (nombre, edad, genero, peso, altura, nivel, Cuenta_idCuenta) values 
+('Agustin', 22, 'Hombre', 70, 168, 'Intermedio', 2),
+('Esteban', 23, 'Hombre', 72, 172, 'Principiante', 3), 
+('Thomas', 20, 'Hombre', 76, 170, 'Principiante', 4),
+('Test', 21, 'Hombre', 80, 190, 'Principiante', 5);
 
-insert into Espalda (idEspalda, ejercicio_espalda) values
-(1, 'Narrow Grip Lat Pulldowns'),
-(2, 'Wide Grip Chest Supported Row'),
-(3, 'One-Arm Cable Row');
+insert into Entrenador (nombre, Cuenta_idCuenta) values
+('Antonio', 1),
+('Gamaliel',6);
 
-insert into Brazos (idBrazos, ejercicio_brazos) values
-(4,'Face Away Bayesian Cable Curls'),
-(5, 'Preacher Hammer Curls'),
-(6, 'EZ Bar Skull Crushers');
+insert into Espalda (ejercicio_espalda) values
+('Narrow Grip Lat Pulldowns'),
+('Wide Grip Chest Supported Row'),
+('One-Arm Cable Row');
 
-insert into Pecho (idPecho, ejercicio_pecho) values
-(7, 'Bench Press'),
-(8, 'Incline Shoulder Press' ),
-(9, 'Dumbbell Fly' );
+insert into Brazos (ejercicio_brazos) values
+('Face Away Bayesian Cable Curls'),
+('Preacher Hammer Curls'),
+('EZ Bar Skull Crushers');
 
-insert into Cardio (idCardio, Actividad) values
-(10, 'Incline Walk'),
-(11, 'Biking'),
-(12, 'Jogging');
+insert into Pecho (ejercicio_pecho) values
+('Bench Press'),
+('Incline Shoulder Press' ),
+('Dumbbell Fly' );
 
-insert into ZonaMedia (idZonaMedia, ejercicio_zona_media) values
-(13, 'Crunches'),
-(14, 'Planche'),
-(15, 'Leg Raises');
+insert into Cardio (Actividad) values
+('Incline Walk'),
+('Biking'),
+('Jogging');
 
-insert into Piernas (idPiernas, ejercicio_piernas) values
-(16, 'Deadlift'),
-(17, 'Bulgarian Split Squat'),
-(18, 'Hip Adductor/Abductor Machine');
+insert into ZonaMedia (ejercicio_zona_media) values
+('Crunches'),
+('Planche'),
+('Leg Raises');
 
-insert into Ejercicios (idEjercicios, repeticiones, series, cantidad_peso, pausa_series, tiempo, Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) values
-(19, 10, 3, 10, 2, 10, 2, 5, 7, 10, 14, 17);
+insert into Piernas (ejercicio_piernas) values
+('Deadlift'),
+('Bulgarian Split Squat'),
+('Hip Adductor/Abductor Machine');
 
-insert into Gamificacion (idGamificacion, puntaje, carta, Cliente_idCliente, Cliente_Cuenta_idCuenta) values
-(20, 75, 'Oro', 002, 02);
+-- Inserción de ejercicios para cada cliente
+-- Ejercicios para Agustin (ID Cliente 1)
+INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, tiempo, Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) VALUES
+(10, 3, 10, 60, 20, 1, 1, 1, 1, 1, 1);  -- ID Ejercicio 1
 
-insert into Rutina (idRutina, Cuenta_idCuenta, Ejercicios_idEjercicios, Gamificacion_idGamificacion) values
-(0001, 02, 19, 20);
+-- Ejercicios para Esteban (ID Cliente 2)
+INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, tiempo, Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) VALUES
+(8, 2, 5, 90, 15, 2, 2, 2, 2, 2, 2);  -- ID Ejercicio 2
+
+-- Ejercicios para Thomas (ID Cliente 3)
+INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, tiempo, Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) VALUES
+(12, 4, 15, 45, 30, 3, 3, 3, 3, 3, 3);  -- ID Ejercicio 3
+
+-- Ejercicios para Test (ID Cliente 4)
+INSERT INTO Ejercicios (repeticiones, series, cantidad_peso, pausa_series, tiempo, Espalda_idEspalda, Brazos_idBrazos, Pecho_idPecho, Cardio_idCardio, ZonaMedia_idZonaMedia, Piernas_idPiernas) VALUES
+(5, 1, 2, 120, 10, 1, 2, 3, 1, 2, 3);  -- ID Ejercicio 4
+
+-- Gamificación para todos los clientes
+INSERT INTO Gamificacion (puntaje, carta, Cliente_idCliente, Cliente_Cuenta_idCuenta) VALUES
+(75, 'Oro', 1, 2),    -- Agustin
+(50, 'Plata', 2, 3),  -- Esteban
+(30, 'Bronce', 3, 4), -- Thomas
+(10, 'Bronce', 4, 5); -- Test
+
+-- Rutinas para todos los clientes
+INSERT INTO Rutina (Cuenta_idCuenta, Ejercicios_idEjercicios, Gamificacion_idGamificacion) VALUES
+(2, 1, 1),  -- Agustin
+(3, 2, 2),  -- Esteban
+(4, 3, 3),  -- Thomas
+(5, 4, 4);  -- Test
