@@ -17,7 +17,7 @@ public class ConfigRutina extends Ejercicios {
     private int series;
     private int cantPeso;
     private int pausaEntreSerie;
-    private int tiempo; //Hay que agregarlo en la base de datos para guardarlo
+    private int tiempo; 
 
     public ConfigRutina(String piernas, String brazos, String pecho, String espalda, String zonaMedia,
                         String cardio, int repeticiones, int series, int cantPeso, int pausaEntreSerie, int tiempo) {
