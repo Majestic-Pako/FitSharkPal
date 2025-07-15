@@ -299,7 +299,7 @@ public class MenuCoach extends JFrame {
 	    btnSi.setForeground(Color.WHITE);
 	    btnSi.addActionListener(e -> {
 	        this.dispose();
-	        new Index().setVisible(true); // Vuelve al index
+	        new Index().setVisible(true);
 	    });
 	    
 	    JButton btnNo = new JButton("No, cancelar");
