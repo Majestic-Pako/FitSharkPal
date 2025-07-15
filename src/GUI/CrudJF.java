@@ -367,7 +367,7 @@ public class CrudJF extends JFrame {
         
         return panel;
     }
-
+        
     private JPanel createEliminarPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));

@@ -104,7 +104,7 @@ public class RegistroJF extends JFrame implements Validacion {
             
             if (idNuevo != -1) {
                 JOptionPane.showMessageDialog(this, 
-                    "Cuenta creada exitosamente. ID: ", 
+                    "Cuenta creada exitosamente.", 
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                 new Index().setVisible(true);

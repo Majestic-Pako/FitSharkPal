@@ -287,6 +287,8 @@ public interface Validacion {
             int idEjercicios = Ejercicios.EjercicioBD(rutina);
             int idGamificacion = Gamificacion.IdGami(idCliente, idCuenta);
 
+            Rutina.RutinaBD(idCuenta, idEjercicios, idGamificacion);
+            
             int puntaje = ConfigRutina.Calculo(rutina.getRepeticiones(), rutina.getSeries(), rutina.getCantPeso());
             ConfigRutina.Calculo(idCliente, idEjercicios, idGamificacion);
             
@@ -473,6 +475,37 @@ public interface Validacion {
                 }
             }
         }
+    }
+    
+    default String Nota(ArrayList<String> cartas) {
+        if (cartas == null || cartas.isEmpty()) {
+            return "Quien sos vos?";
+        }
+        
+        String carta = cartas.get(0); 
+        
+        if (carta == null || carta.isEmpty()) {
+            return "Quien sos vos?";
+        }
+
+        if (carta.equalsIgnoreCase("Bronce")) {
+            return "Che ponele ma ganas >:3";
+        } else if (carta.equalsIgnoreCase("Plata")) {
+            return "Sos re medio ni tan bueno ni tan malo ";
+        } else if (carta.equalsIgnoreCase("Oro")) {
+            return "Vo sos el FitsharkPal turu turu";
+        }
+        
+        return "No sos nada pa";
+    }
+    
+    default String PtsMeta(int puntosActuales) {
+        if (puntosActuales < 30) {
+            return "Meta: Plata (30 pts) - Faltan " + (30 - puntosActuales);
+        } else if (puntosActuales < 70) {
+            return "Meta: Oro (70 pts) - Faltan " + (70 - puntosActuales);
+        }
+        return "Te platinaste la membresia pa";
     }
     
 }

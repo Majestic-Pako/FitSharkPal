@@ -73,7 +73,6 @@ public class MenuCliente extends JFrame implements Validacion {
                 int altura = Integer.parseInt(alturaField.getText());
                 Nivel nivel = (Nivel) nivelCombo.getSelectedItem();
                 
-                // Usamos el método de validación de la interfaz
                 if (validarDatos(nombre, edad, genero, peso, altura, nivel)) {
                     int idCliente = Cliente.registrarCliente(
                         idCuenta, nombre, edad, genero, peso, altura, nivel
@@ -298,7 +297,7 @@ public class MenuCliente extends JFrame implements Validacion {
 
     public JPanel createProgressPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        
+        Validacion validador = new Main();
         Gamificacion gami = Gamificacion.GamiVer(idCuenta);
         
         if (gami == null) {
@@ -307,7 +306,10 @@ public class MenuCliente extends JFrame implements Validacion {
             String[] columnNames = {"Concepto", "Valor"};
             Object[][] data = {
                 {"Puntaje Total", gami.getPts()},
-                {"Carta Actual", gami.getCarta()}
+                {"Carta Actual", gami.getCarta()},
+                {"Notas", validador.Nota(gami.getCarta())},
+                {"Próxima Meta", validador.PtsMeta(gami.getPts())},
+                {"Última Actualización", new java.util.Date()}
             };
            
             JTable progressTable = new JTable(data, columnNames);
